@@ -1,4 +1,4 @@
-# Plataforma de Gestión de Contenidos Académicos CUL - Backend API
+# Sequora — Backend API
 
 ## 1. Descripción General
 Este es el servidor backend para la estructuración de rutas de aprendizaje del programa de Ingeniería de Sistemas de la Corporación Universitaria Latinoamericana (CUL). Desarrollado bajo una arquitectura estricta **MVC (Model-View-Controller)** y orientado a objetos.

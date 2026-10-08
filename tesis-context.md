@@ -1,5 +1,5 @@
 # Especificación Funcional y Arquitectura de Frontend (MVC)
-**Proyecto:** Plataforma de Gestión de Contenidos Académicos y Rutas de Aprendizaje  
+**Proyecto:** Sequora — Plataforma de Gestión de Contenidos Académicos y Rutas de Aprendizaje  
 **Institución:** Corporación Universitaria Latinoamericana (CUL)[cite: 1]  
 **Programa:** Ingeniería de Sistemas  
 **Enfoque de Arquitectura:** Patrón MVC (Modelo-Vista-Controlador), componentes desacoplados, alta escalabilidad y prevención de fallos en cascada (loose coupling).

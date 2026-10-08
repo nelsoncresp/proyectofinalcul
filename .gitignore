@@ -1,31 +1,42 @@
+# ========== Node ==========
 node_modules/
 .pnp
 .pnp.js
 
-/dist
-/build
-/out
-/tmp
-/out-tsc
+# ========== Compilación / build ==========
+# backend (tsc) compila a backend/dist, client (Angular) compila a client/dist
+dist/
+build/
+out/
+tmp/
+out-tsc/
 *.tsbuildinfo
+.angular/
+coverage/
+typings/
 
+# ========== Variables de entorno ==========
+# cubre backend/.env y cualquier .env de ambas carpetas
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
+# ========== Logs ==========
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-/.angular/cache
+# ========== Cachés ==========
 .sass-cache/
-/coverage
-/typings
+/connect.lock
+/libpeerconnection.log
+testem.log
 
+# ========== IDEs y editores ==========
 .idea/
 .project
 .classpath
@@ -41,6 +52,7 @@ pnpm-debug.log*
 !.vscode/extensions.json
 .history/*
 
+# ========== Sistema ==========
 .DS_Store
 Thumbs.db
 Desktop.ini
