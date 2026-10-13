@@ -64,7 +64,17 @@ export const AuthController = {
                 process.env.JWT_SECRET as string,
                 { expiresIn: '1d' }
             );
-            res.status(200).json({ token, user: { id: user.id, nombre: user.nombre, email: user.email, rol_id: user.rol_id } });
+            res.status(200).json({ 
+                token, 
+                user: { 
+                    id: user.id, 
+                    nombre: user.nombre, 
+                    email: user.email, 
+                    rol_id: user.rol_id,
+                    semestre: user.semestre,
+                    jornada: user.jornada
+                } 
+            });
         } catch (error) {
             res.status(500).json({ error: 'Internal server error' });
         }

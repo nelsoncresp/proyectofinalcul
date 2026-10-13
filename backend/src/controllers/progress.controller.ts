@@ -18,20 +18,29 @@ export const ProgressController = {
             const progressRepository = AppDataSource.getRepository(ProgresoEstudiante);
             const asignaturaRepository = AppDataSource.getRepository(Asignatura);
 
+            // Validar existencia de la materia
+            const asignatura = await asignaturaRepository.findOne({ 
+                where: { id: asignatura_id },
+                relations: ['prerrequisitos'] 
+            });
+
+            if (!asignatura) {
+                res.status(404).json({ error: 'Asignatura no encontrada' });
+                return;
+            }
+
+            // Motor de prerrequisitos si el estado es 'completado'
             if (estado === 'completado') {
-                const asignatura = await asignaturaRepository.findOne({ 
-                    where: { id: asignatura_id },
-                    relations: ['prerrequisitos'] 
-                });
-                
-                if (asignatura && asignatura.prerrequisitos) {
+                if (asignatura.prerrequisitos && asignatura.prerrequisitos.length > 0) {
                     for (const pre of asignatura.prerrequisitos) {
                         const preProgress = await progressRepository.findOneBy({ 
                             usuario_id, 
                             asignatura_id: pre.id 
                         });
                         if (!preProgress || preProgress.estado !== 'completado') {
-                            res.status(400).json({ error: `Business Logic Error: Prerequisite ${pre.id} not completed` });
+                            res.status(400).json({ 
+                                error: `Error de Regla de Negocio: La asignatura previa "${pre.nombre || pre.id}" no ha sido completada.` 
+                            });
                             return;
                         }
                     }
@@ -46,8 +55,34 @@ export const ProgressController = {
             }
             await progressRepository.save(progress);
 
-            res.status(200).json({ message: 'Progress updated successfully' });
+            // Calcular qué materias quedaron recién desbloqueadas
+            const recienDesbloqueadas: { id: number; nombre: string; semestre: number }[] = [];
+            if (estado === 'completado') {
+                const todasAsignaturas = await asignaturaRepository.find({ relations: ['prerrequisitos'] });
+                const todosProgresos = await progressRepository.findBy({ usuario_id });
+                const completadasSet = new Set(todosProgresos.filter(p => p.estado === 'completado').map(p => p.asignatura_id));
+
+                for (const asig of todasAsignaturas) {
+                    if (!completadasSet.has(asig.id) && asig.prerrequisitos && asig.prerrequisitos.length > 0) {
+                        const dependeDeEsta = asig.prerrequisitos.some(p => p.id === asignatura_id);
+                        if (dependeDeEsta) {
+                            const todosCumplidos = asig.prerrequisitos.every(p => completadasSet.has(p.id));
+                            if (todosCumplidos) {
+                                recienDesbloqueadas.push({ id: asig.id, nombre: asig.nombre, semestre: asig.semestre });
+                            }
+                        }
+                    }
+                }
+            }
+
+            res.status(200).json({ 
+                message: 'Progreso actualizado exitosamente',
+                asignatura_id,
+                estado,
+                recienDesbloqueadas
+            });
         } catch (error) {
+            console.error('[UpdateProgress Error]:', error);
             res.status(500).json({ error: 'Internal server error' });
         }
     }

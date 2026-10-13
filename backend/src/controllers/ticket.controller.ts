@@ -22,9 +22,23 @@ export const TicketController = {
             });
             await ticketRepository.save(newTicket);
 
-            res.status(201).json({ message: 'Ticket created successfully' });
+            res.status(201).json({ message: 'Ticket created successfully', ticket: newTicket });
         } catch (error) {
             console.error('[Ticket Error]:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+
+    async getTickets(req: AuthRequest, res: Response): Promise<void> {
+        try {
+            const ticketRepository = AppDataSource.getRepository(SoporteTicket);
+            const tickets = await ticketRepository.find({
+                relations: ['recurso', 'usuario'],
+                order: { id: 'DESC' }
+            });
+            res.status(200).json(tickets);
+        } catch (error) {
+            console.error('[GetTickets Error]:', error);
             res.status(500).json({ error: 'Internal server error' });
         }
     }

@@ -1,0 +1,185 @@
+{
+  "generado_en": "2026-10-12T22:10:08.732Z",
+  "lecciones_evaluaciones": [
+    {
+      "id": 1,
+      "asignatura_id": 1,
+      "contenido_lectura": "Física Mecánica: del movimiento a las leyes de Newton\n\nLa física mecánica estudia los sistemas materiales en reposo y en movimiento, y constituye el lenguaje con el que la ingeniería describe el mundo físico. La cinemática describe el movimiento sin preguntar por sus causas: posición, desplazamiento, velocidad y aceleración se modelan como funciones del tiempo, y el análisis del movimiento rectilíneo uniforme (MRU) y del movimiento rectilíneo uniformemente acelerado (MRUA) entrega las herramientas básicas para predecir trayectorias. La dinámica introduce las causas del movimiento: la primera ley de Newton define la inercia, la segunda establece que la fuerza neta es igual a masa por aceleración (F = m·a), y la tercera describe la acción y la reacción. Sobre estas leyes se construyen el análisis de fuerzas de rozamiento, el equilibrio de cuerpos y el estudio del trabajo, la energía cinética y la energía potencial, cuyos principios de conservación permiten resolver problemas complejos sin rastrear cada fuerza por separado. El dominio de estos conceptos es imprescindible para carreras de ingeniería, donde el modelado mecánico sustenta el diseño de estructuras, máquinas y sistemas electromecánicos.",
+      "video_url": "https://www.youtube.com/watch?v=aDHVXyFXxCE",
+      "tiempo_minimo_segundos": 150,
+      "pregunta": "En cinemática, ¿qué diferencia existe entre desplazamiento y recorrido (distancia)?",
+      "opciones": "[\"El desplazamiento es una magnitud vectorial que solo depende de los puntos inicial y final; el recorrido es la longitud total del trayecto.\",\"El desplazamiento siempre es mayor o igual que el recorrido.\",\"Ambas magnitudes son idénticas siempre que el movimiento sea curvilíneo.\",\"El recorrido depende solo de la velocidad media, y el desplazamiento de la aceleración.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "El desplazamiento es un vector que va del punto inicial al final, por lo que ignora el camino intermedio; el recorrido (distancia) mide toda la longitud recorrida y solo puede ser mayor o igual en módulo que el desplazamiento."
+    },
+    {
+      "id": 2,
+      "asignatura_id": 2,
+      "contenido_lectura": "La programación secuencial y estructurada se fundamenta en variables, tipos de datos primitivos, operadores lógicos y estructuras de control de flujo (condicionales y bucles iterativos). Todo algoritmo eficiente descompone un problema complejo en instrucciones secuenciales elementales.",
+      "video_url": "https://www.youtube.com/watch?v=CDk8bTls2b4",
+      "tiempo_minimo_segundos": 60,
+      "pregunta": "¿Qué estructura de control es óptima cuando se conoce con exactitud el número de iteraciones a ejecutar?",
+      "opciones": "[\"Bucle while con condición indefinida.\",\"Bucle for indexado.\",\"Estructura switch-case.\",\"Recursión sin caso base.\"]",
+      "respuesta_correcta": 1,
+      "explicacion": "Correcto: El ciclo for es el más adecuado cuando el número de repeticiones está determinado de antemano."
+    },
+    {
+      "id": 3,
+      "asignatura_id": 3,
+      "contenido_lectura": "La Ingeniería de Sistemas en la CUL forma profesionales orientados al diseño, análisis y optimización de soluciones de computación integrales, considerando hardware, software y factor humano en ecosistemas de información.",
+      "video_url": null,
+      "tiempo_minimo_segundos": 30,
+      "pregunta": "¿Cuál es el objetivo principal del pensamiento sistémico en la ingeniería?",
+      "opciones": "[\"Escribir código sin documentar.\",\"Comprender las partes como un todo interconectado y evaluar su impacto global.\",\"Ignorar el contexto de negocio de las empresas.\",\"Reemplazar todas las personas por robots.\"]",
+      "respuesta_correcta": 1,
+      "explicacion": "Correcto: El pensamiento sistémico evalúa cómo interactúan todos los componentes de un sistema complejo."
+    },
+    {
+      "id": 4,
+      "asignatura_id": 5,
+      "contenido_lectura": "La Programación Orientada a Objetos (POO) modela el software en base a Clases y Objetos, articulándose sobre cuatro pilares fundamentales: Abstracción, Encapsulamiento, Herencia y Polimorfismo.",
+      "video_url": "https://www.youtube.com/watch?v=2pA4UjE_tB8",
+      "tiempo_minimo_segundos": 60,
+      "pregunta": "¿Qué pilar de la POO permite que un objeto oculte sus atributos internos y restrinja el acceso directo?",
+      "opciones": "[\"Polimorfismo dinámico.\",\"Herencia múltiple.\",\"Encapsulamiento.\",\"Sobrecarga de operadores.\"]",
+      "respuesta_correcta": 2,
+      "explicacion": "Excelente: El encapsulamiento protege el estado interno de un objeto permitiendo su manipulación únicamente mediante métodos controlados (getters/setters)."
+    },
+    {
+      "id": 5,
+      "asignatura_id": 14,
+      "contenido_lectura": "Módulo Académico Oficial: Fundamentos administrativos.\n\nEsta asignatura perteneciente al Semestre 3 del programa de Ingeniería de Sistemas de la Corporación Universitaria Latinoamericana (CUL) tiene como propósito desarrollar competencias específicas en el área de Bases de Datos e Información.\n\nFundamentación conceptual:\nEl estudio de Fundamentos administrativos provee las bases cognitivas y las herramientas analíticas para estructurar sistemas de información, formular modelos abstractos y ejecutar soluciones de ingeniería de software y computación con rigor metodológico.\n\nMetodología de Trabajo Autónomo:\nSe recomienda realizar lectura comprensiva de los conceptos clave, revisar el material de apoyo sugerido y validar tu comprensión mediante la comprobación conceptual inferior.",
+      "video_url": "https://www.youtube.com/results?search_query=Fundamentos%20administrativos%20ingenieria%20cul",
+      "tiempo_minimo_segundos": 45,
+      "pregunta": "¿Cuál es el objetivo formativo central de la asignatura \"Fundamentos administrativos\"?",
+      "opciones": "[\"Desarrollar competencias teórico-prácticas en Fundamentos administrativos para el análisis y diseño de soluciones de ingeniería.\",\"Memorizar definiciones sin comprender la integración sistémica con el pensum.\",\"Omitir la experimentación práctica y el estudio de casos reales.\",\"Avanzar de semestre sin validar los prerrequisitos académicos correspondientes.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "¡Correcto! La materia \"Fundamentos administrativos\" busca cimentar capacidades prácticas y metodológicas para la resolución de problemas en el ecosistema tecnológico."
+    },
+    {
+      "id": 6,
+      "asignatura_id": 20,
+      "contenido_lectura": "Módulo Académico Oficial: Base de datos I.\n\nEsta asignatura perteneciente al Semestre 4 del programa de Ingeniería de Sistemas de la Corporación Universitaria Latinoamericana (CUL) tiene como propósito desarrollar competencias específicas en el área de Ciencias Básicas y Matemáticas.\n\nFundamentación conceptual:\nEl estudio de Base de datos I provee las bases cognitivas y las herramientas analíticas para estructurar sistemas de información, formular modelos abstractos y ejecutar soluciones de ingeniería de software y computación con rigor metodológico.\n\nMetodología de Trabajo Autónomo:\nSe recomienda realizar lectura comprensiva de los conceptos clave, revisar el material de apoyo sugerido y validar tu comprensión mediante la comprobación conceptual inferior.",
+      "video_url": "https://www.youtube.com/results?search_query=Base%20de%20datos%20I%20ingenieria%20cul",
+      "tiempo_minimo_segundos": 45,
+      "pregunta": "¿Cuál es el objetivo formativo central de la asignatura \"Base de datos I\"?",
+      "opciones": "[\"Desarrollar competencias teórico-prácticas en Base de datos I para el análisis y diseño de soluciones de ingeniería.\",\"Memorizar definiciones sin comprender la integración sistémica con el pensum.\",\"Omitir la experimentación práctica y el estudio de casos reales.\",\"Avanzar de semestre sin validar los prerrequisitos académicos correspondientes.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "¡Correcto! La materia \"Base de datos I\" busca cimentar capacidades prácticas y metodológicas para la resolución de problemas en el ecosistema tecnológico."
+    },
+    {
+      "id": 7,
+      "asignatura_id": 25,
+      "contenido_lectura": "Módulo Académico Oficial: Electronica analoga.\n\nEsta asignatura perteneciente al Semestre 5 del programa de Ingeniería de Sistemas de la Corporación Universitaria Latinoamericana (CUL) tiene como propósito desarrollar competencias específicas en el área de Infraestructura, Redes y Sistemas.\n\nFundamentación conceptual:\nEl estudio de Electronica analoga provee las bases cognitivas y las herramientas analíticas para estructurar sistemas de información, formular modelos abstractos y ejecutar soluciones de ingeniería de software y computación con rigor metodológico.\n\nMetodología de Trabajo Autónomo:\nSe recomienda realizar lectura comprensiva de los conceptos clave, revisar el material de apoyo sugerido y validar tu comprensión mediante la comprobación conceptual inferior.",
+      "video_url": "https://www.youtube.com/results?search_query=Electronica%20analoga%20ingenieria%20cul",
+      "tiempo_minimo_segundos": 45,
+      "pregunta": "¿Cuál es el objetivo formativo central de la asignatura \"Electronica analoga\"?",
+      "opciones": "[\"Desarrollar competencias teórico-prácticas en Electronica analoga para el análisis y diseño de soluciones de ingeniería.\",\"Memorizar definiciones sin comprender la integración sistémica con el pensum.\",\"Omitir la experimentación práctica y el estudio de casos reales.\",\"Avanzar de semestre sin validar los prerrequisitos académicos correspondientes.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "¡Correcto! La materia \"Electronica analoga\" busca cimentar capacidades prácticas y metodológicas para la resolución de problemas en el ecosistema tecnológico."
+    },
+    {
+      "id": 8,
+      "asignatura_id": 32,
+      "contenido_lectura": "Módulo Académico Oficial: Arquitectura del computador.\n\nEsta asignatura perteneciente al Semestre 6 del programa de Ingeniería de Sistemas de la Corporación Universitaria Latinoamericana (CUL) tiene como propósito desarrollar competencias específicas en el área de Infraestructura, Redes y Sistemas.\n\nFundamentación conceptual:\nEl estudio de Arquitectura del computador provee las bases cognitivas y las herramientas analíticas para estructurar sistemas de información, formular modelos abstractos y ejecutar soluciones de ingeniería de software y computación con rigor metodológico.\n\nMetodología de Trabajo Autónomo:\nSe recomienda realizar lectura comprensiva de los conceptos clave, revisar el material de apoyo sugerido y validar tu comprensión mediante la comprobación conceptual inferior.",
+      "video_url": "https://www.youtube.com/results?search_query=Arquitectura%20del%20computador%20ingenieria%20cul",
+      "tiempo_minimo_segundos": 45,
+      "pregunta": "¿Cuál es el objetivo formativo central de la asignatura \"Arquitectura del computador\"?",
+      "opciones": "[\"Desarrollar competencias teórico-prácticas en Arquitectura del computador para el análisis y diseño de soluciones de ingeniería.\",\"Memorizar definiciones sin comprender la integración sistémica con el pensum.\",\"Omitir la experimentación práctica y el estudio de casos reales.\",\"Avanzar de semestre sin validar los prerrequisitos académicos correspondientes.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "¡Correcto! La materia \"Arquitectura del computador\" busca cimentar capacidades prácticas y metodológicas para la resolución de problemas en el ecosistema tecnológico."
+    },
+    {
+      "id": 9,
+      "asignatura_id": 39,
+      "contenido_lectura": "Módulo Académico Oficial: Auditoria informatica.\n\nEsta asignatura perteneciente al Semestre 7 del programa de Ingeniería de Sistemas de la Corporación Universitaria Latinoamericana (CUL) tiene como propósito desarrollar competencias específicas en el área de Bases de Datos e Información.\n\nFundamentación conceptual:\nEl estudio de Auditoria informatica provee las bases cognitivas y las herramientas analíticas para estructurar sistemas de información, formular modelos abstractos y ejecutar soluciones de ingeniería de software y computación con rigor metodológico.\n\nMetodología de Trabajo Autónomo:\nSe recomienda realizar lectura comprensiva de los conceptos clave, revisar el material de apoyo sugerido y validar tu comprensión mediante la comprobación conceptual inferior.",
+      "video_url": "https://www.youtube.com/results?search_query=Auditoria%20informatica%20ingenieria%20cul",
+      "tiempo_minimo_segundos": 45,
+      "pregunta": "¿Cuál es el objetivo formativo central de la asignatura \"Auditoria informatica\"?",
+      "opciones": "[\"Desarrollar competencias teórico-prácticas en Auditoria informatica para el análisis y diseño de soluciones de ingeniería.\",\"Memorizar definiciones sin comprender la integración sistémica con el pensum.\",\"Omitir la experimentación práctica y el estudio de casos reales.\",\"Avanzar de semestre sin validar los prerrequisitos académicos correspondientes.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "¡Correcto! La materia \"Auditoria informatica\" busca cimentar capacidades prácticas y metodológicas para la resolución de problemas en el ecosistema tecnológico."
+    },
+    {
+      "id": 10,
+      "asignatura_id": 45,
+      "contenido_lectura": "Módulo Académico Oficial: Admon de sistemas de informacion.\n\nEsta asignatura perteneciente al Semestre 8 del programa de Ingeniería de Sistemas de la Corporación Universitaria Latinoamericana (CUL) tiene como propósito desarrollar competencias específicas en el área de Gestión de TI y Formación CUL.\n\nFundamentación conceptual:\nEl estudio de Admon de sistemas de informacion provee las bases cognitivas y las herramientas analíticas para estructurar sistemas de información, formular modelos abstractos y ejecutar soluciones de ingeniería de software y computación con rigor metodológico.\n\nMetodología de Trabajo Autónomo:\nSe recomienda realizar lectura comprensiva de los conceptos clave, revisar el material de apoyo sugerido y validar tu comprensión mediante la comprobación conceptual inferior.",
+      "video_url": "https://www.youtube.com/results?search_query=Admon%20de%20sistemas%20de%20informacion%20ingenieria%20cul",
+      "tiempo_minimo_segundos": 45,
+      "pregunta": "¿Cuál es el objetivo formativo central de la asignatura \"Admon de sistemas de informacion\"?",
+      "opciones": "[\"Desarrollar competencias teórico-prácticas en Admon de sistemas de informacion para el análisis y diseño de soluciones de ingeniería.\",\"Memorizar definiciones sin comprender la integración sistémica con el pensum.\",\"Omitir la experimentación práctica y el estudio de casos reales.\",\"Avanzar de semestre sin validar los prerrequisitos académicos correspondientes.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "¡Correcto! La materia \"Admon de sistemas de informacion\" busca cimentar capacidades prácticas y metodológicas para la resolución de problemas en el ecosistema tecnológico."
+    },
+    {
+      "id": 11,
+      "asignatura_id": 52,
+      "contenido_lectura": "Módulo Académico Oficial: Electiva de profundizacion II.\n\nEsta asignatura perteneciente al Semestre 9 del programa de Ingeniería de Sistemas de la Corporación Universitaria Latinoamericana (CUL) tiene como propósito desarrollar competencias específicas en el área de Ciencias Básicas y Matemáticas.\n\nFundamentación conceptual:\nEl estudio de Electiva de profundizacion II provee las bases cognitivas y las herramientas analíticas para estructurar sistemas de información, formular modelos abstractos y ejecutar soluciones de ingeniería de software y computación con rigor metodológico.\n\nMetodología de Trabajo Autónomo:\nSe recomienda realizar lectura comprensiva de los conceptos clave, revisar el material de apoyo sugerido y validar tu comprensión mediante la comprobación conceptual inferior.",
+      "video_url": "https://www.youtube.com/results?search_query=Electiva%20de%20profundizacion%20II%20ingenieria%20cul",
+      "tiempo_minimo_segundos": 45,
+      "pregunta": "¿Cuál es el objetivo formativo central de la asignatura \"Electiva de profundizacion II\"?",
+      "opciones": "[\"Desarrollar competencias teórico-prácticas en Electiva de profundizacion II para el análisis y diseño de soluciones de ingeniería.\",\"Memorizar definiciones sin comprender la integración sistémica con el pensum.\",\"Omitir la experimentación práctica y el estudio de casos reales.\",\"Avanzar de semestre sin validar los prerrequisitos académicos correspondientes.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "¡Correcto! La materia \"Electiva de profundizacion II\" busca cimentar capacidades prácticas y metodológicas para la resolución de problemas en el ecosistema tecnológico."
+    },
+    {
+      "id": 12,
+      "asignatura_id": 6,
+      "contenido_lectura": "Módulo Académico Oficial: Introduccion a la ingenieria.\n\nEsta asignatura perteneciente al Semestre 1 del programa de Ingeniería de Sistemas de la Corporación Universitaria Latinoamericana (CUL) tiene como propósito desarrollar competencias específicas en el área de Gestión de TI y Formación CUL.\n\nFundamentación conceptual:\nEl estudio de Introduccion a la ingenieria provee las bases cognitivas y las herramientas analíticas para estructurar sistemas de información, formular modelos abstractos y ejecutar soluciones de ingeniería de software y computación con rigor metodológico.\n\nMetodología de Trabajo Autónomo:\nSe recomienda realizar lectura comprensiva de los conceptos clave, revisar el material de apoyo sugerido y validar tu comprensión mediante la comprobación conceptual inferior.",
+      "video_url": "https://www.youtube.com/results?search_query=Introduccion%20a%20la%20ingenieria%20ingenieria%20cul",
+      "tiempo_minimo_segundos": 45,
+      "pregunta": "¿Cuál es el objetivo formativo central de la asignatura \"Introduccion a la ingenieria\"?",
+      "opciones": "[\"Desarrollar competencias teórico-prácticas en Introduccion a la ingenieria para el análisis y diseño de soluciones de ingeniería.\",\"Memorizar definiciones sin comprender la integración sistémica con el pensum.\",\"Omitir la experimentación práctica y el estudio de casos reales.\",\"Avanzar de semestre sin validar los prerrequisitos académicos correspondientes.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "¡Correcto! La materia \"Introduccion a la ingenieria\" busca cimentar capacidades prácticas y metodológicas para la resolución de problemas en el ecosistema tecnológico."
+    },
+    {
+      "id": 13,
+      "asignatura_id": 4,
+      "contenido_lectura": "Módulo Académico Oficial: Formacion del espiritu cientifico.\n\nEsta asignatura perteneciente al Semestre 1 del programa de Ingeniería de Sistemas de la Corporación Universitaria Latinoamericana (CUL) tiene como propósito desarrollar competencias específicas en el área de Bases de Datos e Información.\n\nFundamentación conceptual:\nEl estudio de Formacion del espiritu cientifico provee las bases cognitivas y las herramientas analíticas para estructurar sistemas de información, formular modelos abstractos y ejecutar soluciones de ingeniería de software y computación con rigor metodológico.\n\nMetodología de Trabajo Autónomo:\nSe recomienda realizar lectura comprensiva de los conceptos clave, revisar el material de apoyo sugerido y validar tu comprensión mediante la comprobación conceptual inferior.",
+      "video_url": "https://www.youtube.com/results?search_query=Formacion%20del%20espiritu%20cientifico%20ingenieria%20cul",
+      "tiempo_minimo_segundos": 45,
+      "pregunta": "¿Cuál es el objetivo formativo central de la asignatura \"Formacion del espiritu cientifico\"?",
+      "opciones": "[\"Desarrollar competencias teórico-prácticas en Formacion del espiritu cientifico para el análisis y diseño de soluciones de ingeniería.\",\"Memorizar definiciones sin comprender la integración sistémica con el pensum.\",\"Omitir la experimentación práctica y el estudio de casos reales.\",\"Avanzar de semestre sin validar los prerrequisitos académicos correspondientes.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "¡Correcto! La materia \"Formacion del espiritu cientifico\" busca cimentar capacidades prácticas y metodológicas para la resolución de problemas en el ecosistema tecnológico."
+    },
+    {
+      "id": 14,
+      "asignatura_id": 7,
+      "contenido_lectura": "Módulo Académico Oficial: Sociedad y tecnologia.\n\nEsta asignatura perteneciente al Semestre 1 del programa de Ingeniería de Sistemas de la Corporación Universitaria Latinoamericana (CUL) tiene como propósito desarrollar competencias específicas en el área de Bases de Datos e Información.\n\nFundamentación conceptual:\nEl estudio de Sociedad y tecnologia provee las bases cognitivas y las herramientas analíticas para estructurar sistemas de información, formular modelos abstractos y ejecutar soluciones de ingeniería de software y computación con rigor metodológico.\n\nMetodología de Trabajo Autónomo:\nSe recomienda realizar lectura comprensiva de los conceptos clave, revisar el material de apoyo sugerido y validar tu comprensión mediante la comprobación conceptual inferior.",
+      "video_url": "https://www.youtube.com/results?search_query=Sociedad%20y%20tecnologia%20ingenieria%20cul",
+      "tiempo_minimo_segundos": 45,
+      "pregunta": "¿Cuál es el objetivo formativo central de la asignatura \"Sociedad y tecnologia\"?",
+      "opciones": "[\"Desarrollar competencias teórico-prácticas en Sociedad y tecnologia para el análisis y diseño de soluciones de ingeniería.\",\"Memorizar definiciones sin comprender la integración sistémica con el pensum.\",\"Omitir la experimentación práctica y el estudio de casos reales.\",\"Avanzar de semestre sin validar los prerrequisitos académicos correspondientes.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "¡Correcto! La materia \"Sociedad y tecnologia\" busca cimentar capacidades prácticas y metodológicas para la resolución de problemas en el ecosistema tecnológico."
+    }
+  ],
+  "recursos_contenido": [
+    {
+      "id": 1,
+      "asignatura_id": 1,
+      "titulo": "Física Mecánica PDF",
+      "tipo_recurso": "documento",
+      "enlace": "https://example.com/fisica.pdf",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 2,
+      "asignatura_id": 2,
+      "titulo": "Repositorio GitHub - Algoritmos y Ejercicios Prácticos",
+      "tipo_recurso": "repositorio",
+      "enlace": "https://github.com/cul-ingenieria/fundamentos-programacion",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 3,
+      "asignatura_id": 5,
+      "titulo": "Manual de Patrones POO y Principios SOLID",
+      "tipo_recurso": "documento",
+      "enlace": "https://github.com/cul-ingenieria/poo-solid-patterns",
+      "estado_revision": "aprobado"
+    }
+  ]
+}

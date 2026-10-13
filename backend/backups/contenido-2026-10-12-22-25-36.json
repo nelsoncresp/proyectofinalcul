@@ -1,0 +1,516 @@
+{
+  "generado_en": "2026-10-12T22:25:36.782Z",
+  "lecciones_evaluaciones": [
+    {
+      "id": 1,
+      "asignatura_id": 1,
+      "contenido_lectura": "Física Mecánica: del movimiento a las leyes de Newton\n\nLa física mecánica estudia los sistemas materiales en reposo y en movimiento, y constituye el lenguaje con el que la ingeniería describe el mundo físico. La cinemática describe el movimiento sin preguntar por sus causas: posición, desplazamiento, velocidad y aceleración se modelan como funciones del tiempo, y el análisis del movimiento rectilíneo uniforme (MRU) y del movimiento rectilíneo uniformemente acelerado (MRUA) entrega las herramientas básicas para predecir trayectorias. La dinámica introduce las causas del movimiento: la primera ley de Newton define la inercia, la segunda establece que la fuerza neta es igual a masa por aceleración (F = m·a), y la tercera describe la acción y la reacción. Sobre estas leyes se construyen el análisis de fuerzas de rozamiento, el equilibrio de cuerpos y el estudio del trabajo, la energía cinética y la energía potencial, cuyos principios de conservación permiten resolver problemas complejos sin rastrear cada fuerza por separado. El dominio de estos conceptos es imprescindible para carreras de ingeniería, donde el modelado mecánico sustenta el diseño de estructuras, máquinas y sistemas electromecánicos.",
+      "video_url": "https://www.youtube.com/watch?v=aDHVXyFXxCE",
+      "tiempo_minimo_segundos": 150,
+      "pregunta": "En cinemática, ¿qué diferencia existe entre desplazamiento y recorrido (distancia)?",
+      "opciones": "[\"El desplazamiento es una magnitud vectorial que solo depende de los puntos inicial y final; el recorrido es la longitud total del trayecto.\",\"El desplazamiento siempre es mayor o igual que el recorrido.\",\"Ambas magnitudes son idénticas siempre que el movimiento sea curvilíneo.\",\"El recorrido depende solo de la velocidad media, y el desplazamiento de la aceleración.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "El desplazamiento es un vector que va del punto inicial al final, por lo que ignora el camino intermedio; el recorrido (distancia) mide toda la longitud recorrida y solo puede ser mayor o igual en módulo que el desplazamiento."
+    },
+    {
+      "id": 2,
+      "asignatura_id": 2,
+      "contenido_lectura": "Comunicación Oral y Escrita: argumentar con claridad\n\nComunicar es transferir información, ideas y actitudes de un emisor a un receptor mediante un código compartido, y la competencia comunicativa es un activo profesional tan determinante como la técnica. La comunicación oral se produce en tiempo real: depende de la pronunciación, el ritmo, el lenguaje corporal y la escucha activa, y admite retroalimentación inmediata; por eso su preparación exige estructurar el mensaje con introducción, desarrollo y cierre, y adaptar el registro al auditorio. La comunicación escrita, en cambio, permite planificación y revisión, pero exige precisión léxica, coherencia y cohesión textual: párrafos con idea central, conectores lógicos y un estilo adecuado al género (informe, correo profesional, memoria). Ambas modalidades comparten la argumentación: sostener una tesis con premisas verificables, anticipar objeciones y evitar falacias como el ad hominem o la apelación a la mayoría. En el ejercicio profesional, la mayor parte de los fracasos técnicos se explican por mensajes mal formulados, no por ideas débiles: redactar y exponer con rigor es, literalmente, parte del trabajo del ingeniero.",
+      "video_url": "https://www.youtube.com/watch?v=JiM6f6z1lxA",
+      "tiempo_minimo_segundos": 150,
+      "pregunta": "¿Cuál es una diferencia fundamental entre la comunicación escrita y la oral?",
+      "opciones": "[\"La escrita permite planificación y revisión; la oral se produce en tiempo real y depende de la retroalimentación inmediata.\",\"La oral admite un vocabulario técnico y la escrita no.\",\"La escrita nunca requiere adaptación al auditorio.\",\"La oral no transmite actitudes ni emociones.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "La escrita ofrece control sobre el texto (planificación, borradores, revisión); la oral ocurre en vivo y su eficacia depende de la claridad del habla, del lenguaje corporal y de la escucha activa del interlocutor."
+    },
+    {
+      "id": 3,
+      "asignatura_id": 3,
+      "contenido_lectura": "Fundamentos Matemáticos: lógica, conjuntos y funciones\n\nLos fundamentos matemáticos construyen el idioma en el que la ingeniería formula sus problemas. La lógica proposicional estudia enunciados que pueden ser verdaderos o falsos, las conectivas (y, o, negación, implicación) que los combinan y las tablas de verdad que determinan su valor; los cuantificadores universal (∀) y existencial (∀) permiten enunciar proposiciones sobre conjuntos completos. La teoría de conjuntos aporta la notación de pertenencia, unión, intersección, complemento y diferencia, base para describir dominios de funciones y relaciones. Las funciones asocian cada elemento de un conjunto de partida con un único elemento de un conjunto de llegada; su estudio incluye dominio, recorrido, inyectividad, biyectividad y composición, además del análisis gráfico de crecimiento, máximos y asíntotas. El orden de magnitud, la notación científica y el manejo de logaritmos y potencias completan el instrumental necesario para el cálculo diferencial e integral. Este bloque parece abstracto, pero cada técnica que se use después en física, estadística o programación descansa aquí: dominar estas bases reduce drásticamente los fracasos en asignaturas posteriores.",
+      "video_url": "https://www.youtube.com/watch?v=oVxT4iwwG9g",
+      "tiempo_minimo_segundos": 150,
+      "pregunta": "En lógica proposicional, ¿cuál es el valor de verdad de la negación de una proposición verdadera?",
+      "opciones": "[\"Falso, siempre.\",\"Verdadero, siempre.\",\"Depende de la longitud de la proposición.\",\"Indefinido hasta aplicar los cuantificadores.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "La negación invierte el valor de verdad: si P es verdadera, ¬P es falsa. Es una de las propiedades básicas de las conectivas lógicas."
+    },
+    {
+      "id": 4,
+      "asignatura_id": 5,
+      "contenido_lectura": "Fundamentos de Lógica y Programación Estructurada\n\nLa lógica de programación establece las bases para cualquier ingeniero de sistemas. En este primer semestre, el enfoque se centra en la resolución de problemas mediante el modelado lógico de datos y flujos de ejecución. Herramientas como pseudocódigo y diagramas de flujo permiten comprender las estructuras secuenciales, condicionales y cíclicas sin la complejidad sintáctica de un lenguaje de compilación avanzada. El dominio de este bloque garantiza que el estudiante comprenda el comportamiento de la memoria y la evaluación de expresiones booleanas antes de abordar lenguajes fuertemente tipados como Java en la universidad.",
+      "video_url": "https://www.youtube.com/watch?v=c2sodUDMxDs",
+      "tiempo_minimo_segundos": 120,
+      "pregunta": "¿Cuál es la principal característica operativa de una estructura condicional múltiple (como el comando Según / Switch)?",
+      "opciones": "[\"Ejecutar un bloque de instrucciones de manera repetitiva hasta que una condición externa cambie a verdadero.\",\"Evaluar una única variable contra múltiples valores posibles para bifurcar el flujo de ejecución hacia caminos específicos de manera limpia.\",\"Declarar variables estáticas en tiempo de compilación para optimizar el uso de memoria RAM.\",\"Ordenar de forma descendente un conjunto de registros numéricos.\"]",
+      "respuesta_correcta": 1,
+      "explicacion": "El comando Según/Switch compara una expresión contra varios valores posibles y ejecuta únicamente el bloque asociado al valor coincidente, evitando encadenamientos extensos de condicionales simples."
+    },
+    {
+      "id": 12,
+      "asignatura_id": 6,
+      "contenido_lectura": "Introducción a la Ingeniería: profesión, método y sistemas\n\nLa ingeniería es la profesión que aplica el conocimiento científico y matemático para resolver problemas prácticos diseñando sistemas, procesos y productos bajo restricciones de costo, tiempo, calidad y seguridad. La ingeniería de sistemas, en particular, se distingue por su enfoque interdisciplinario: no optimiza componentes aislados, sino el comportamiento del todo, considerando las interdependencias entre personas, procesos, tecnología y contexto. El pensamiento sistémico se apoya en conceptos como frontera del sistema, entradas y salidas, retroalimentación (feedback) y equilibrio, y en metodologías que estructuran el ciclo de vida del proyecto: definición de requisitos, diseño, implementación, verificación y mantenimiento. A lo anterior se suma el marco profesional: estándares de calidad (como los de la ISO), gestión de proyectos, documentación técnica y una ética de responsabilidad social que obliga a ponderar el impacto humano de cada decisión técnica. Esta asignatura contextualiza el pensum: cada materia posterior —programación, redes, bases de datos, software— será una herramienta al servicio de un propósito mayor: construir sistemas que funcionen en el mundo real.",
+      "video_url": "https://www.youtube.com/watch?v=i3mhdoptGKk",
+      "tiempo_minimo_segundos": 150,
+      "pregunta": "¿Qué distingue el enfoque de la ingeniería de sistemas?",
+      "opciones": "[\"Aborda problemas complejos considerando el sistema completo y sus interdependencias, integrando múltiples disciplinas.\",\"Se enfoca exclusivamente en el hardware de las computadoras.\",\"Estudia únicamente los algoritmos de programación sin contexto organizacional.\",\"Aplica únicamente métodos empíricos sin apoyo matemático.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "La ingeniería de sistemas es interdisciplinaria y sistémica: analiza el todo y las relaciones entre sus partes (personas, procesos y tecnología) antes de optimizar componentes aislados."
+    },
+    {
+      "id": 13,
+      "asignatura_id": 4,
+      "contenido_lectura": "Formación del Espíritu Científico: método, escepticismo y ética\n\nFormar el espíritu científico no es memorizar hechos, sino adoptar una manera de pensar: exigir evidencia, aceptar el error y corregirlo. El método científico articula observación de un fenómeno, formulación de una hipótesis contrastable, experimentación controlada, análisis de resultados y publicación que permite la réplica de terceros. Karl Popper añadió una corrección decisiva: lo que distingue a una teoría científica no es que pueda confirmarse —casi cualquier hipótesia admite ejemplos a favor— sino que pueda refutarse; una afirmación inverificable (como las predicciones sin fecha) queda fuera de la ciencia. El pensamiento crítico complementa el método con herramientas defensivas contra el autoengaño: identificar sesgos cognitivos (confirmación, disponibilidad, exceso de confianza) y reconocer falacias formales e informales, como el ad hominem, la falsa dicotomía o la apelación a la autoridad. A esto se suma la ética científica: honestidad en el reporte de datos, reconocimiento de fuentes y responsabilidad social del conocimiento. Un profesional formado en este marco toma mejores decisiones porque distingue entre lo que sabe, lo que supone y lo que solo parece saber.",
+      "video_url": "https://www.youtube.com/watch?v=gHTYikPV15M",
+      "tiempo_minimo_segundos": 150,
+      "pregunta": "Según el falsacionismo de Karl Popper, ¿qué convierte a una teoría en científica?",
+      "opciones": "[\"Que formule afirmaciones que puedan ser refutadas por evidencia o experimentación.\",\"Que acumule la mayor cantidad de confirmaciones posibles.\",\"Que sea aceptada por la mayoría de los científicos.\",\"Que no pueda ser contradicha por ningún dato futuro.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "Popper sostenía que la demarcación entre ciencia y no ciencia es la refutabilidad: una teoría científica arriesga predicciones que pueden resultar falsas; las teorías inverificables no hacen ciencia."
+    },
+    {
+      "id": 14,
+      "asignatura_id": 7,
+      "contenido_lectura": "Sociedad y Tecnología: co-evolución, brecha y responsabilidad\n\nLa tecnología y la sociedad se transforman mutuamente: cada avance técnico reorganiza hábitos, economías y relaciones de poder, y cada necesidad social abre una ruta de innovación. La revolución industrial ilustró el patrón —la máquina de vapor no solo produjo telas, sino fábricas, ciudades y nuevas clases sociales— y la revolución digital lo aceleró: la computación, internet y la telefonía móvil alteraron la comunicación, el trabajo, la educación y hasta la política. Este entrelazamiento tiene doble filo. Por un lado, la tecnología amplía capacidades: acceso al conocimiento, salud a distancia, automatización de tareas peligrosas. Por otro, produce riesgos que el ingeniero no puede ignorar: la brecha digital —la desigualdad en el acceso y uso efectivo de las tecnologías de la información— excluye a millones; la sobreexposición de datos compromete la privacidad; la automatización desplaza empleos y la huella ambiental de la infraestructura digital crece. Frente a esto, la ética tecnológica y la regulación (marcos de protección de datos, diseño inclusivo, computación responsable) se vuelven parte del diseño, no un añadido. El profesional que ignore el contexto social de su obra construirá sistemas técnicamente correctos y socialmente fracasados.",
+      "video_url": "https://www.youtube.com/watch?v=AU_m-7dDVR8",
+      "tiempo_minimo_segundos": 150,
+      "pregunta": "¿Qué describe el concepto de brecha digital?",
+      "opciones": "[\"La desigualdad en el acceso y el uso efectivo de las tecnologías de la información entre distintos grupos, territorios o generaciones.\",\"La distancia física entre los centros de cómputo y los usuarios finales.\",\"El retraso técnico entre dos versiones de un mismo software.\",\"El diferencial de costo entre equipos de marca y equipos genéricos.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "La brecha digital es una desigualdad socio-técnica: incluye acceso a dispositivos y conectividad, pero también habilidades digitales y uso productivo de la tecnología."
+    }
+  ],
+  "recursos_contenido": [
+    {
+      "id": 1,
+      "asignatura_id": 1,
+      "titulo": "Física Mecánica PDF",
+      "tipo_recurso": "documento",
+      "enlace": "https://example.com/fisica.pdf",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 3,
+      "asignatura_id": 24,
+      "titulo": "Manual de Patrones POO y Principios SOLID",
+      "tipo_recurso": "documento",
+      "enlace": "https://github.com/cul-ingenieria/poo-solid-patterns",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 4,
+      "asignatura_id": 1,
+      "titulo": "Khan Academy - Física (curso completo en español)",
+      "tipo_recurso": "enlace",
+      "enlace": "https://es.khanacademy.org/science/physics",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 5,
+      "asignatura_id": 1,
+      "titulo": "HyperPhysics - Referencia conceptual de mecánica",
+      "tipo_recurso": "documento",
+      "enlace": "https://hyperphysics.phy-astr.gsu.edu/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 6,
+      "asignatura_id": 1,
+      "titulo": "The Physics Classroom - Lecciones y simulaciones",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.physicsclassroom.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 7,
+      "asignatura_id": 1,
+      "titulo": "MIT OpenCourseWare 8.01SC - Classical Mechanics",
+      "tipo_recurso": "documento",
+      "enlace": "https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 8,
+      "asignatura_id": 1,
+      "titulo": "LibreTexts Physics - Textos abiertos de física",
+      "tipo_recurso": "documento",
+      "enlace": "https://phys.libretexts.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 9,
+      "asignatura_id": 1,
+      "titulo": "OpenStax - University Physics Volume 1 (PDF libre)",
+      "tipo_recurso": "documento",
+      "enlace": "https://openstax.org/details/books/university-physics-volume-1",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 10,
+      "asignatura_id": 1,
+      "titulo": "Wikipedia - Mecánica clásica",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Mec%C3%A1nica_cl%C3%A1sica",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 11,
+      "asignatura_id": 1,
+      "titulo": "GeoGebra - Simulaciones interactivas de física",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.geogebra.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 12,
+      "asignatura_id": 2,
+      "titulo": "Purdue OWL - Guía de redacción y gramática (inglés)",
+      "tipo_recurso": "documento",
+      "enlace": "https://owl.purdue.edu/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 13,
+      "asignatura_id": 2,
+      "titulo": "Khan Academy - Gramática en español",
+      "tipo_recurso": "enlace",
+      "enlace": "https://es.khanacademy.org/humanities/grammar",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 14,
+      "asignatura_id": 2,
+      "titulo": "RAE - Diccionario panhispánico de dudas (DPD)",
+      "tipo_recurso": "documento",
+      "enlace": "https://www.rae.es/dpd/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 15,
+      "asignatura_id": 2,
+      "titulo": "MindTools - Habilidades de comunicación",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.mindtools.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 16,
+      "asignatura_id": 2,
+      "titulo": "Wikipedia - Comunicación (proceso y elementos)",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Comunicaci%C3%B3n",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 17,
+      "asignatura_id": 2,
+      "titulo": "Wikipedia - Redacción (géneros y estructura)",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Redacci%C3%B3n",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 18,
+      "asignatura_id": 2,
+      "titulo": "Astraway - Videos de comunicación oral y escrita",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.youtube.com/@Astraway",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 19,
+      "asignatura_id": 3,
+      "titulo": "Khan Academy - Matemáticas (ruta completa en español)",
+      "tipo_recurso": "enlace",
+      "enlace": "https://es.khanacademy.org/math",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 20,
+      "asignatura_id": 3,
+      "titulo": "MathWorld (Wolfram) - Referencia matemática enciclopédica",
+      "tipo_recurso": "documento",
+      "enlace": "https://mathworld.wolfram.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 21,
+      "asignatura_id": 3,
+      "titulo": "Paul's Online Math Notes - Álgebra y pre cálculo",
+      "tipo_recurso": "documento",
+      "enlace": "https://tutorial.math.lamar.edu/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 22,
+      "asignatura_id": 3,
+      "titulo": "Wolfram Alpha - Calculadora de pasos",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.wolframalpha.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 23,
+      "asignatura_id": 3,
+      "titulo": "Wikipedia - Conjunto (teoría de conjuntos)",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Conjunto",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 24,
+      "asignatura_id": 3,
+      "titulo": "Wikipedia - Lógica matemática",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/L%C3%B3gica_matem%C3%A1tica",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 25,
+      "asignatura_id": 3,
+      "titulo": "3Blue1Brown - Visualización matemática",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.3blue1brown.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 26,
+      "asignatura_id": 4,
+      "titulo": "Wikipedia - Método científico (fases y debate)",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/M%C3%A9todo_cient%C3%ADfico",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 27,
+      "asignatura_id": 4,
+      "titulo": "Wikipedia - Pensamiento crítico",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Pensamiento_cr%C3%ADtico",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 28,
+      "asignatura_id": 4,
+      "titulo": "Wikipedia - Falsabilidad (criterio de demarcación)",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Falsabilidad",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 29,
+      "asignatura_id": 4,
+      "titulo": "Science - Revista científica de referencia",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.science.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 30,
+      "asignatura_id": 4,
+      "titulo": "Nature - Investigación y actualidad científica",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.nature.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 31,
+      "asignatura_id": 4,
+      "titulo": "TED - Charlas de divulgación científica",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.ted.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 32,
+      "asignatura_id": 4,
+      "titulo": "CuriosaMente - Pensamiento crítico y lógica (canal)",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.youtube.com/@CuriosaMente",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 33,
+      "asignatura_id": 5,
+      "titulo": "karan/Projects - Colección de proyectos de programación para principiantes",
+      "tipo_recurso": "repositorio",
+      "enlace": "https://github.com/karan/Projects",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 34,
+      "asignatura_id": 5,
+      "titulo": "TheAlgorithms/Java - Algoritmos y estructuras implementados en Java",
+      "tipo_recurso": "repositorio",
+      "enlace": "https://github.com/TheAlgorithms/Java",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 35,
+      "asignatura_id": 5,
+      "titulo": "TheAlgorithms/Python - Algoritmos y estructuras en Python",
+      "tipo_recurso": "repositorio",
+      "enlace": "https://github.com/TheAlgorithms/Python",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 36,
+      "asignatura_id": 5,
+      "titulo": "PseInt - Documentación y manual de uso del intérprete de pseudocódigo",
+      "tipo_recurso": "documento",
+      "enlace": "https://pseint.sourceforge.net/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 37,
+      "asignatura_id": 5,
+      "titulo": "freeCodeCamp Español - Fundamentos de programación",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.freecodecamp.org/espanol/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 38,
+      "asignatura_id": 5,
+      "titulo": "OpenWebinars - Curso de Introducción a la Programación",
+      "tipo_recurso": "enlace",
+      "enlace": "https://openwebinars.net/cursos/fundamentos-programacion/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 39,
+      "asignatura_id": 5,
+      "titulo": "MDN Web Docs - Guía de lógica y conceptos de código",
+      "tipo_recurso": "documento",
+      "enlace": "https://developer.mozilla.org/es/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 40,
+      "asignatura_id": 5,
+      "titulo": "LeetCode - Sección de problemas fáciles de introducción",
+      "tipo_recurso": "enlace",
+      "enlace": "https://leetcode.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 41,
+      "asignatura_id": 5,
+      "titulo": "HackerRank - Domains de práctica algorítmica",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.hackerrank.com/domains",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 42,
+      "asignatura_id": 6,
+      "titulo": "INCOSE - Sociedad Internacional de Ingeniería de Sistemas",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.incose.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 43,
+      "asignatura_id": 6,
+      "titulo": "ASQ - Calidad y estándares de ingeniería",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.asq.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 44,
+      "asignatura_id": 6,
+      "titulo": "IIASA - Investigación en ciencias de sistemas (Viena)",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.iiasa.ac.at/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 45,
+      "asignatura_id": 6,
+      "titulo": "ISO - Estándares internacionales de calidad",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.iso.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 46,
+      "asignatura_id": 6,
+      "titulo": "PMI - Marco de gestión de proyectos (PMBOK)",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.pmi.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 47,
+      "asignatura_id": 6,
+      "titulo": "Wikipedia - Ingeniería de sistemas",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Ingenier%C3%ADa_de_sistemas",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 48,
+      "asignatura_id": 6,
+      "titulo": "Wikipedia - Teoría de sistemas",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Teor%C3%ADa_de_sistemas",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 49,
+      "asignatura_id": 7,
+      "titulo": "Wikipedia - Impacto tecnológico",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Impacto_tecnol%C3%B3gico",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 50,
+      "asignatura_id": 7,
+      "titulo": "Wikipedia - Brecha digital",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Brecha_digital",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 51,
+      "asignatura_id": 7,
+      "titulo": "Wikipedia - Revolución digital",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Revoluci%C3%B3n_digital",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 52,
+      "asignatura_id": 7,
+      "titulo": "Wikipedia - Tecnologías de la información y la comunicación",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Tecnolog%C3%ADa_de_la_informaci%C3%B3n_y_la_comunicaci%C3%B3n",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 53,
+      "asignatura_id": 7,
+      "titulo": "OCDE - Estudios de sociedad y tecnología",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.oecd.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 54,
+      "asignatura_id": 7,
+      "titulo": "World Economic Forum - Agenda tecnológica global",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.weforum.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 55,
+      "asignatura_id": 7,
+      "titulo": "TEDx Talks - Charlas sobre tecnología y sociedad",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.youtube.com/@TEDxTalks",
+      "estado_revision": "aprobado"
+    }
+  ]
+}

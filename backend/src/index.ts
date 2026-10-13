@@ -6,6 +6,7 @@ import authRoutes from './routes/auth.routes';
 import progressRoutes from './routes/progress.routes';
 import resourceRoutes from './routes/resource.routes';
 import ticketRoutes from './routes/ticket.routes';
+import asignaturaRoutes from './routes/asignatura.routes';
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/resources', resourceRoutes);
 app.use('/api/tickets', ticketRoutes);
+app.use('/api/asignaturas', asignaturaRoutes);
 app.use('/prueba', (req, res) => {
     console.log('HOLA'); res.send('HOLA, culo con cara <br> uaa');
 }

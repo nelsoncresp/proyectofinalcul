@@ -1,0 +1,934 @@
+{
+  "generado_en": "2026-10-12T23:14:10.821Z",
+  "lecciones_evaluaciones": [
+    {
+      "id": 1,
+      "asignatura_id": 1,
+      "contenido_lectura": "Física Mecánica: del movimiento a las leyes de Newton\n\nLa física mecánica estudia los sistemas materiales en reposo y en movimiento, y constituye el lenguaje con el que la ingeniería describe el mundo físico. La cinemática describe el movimiento sin preguntar por sus causas: posición, desplazamiento, velocidad y aceleración se modelan como funciones del tiempo, y el análisis del movimiento rectilíneo uniforme (MRU) y del movimiento rectilíneo uniformemente acelerado (MRUA) entrega las herramientas básicas para predecir trayectorias. La dinámica introduce las causas del movimiento: la primera ley de Newton define la inercia, la segunda establece que la fuerza neta es igual a masa por aceleración (F = m·a), y la tercera describe la acción y la reacción. Sobre estas leyes se construyen el análisis de fuerzas de rozamiento, el equilibrio de cuerpos y el estudio del trabajo, la energía cinética y la energía potencial, cuyos principios de conservación permiten resolver problemas complejos sin rastrear cada fuerza por separado. El dominio de estos conceptos es imprescindible para carreras de ingeniería, donde el modelado mecánico sustenta el diseño de estructuras, máquinas y sistemas electromecánicos.",
+      "video_url": "https://www.youtube.com/watch?v=aDHVXyFXxCE",
+      "tiempo_minimo_segundos": 150,
+      "pregunta": "En cinemática, ¿qué diferencia existe entre desplazamiento y recorrido (distancia)?",
+      "opciones": "[\"El desplazamiento es una magnitud vectorial que solo depende de los puntos inicial y final; el recorrido es la longitud total del trayecto.\",\"El desplazamiento siempre es mayor o igual que el recorrido.\",\"Ambas magnitudes son idénticas siempre que el movimiento sea curvilíneo.\",\"El recorrido depende solo de la velocidad media, y el desplazamiento de la aceleración.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "El desplazamiento es un vector que va del punto inicial al final, por lo que ignora el camino intermedio; el recorrido (distancia) mide toda la longitud recorrida y solo puede ser mayor o igual en módulo que el desplazamiento."
+    },
+    {
+      "id": 2,
+      "asignatura_id": 2,
+      "contenido_lectura": "Comunicación Oral y Escrita: argumentar con claridad\n\nComunicar es transferir información, ideas y actitudes de un emisor a un receptor mediante un código compartido, y la competencia comunicativa es un activo profesional tan determinante como la técnica. La comunicación oral se produce en tiempo real: depende de la pronunciación, el ritmo, el lenguaje corporal y la escucha activa, y admite retroalimentación inmediata; por eso su preparación exige estructurar el mensaje con introducción, desarrollo y cierre, y adaptar el registro al auditorio. La comunicación escrita, en cambio, permite planificación y revisión, pero exige precisión léxica, coherencia y cohesión textual: párrafos con idea central, conectores lógicos y un estilo adecuado al género (informe, correo profesional, memoria). Ambas modalidades comparten la argumentación: sostener una tesis con premisas verificables, anticipar objeciones y evitar falacias como el ad hominem o la apelación a la mayoría. En el ejercicio profesional, la mayor parte de los fracasos técnicos se explican por mensajes mal formulados, no por ideas débiles: redactar y exponer con rigor es, literalmente, parte del trabajo del ingeniero.",
+      "video_url": "https://www.youtube.com/watch?v=JiM6f6z1lxA",
+      "tiempo_minimo_segundos": 150,
+      "pregunta": "¿Cuál es una diferencia fundamental entre la comunicación escrita y la oral?",
+      "opciones": "[\"La escrita permite planificación y revisión; la oral se produce en tiempo real y depende de la retroalimentación inmediata.\",\"La oral admite un vocabulario técnico y la escrita no.\",\"La escrita nunca requiere adaptación al auditorio.\",\"La oral no transmite actitudes ni emociones.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "La escrita ofrece control sobre el texto (planificación, borradores, revisión); la oral ocurre en vivo y su eficacia depende de la claridad del habla, del lenguaje corporal y de la escucha activa del interlocutor."
+    },
+    {
+      "id": 3,
+      "asignatura_id": 3,
+      "contenido_lectura": "Fundamentos Matemáticos: lógica, conjuntos y funciones\n\nLos fundamentos matemáticos construyen el idioma en el que la ingeniería formula sus problemas. La lógica proposicional estudia enunciados que pueden ser verdaderos o falsos, las conectivas (y, o, negación, implicación) que los combinan y las tablas de verdad que determinan su valor; los cuantificadores universal (∀) y existencial (∀) permiten enunciar proposiciones sobre conjuntos completos. La teoría de conjuntos aporta la notación de pertenencia, unión, intersección, complemento y diferencia, base para describir dominios de funciones y relaciones. Las funciones asocian cada elemento de un conjunto de partida con un único elemento de un conjunto de llegada; su estudio incluye dominio, recorrido, inyectividad, biyectividad y composición, además del análisis gráfico de crecimiento, máximos y asíntotas. El orden de magnitud, la notación científica y el manejo de logaritmos y potencias completan el instrumental necesario para el cálculo diferencial e integral. Este bloque parece abstracto, pero cada técnica que se use después en física, estadística o programación descansa aquí: dominar estas bases reduce drásticamente los fracasos en asignaturas posteriores.",
+      "video_url": "https://www.youtube.com/watch?v=oVxT4iwwG9g",
+      "tiempo_minimo_segundos": 150,
+      "pregunta": "En lógica proposicional, ¿cuál es el valor de verdad de la negación de una proposición verdadera?",
+      "opciones": "[\"Falso, siempre.\",\"Verdadero, siempre.\",\"Depende de la longitud de la proposición.\",\"Indefinido hasta aplicar los cuantificadores.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "La negación invierte el valor de verdad: si P es verdadera, ¬P es falsa. Es una de las propiedades básicas de las conectivas lógicas."
+    },
+    {
+      "id": 4,
+      "asignatura_id": 5,
+      "contenido_lectura": "Fundamentos de Lógica y Programación Estructurada\n\nLa lógica de programación establece las bases para cualquier ingeniero de sistemas. En este primer semestre, el enfoque se centra en la resolución de problemas mediante el modelado lógico de datos y flujos de ejecución. Herramientas como pseudocódigo y diagramas de flujo permiten comprender las estructuras secuenciales, condicionales y cíclicas sin la complejidad sintáctica de un lenguaje de compilación avanzada. El dominio de este bloque garantiza que el estudiante comprenda el comportamiento de la memoria y la evaluación de expresiones booleanas antes de abordar lenguajes fuertemente tipados como Java en la universidad.",
+      "video_url": "https://www.youtube.com/watch?v=c2sodUDMxDs",
+      "tiempo_minimo_segundos": 120,
+      "pregunta": "¿Cuál es la principal característica operativa de una estructura condicional múltiple (como el comando Según / Switch)?",
+      "opciones": "[\"Ejecutar un bloque de instrucciones de manera repetitiva hasta que una condición externa cambie a verdadero.\",\"Evaluar una única variable contra múltiples valores posibles para bifurcar el flujo de ejecución hacia caminos específicos de manera limpia.\",\"Declarar variables estáticas en tiempo de compilación para optimizar el uso de memoria RAM.\",\"Ordenar de forma descendente un conjunto de registros numéricos.\"]",
+      "respuesta_correcta": 1,
+      "explicacion": "El comando Según/Switch compara una expresión contra varios valores posibles y ejecuta únicamente el bloque asociado al valor coincidente, evitando encadenamientos extensos de condicionales simples."
+    },
+    {
+      "id": 12,
+      "asignatura_id": 6,
+      "contenido_lectura": "Introducción a la Ingeniería: profesión, método y sistemas\n\nLa ingeniería es la profesión que aplica el conocimiento científico y matemático para resolver problemas prácticos diseñando sistemas, procesos y productos bajo restricciones de costo, tiempo, calidad y seguridad. La ingeniería de sistemas, en particular, se distingue por su enfoque interdisciplinario: no optimiza componentes aislados, sino el comportamiento del todo, considerando las interdependencias entre personas, procesos, tecnología y contexto. El pensamiento sistémico se apoya en conceptos como frontera del sistema, entradas y salidas, retroalimentación (feedback) y equilibrio, y en metodologías que estructuran el ciclo de vida del proyecto: definición de requisitos, diseño, implementación, verificación y mantenimiento. A lo anterior se suma el marco profesional: estándares de calidad (como los de la ISO), gestión de proyectos, documentación técnica y una ética de responsabilidad social que obliga a ponderar el impacto humano de cada decisión técnica. Esta asignatura contextualiza el pensum: cada materia posterior —programación, redes, bases de datos, software— será una herramienta al servicio de un propósito mayor: construir sistemas que funcionen en el mundo real.",
+      "video_url": "https://www.youtube.com/watch?v=i3mhdoptGKk",
+      "tiempo_minimo_segundos": 150,
+      "pregunta": "¿Qué distingue el enfoque de la ingeniería de sistemas?",
+      "opciones": "[\"Aborda problemas complejos considerando el sistema completo y sus interdependencias, integrando múltiples disciplinas.\",\"Se enfoca exclusivamente en el hardware de las computadoras.\",\"Estudia únicamente los algoritmos de programación sin contexto organizacional.\",\"Aplica únicamente métodos empíricos sin apoyo matemático.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "La ingeniería de sistemas es interdisciplinaria y sistémica: analiza el todo y las relaciones entre sus partes (personas, procesos y tecnología) antes de optimizar componentes aislados."
+    },
+    {
+      "id": 13,
+      "asignatura_id": 4,
+      "contenido_lectura": "Formación del Espíritu Científico: método, escepticismo y ética\n\nFormar el espíritu científico no es memorizar hechos, sino adoptar una manera de pensar: exigir evidencia, aceptar el error y corregirlo. El método científico articula observación de un fenómeno, formulación de una hipótesis contrastable, experimentación controlada, análisis de resultados y publicación que permite la réplica de terceros. Karl Popper añadió una corrección decisiva: lo que distingue a una teoría científica no es que pueda confirmarse —casi cualquier hipótesia admite ejemplos a favor— sino que pueda refutarse; una afirmación inverificable (como las predicciones sin fecha) queda fuera de la ciencia. El pensamiento crítico complementa el método con herramientas defensivas contra el autoengaño: identificar sesgos cognitivos (confirmación, disponibilidad, exceso de confianza) y reconocer falacias formales e informales, como el ad hominem, la falsa dicotomía o la apelación a la autoridad. A esto se suma la ética científica: honestidad en el reporte de datos, reconocimiento de fuentes y responsabilidad social del conocimiento. Un profesional formado en este marco toma mejores decisiones porque distingue entre lo que sabe, lo que supone y lo que solo parece saber.",
+      "video_url": "https://www.youtube.com/watch?v=gHTYikPV15M",
+      "tiempo_minimo_segundos": 150,
+      "pregunta": "Según el falsacionismo de Karl Popper, ¿qué convierte a una teoría en científica?",
+      "opciones": "[\"Que formule afirmaciones que puedan ser refutadas por evidencia o experimentación.\",\"Que acumule la mayor cantidad de confirmaciones posibles.\",\"Que sea aceptada por la mayoría de los científicos.\",\"Que no pueda ser contradicha por ningún dato futuro.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "Popper sostenía que la demarcación entre ciencia y no ciencia es la refutabilidad: una teoría científica arriesga predicciones que pueden resultar falsas; las teorías inverificables no hacen ciencia."
+    },
+    {
+      "id": 14,
+      "asignatura_id": 7,
+      "contenido_lectura": "Sociedad y Tecnología: co-evolución, brecha y responsabilidad\n\nLa tecnología y la sociedad se transforman mutuamente: cada avance técnico reorganiza hábitos, economías y relaciones de poder, y cada necesidad social abre una ruta de innovación. La revolución industrial ilustró el patrón —la máquina de vapor no solo produjo telas, sino fábricas, ciudades y nuevas clases sociales— y la revolución digital lo aceleró: la computación, internet y la telefonía móvil alteraron la comunicación, el trabajo, la educación y hasta la política. Este entrelazamiento tiene doble filo. Por un lado, la tecnología amplía capacidades: acceso al conocimiento, salud a distancia, automatización de tareas peligrosas. Por otro, produce riesgos que el ingeniero no puede ignorar: la brecha digital —la desigualdad en el acceso y uso efectivo de las tecnologías de la información— excluye a millones; la sobreexposición de datos compromete la privacidad; la automatización desplaza empleos y la huella ambiental de la infraestructura digital crece. Frente a esto, la ética tecnológica y la regulación (marcos de protección de datos, diseño inclusivo, computación responsable) se vuelven parte del diseño, no un añadido. El profesional que ignore el contexto social de su obra construirá sistemas técnicamente correctos y socialmente fracasados.",
+      "video_url": "https://www.youtube.com/watch?v=AU_m-7dDVR8",
+      "tiempo_minimo_segundos": 150,
+      "pregunta": "¿Qué describe el concepto de brecha digital?",
+      "opciones": "[\"La desigualdad en el acceso y el uso efectivo de las tecnologías de la información entre distintos grupos, territorios o generaciones.\",\"La distancia física entre los centros de cómputo y los usuarios finales.\",\"El retraso técnico entre dos versiones de un mismo software.\",\"El diferencial de costo entre equipos de marca y equipos genéricos.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "La brecha digital es una desigualdad socio-técnica: incluye acceso a dispositivos y conectividad, pero también habilidades digitales y uso productivo de la tecnología."
+    },
+    {
+      "id": 15,
+      "asignatura_id": 8,
+      "contenido_lectura": "Constitución Política: la Carta Magna y el Estado social de derecho\n\nLa Constitución Política es la norma suprema del ordenamiento jurídico: toda ley, acto de autoridad y decisión administrativa deben acomodarse a ella so pena de inconstitucionalidad. En Colombia, la Constitución de 1991 adoptó el modelo de Estado social de derecho: el poder público no solo garantiza libertades, sino que asume deberes positivos en salud, educación, trabajo y seguridad social. La Carta estructura el Estado en tres ramas —legislativa (Congreso, que legisla y controla), ejecutiva (Presidencia y ministros, que administra) y judicial (corte y jueces, que administran justicia)—, además de órganos de control y entes de planeación y vigilancia. Los derechos fundamentales (vida, dignidad, igualdad, libertad de cultos, debido proceso) son exigibles directamente ante los jueces mediante la acción de tutela, mientras los derechos económicos, sociales y culturales progresan según la capacidad del Estado. El control de constitucionalidad lo ejerce la Corte Constitucional mediante la revisión de acciones de tutela y las demandas de nulidad. Comprender este marco es esencial para el profesional: toda solución tecnológica —bases de datos personales, sistemas de vigilancia, plataformas educativas— opera dentro de este límite legal.",
+      "video_url": "https://www.youtube.com/watch?v=KFoyA8Z8VYc",
+      "tiempo_minimo_segundos": 160,
+      "pregunta": "¿En qué consiste el Estado social de derecho adoptado por la Constitución de 1991?",
+      "opciones": "[\"En que el Estado no solo garantiza libertades, sino que asume deberes positivos para lograr la efectividad de los derechos sociales.\",\"En que el poder judicial administra directamente los servicios públicos.\",\"En que la Constitución puede suspenderse durante emergencias económicas.\",\"En que las leyes prevalecen sobre la Constitución cuando el Congreso lo decide.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "El Estado social de derecho combina el sometimiento del poder a la ley (Estado de derecho) con la obligación del Estado de intervenir activamente para hacer efectivos los derechos económicos, sociales y culturales."
+    },
+    {
+      "id": 16,
+      "asignatura_id": 9,
+      "contenido_lectura": "Física del Calor: temperatura, transferencia y termodinámica\n\nLa física del calor (termodinámica clásica) estudia la energía en su forma térmica y sus transformaciones. La temperatura mide la energía cinética media de las moléculas de un sistema, mientras que el calor es energía en tránsito que se transfiere entre cuerpos con diferente temperatura; la cantidad de calor necesaria para variar la temperatura de una masa se expresa mediante la capacidad calorífica (Q = m·c·ΔT). La transferencia térmica ocurre por tres mecanismos: conducción (contacto directo, cuantificada por la ley de Fourier), convección (movimiento de fluidos) y radiación (emisión de ondas electromagnéticas, descrita por la ley de Stefan-Boltzmann). Sobre esta base se formulan las leyes de la termodinámica: la ley cero define el equilibrio térmico y la temperatura; la primera ley establece la conservación de la energía (ΔU = Q − W); la segunda introduce la entropía y direccióna los procesos espontáneos; la tercera fija el cero absoluto como límite inalcanzable. Estos principios gobiernan motores, refrigeradores, centrales eléctricas y disipadores de equipos electrónicos: cualquier ingeniero que diseñe sistemas físicos debe comprenderlos.",
+      "video_url": "https://www.youtube.com/watch?v=kpCve_D_BrU",
+      "tiempo_minimo_segundos": 160,
+      "pregunta": "¿Cuál es la diferencia entre temperatura y calor?",
+      "opciones": "[\"La temperatura mide la energía cinética media de las moléculas; el calor es energía térmica en tránsito entre cuerpos a distinta temperatura.\",\"La temperatura es una energía y el calor es una temperatura acumulada.\",\"Ambos conceptos describen la misma magnitud con unidades distintas.\",\"El calor mide el volumen de un gas y la temperatura su presión.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "Temperatura y calor no son la misma magnitud: la temperatura es una propiedad de estado del sistema, mientras que el calor es energía que se transfiere (un proceso), no una propiedad del cuerpo."
+    },
+    {
+      "id": 17,
+      "asignatura_id": 10,
+      "contenido_lectura": "Laboratorio de Programación II: práctica deliberada con Java\n\nEste laboratorio consolida mediante práctica lo aprendido en Programación, con Java como lenguaje de referencia. Cada sesión se estructura como un ciclo de trabajo de ingeniería: se plantea un problema, se diseña la solución en pseudocódigo, se implementa, se depura y se documenta. Los ejercicios progresan desde el manejo de arreglos unidimensionales y matrices —recorridos, búsquedas, ordenamientos burbuja e inserción— hasta la modularización: se exige dividir la solución en métodos con parámetros bien definidos, retornos tipados y alcances controlados, evitando variables globales. Se practica el paso por valor de datos y por qué una función no debe alterar el estado del programa salvo que lo declare. Introductorio también es el trabajo con cadenas de caracteres y la lectura validada de datos, que anticipa los problemas de entrada real. El laboratorio instala hábitos que diferencian a un programador de un ingeniero: nombrar con intención, comentar lo que no es obvio, escribir casos de prueba antes del código y revisar la complejidad de cada solución.",
+      "video_url": "https://www.youtube.com/watch?v=qxXcI56NfnE",
+      "tiempo_minimo_segundos": 150,
+      "pregunta": "Al declarar un vector de enteros en Java con int[] notas = new int[10];, ¿cuál es el índice de la última posición accesible?",
+      "opciones": "[\"9\",\"10\",\"11\",\"0\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "Los arreglos en Java se indexan desde 0: un arreglo de 10 posiciones va del índice 0 al 9; usar el índice 10 produce ArrayIndexOutOfBoundsException."
+    },
+    {
+      "id": 18,
+      "asignatura_id": 11,
+      "contenido_lectura": "Cálculo Diferencial: límites, derivadas y tasas de cambio\n\nEl cálculo diferencial estudia cómo cambian las magnitudes. El concepto puerta de entrada es el límite: formaliza el comportamiento de una función cuando la variable se aproxima a un valor, permitiendo definir continuidad y resolver indeterminaciones con teoremas como L'Hôpital. Sobre el límite se construye la derivada, definida como el cociente incremental en el límite cuando h tiende a cero; geométricamente es la pendiente de la recta tangente y físicamente la tasa de cambio instantánea. El estudiante domina las reglas de derivación (potencia, producto, cociente, cadena), las derivadas de funciones trigonométricas, exponenciales y logarítmicas, y aplica el teorema de Rolle y del valor medio para razonar sobre el comportamiento de las funciones. Las aplicaciones son el corazón de la asignatura: optimización (máximos y mínimos relativos), tasas relacionadas, análisis de crecimiento con la diferencial dy = f'(x)·dx y graficado de funciones mediante primer y segunda derivada. Este instrumental es indispensable para física, economía, estimación numérica y cualquier modelo de ingeniería que describa variación.",
+      "video_url": "https://www.youtube.com/watch?v=ZSYQ13iMbYA",
+      "tiempo_minimo_segundos": 160,
+      "pregunta": "La derivada de una función en un punto representa geométricamente:",
+      "opciones": "[\"La pendiente de la recta tangente a la gráfica en ese punto.\",\"El área bajo la curva hasta ese punto.\",\"La asíntota horizontal de la función.\",\"La segunda aproximación polinómica de la función.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "f'(x) mide la pendiente de la tangente y, en general, la tasa de cambio instantánea de f respecto de x; el área corresponde al cálculo integral."
+    },
+    {
+      "id": 19,
+      "asignatura_id": 12,
+      "contenido_lectura": "Álgebra Lineal: vectores, matrices y sistemas lineales\n\nEl álgebra lineal aporta el lenguaje de la mayoría de los modelos de ingeniería. Comienza con los vectores: operaciones, combinaciones lineales, independencia y bases de un espacio vectorial, cuyo concepto de dimensión generaliza el plano y el espacio tridimensional. Las matrices representan transformaciones lineales y sistemas de ecuaciones: se estudían suma, producto, transpuesta e inversa, junto con los métodos de resolución de sistemas —eliminación de Gauss-Jordan, regla de Cramer y factorización—, así como el rango como medida de la información contenida en un sistema. Los determinantes cuantifican el factor de escala de una transformación y permiten decidir invertibilidad. El bloque cierra con autovalores y autovectores: los elementos que no cambian de dirección bajo una transformación, con aplicaciones directas en análisis de estabilidad, procesamiento de imágenes y grafos. Más allá de la técnica, la asignatura enseña a abstraer: cada problema de ingeniería con múltiples variables puede escribirse como un sistema lineal Ax = b, y el álgebra lineal entrega las herramientas para saber cuándo tiene solución y cómo encontrarla.",
+      "video_url": "https://www.youtube.com/watch?v=BMBZJwTS7Ks",
+      "tiempo_minimo_segundos": 160,
+      "pregunta": "¿Qué condición garantiza que un sistema de ecuaciones lineales Ax = b tenga solución única?",
+      "opciones": "[\"Que la matriz A sea cuadrada y su determinante sea distinto de cero (A invertible).\",\"Que la matriz A tenga todos los elementos positivos.\",\"Que el vector b sea nulo.\",\"Que A tenga más filas que columnas.\"]",
+      "respuesta_correcta": 0,
+      "explicacion": "det(A) ≠ 0 equivale a que las columnas de A sean linealmente independientes (rango completo), lo que garantiza existencia y unicidad de la solución."
+    },
+    {
+      "id": 20,
+      "asignatura_id": 13,
+      "contenido_lectura": "Modularización y Estructuras de Datos Lineales\n\nEn esta etapa se traslada la lógica abstracta a un lenguaje formal, con Java como pilar institucional y soporte para Python o JavaScript en la plataforma. La modularización introduce el concepto de funciones y procedimientos para dividir problemas complejos en partes más pequeñas y mantenibles. Asimismo, se estudian los vectores (arreglos unidimensionales) y las matrices (arreglos bidimensionales), permitiendo el almacenamiento estructurado de colecciones de datos homogéneos bajo índices de memoria continuos.",
+      "video_url": "https://www.youtube.com/watch?v=JOAqpdM36wI",
+      "tiempo_minimo_segundos": 120,
+      "pregunta": "Al declarar un vector de enteros en Java mediante int[] notas = new int[10];, ¿cuál es el índice válido correspondiente a la última posición accesible del arreglo?",
+      "opciones": "[\"Índice 10\",\"Índice 9\",\"Índice 11\",\"Índice 0\"]",
+      "respuesta_correcta": 1,
+      "explicacion": "Java indexa los arreglos desde 0: un arreglo de 10 posiciones ocupa los índices 0 a 9; el índice 10 queda fuera del rango y lanza una excepción."
+    }
+  ],
+  "recursos_contenido": [
+    {
+      "id": 1,
+      "asignatura_id": 1,
+      "titulo": "Física Mecánica PDF",
+      "tipo_recurso": "documento",
+      "enlace": "https://example.com/fisica.pdf",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 3,
+      "asignatura_id": 24,
+      "titulo": "Manual de Patrones POO y Principios SOLID",
+      "tipo_recurso": "documento",
+      "enlace": "https://github.com/cul-ingenieria/poo-solid-patterns",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 56,
+      "asignatura_id": 1,
+      "titulo": "Khan Academy - Física (curso completo en español)",
+      "tipo_recurso": "enlace",
+      "enlace": "https://es.khanacademy.org/science/physics",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 57,
+      "asignatura_id": 1,
+      "titulo": "HyperPhysics - Referencia conceptual de mecánica",
+      "tipo_recurso": "documento",
+      "enlace": "https://hyperphysics.phy-astr.gsu.edu/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 58,
+      "asignatura_id": 1,
+      "titulo": "The Physics Classroom - Lecciones y simulaciones",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.physicsclassroom.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 59,
+      "asignatura_id": 1,
+      "titulo": "MIT OpenCourseWare 8.01SC - Classical Mechanics",
+      "tipo_recurso": "documento",
+      "enlace": "https://ocw.mit.edu/courses/8-01sc-classical-mechanics-fall-2016/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 60,
+      "asignatura_id": 1,
+      "titulo": "LibreTexts Physics - Textos abiertos de física",
+      "tipo_recurso": "documento",
+      "enlace": "https://phys.libretexts.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 61,
+      "asignatura_id": 1,
+      "titulo": "OpenStax - University Physics Volume 1 (PDF libre)",
+      "tipo_recurso": "documento",
+      "enlace": "https://openstax.org/details/books/university-physics-volume-1",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 62,
+      "asignatura_id": 1,
+      "titulo": "Wikipedia - Mecánica clásica",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Mec%C3%A1nica_cl%C3%A1sica",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 63,
+      "asignatura_id": 1,
+      "titulo": "GeoGebra - Simulaciones interactivas de física",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.geogebra.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 64,
+      "asignatura_id": 2,
+      "titulo": "Purdue OWL - Guía de redacción y gramática (inglés)",
+      "tipo_recurso": "documento",
+      "enlace": "https://owl.purdue.edu/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 65,
+      "asignatura_id": 2,
+      "titulo": "Khan Academy - Gramática en español",
+      "tipo_recurso": "enlace",
+      "enlace": "https://es.khanacademy.org/humanities/grammar",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 66,
+      "asignatura_id": 2,
+      "titulo": "RAE - Diccionario panhispánico de dudas (DPD)",
+      "tipo_recurso": "documento",
+      "enlace": "https://www.rae.es/dpd/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 67,
+      "asignatura_id": 2,
+      "titulo": "MindTools - Habilidades de comunicación",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.mindtools.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 68,
+      "asignatura_id": 2,
+      "titulo": "Wikipedia - Comunicación (proceso y elementos)",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Comunicaci%C3%B3n",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 69,
+      "asignatura_id": 2,
+      "titulo": "Wikipedia - Redacción (géneros y estructura)",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Redacci%C3%B3n",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 70,
+      "asignatura_id": 2,
+      "titulo": "Astraway - Videos de comunicación oral y escrita",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.youtube.com/@Astraway",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 71,
+      "asignatura_id": 3,
+      "titulo": "Khan Academy - Matemáticas (ruta completa en español)",
+      "tipo_recurso": "enlace",
+      "enlace": "https://es.khanacademy.org/math",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 72,
+      "asignatura_id": 3,
+      "titulo": "MathWorld (Wolfram) - Referencia matemática enciclopédica",
+      "tipo_recurso": "documento",
+      "enlace": "https://mathworld.wolfram.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 73,
+      "asignatura_id": 3,
+      "titulo": "Paul's Online Math Notes - Álgebra y pre cálculo",
+      "tipo_recurso": "documento",
+      "enlace": "https://tutorial.math.lamar.edu/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 74,
+      "asignatura_id": 3,
+      "titulo": "Wolfram Alpha - Calculadora de pasos",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.wolframalpha.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 75,
+      "asignatura_id": 3,
+      "titulo": "Wikipedia - Conjunto (teoría de conjuntos)",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Conjunto",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 76,
+      "asignatura_id": 3,
+      "titulo": "Wikipedia - Lógica matemática",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/L%C3%B3gica_matem%C3%A1tica",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 77,
+      "asignatura_id": 3,
+      "titulo": "3Blue1Brown - Visualización matemática",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.3blue1brown.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 78,
+      "asignatura_id": 4,
+      "titulo": "Wikipedia - Método científico (fases y debate)",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/M%C3%A9todo_cient%C3%ADfico",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 79,
+      "asignatura_id": 4,
+      "titulo": "Wikipedia - Pensamiento crítico",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Pensamiento_cr%C3%ADtico",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 80,
+      "asignatura_id": 4,
+      "titulo": "Wikipedia - Falsabilidad (criterio de demarcación)",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Falsabilidad",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 81,
+      "asignatura_id": 4,
+      "titulo": "Science - Revista científica de referencia",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.science.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 82,
+      "asignatura_id": 4,
+      "titulo": "Nature - Investigación y actualidad científica",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.nature.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 83,
+      "asignatura_id": 4,
+      "titulo": "TED - Charlas de divulgación científica",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.ted.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 84,
+      "asignatura_id": 4,
+      "titulo": "CuriosaMente - Pensamiento crítico y lógica (canal)",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.youtube.com/@CuriosaMente",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 85,
+      "asignatura_id": 5,
+      "titulo": "karan/Projects - Colección de proyectos de programación para principiantes",
+      "tipo_recurso": "repositorio",
+      "enlace": "https://github.com/karan/Projects",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 86,
+      "asignatura_id": 5,
+      "titulo": "TheAlgorithms/Java - Algoritmos y estructuras implementados en Java",
+      "tipo_recurso": "repositorio",
+      "enlace": "https://github.com/TheAlgorithms/Java",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 87,
+      "asignatura_id": 5,
+      "titulo": "TheAlgorithms/Python - Algoritmos y estructuras en Python",
+      "tipo_recurso": "repositorio",
+      "enlace": "https://github.com/TheAlgorithms/Python",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 88,
+      "asignatura_id": 5,
+      "titulo": "PseInt - Documentación y manual de uso del intérprete de pseudocódigo",
+      "tipo_recurso": "documento",
+      "enlace": "https://pseint.sourceforge.net/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 89,
+      "asignatura_id": 5,
+      "titulo": "freeCodeCamp Español - Fundamentos de programación",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.freecodecamp.org/espanol/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 90,
+      "asignatura_id": 5,
+      "titulo": "OpenWebinars - Curso de Introducción a la Programación",
+      "tipo_recurso": "enlace",
+      "enlace": "https://openwebinars.net/cursos/fundamentos-programacion/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 91,
+      "asignatura_id": 5,
+      "titulo": "MDN Web Docs - Guía de lógica y conceptos de código",
+      "tipo_recurso": "documento",
+      "enlace": "https://developer.mozilla.org/es/docs/Learn/Getting_started_with_the_web/JavaScript_basics",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 92,
+      "asignatura_id": 5,
+      "titulo": "LeetCode - Sección de problemas fáciles de introducción",
+      "tipo_recurso": "enlace",
+      "enlace": "https://leetcode.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 93,
+      "asignatura_id": 5,
+      "titulo": "HackerRank - Domains de práctica algorítmica",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.hackerrank.com/domains",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 94,
+      "asignatura_id": 6,
+      "titulo": "INCOSE - Sociedad Internacional de Ingeniería de Sistemas",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.incose.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 95,
+      "asignatura_id": 6,
+      "titulo": "ASQ - Calidad y estándares de ingeniería",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.asq.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 96,
+      "asignatura_id": 6,
+      "titulo": "IIASA - Investigación en ciencias de sistemas (Viena)",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.iiasa.ac.at/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 97,
+      "asignatura_id": 6,
+      "titulo": "ISO - Estándares internacionales de calidad",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.iso.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 98,
+      "asignatura_id": 6,
+      "titulo": "PMI - Marco de gestión de proyectos (PMBOK)",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.pmi.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 99,
+      "asignatura_id": 6,
+      "titulo": "Wikipedia - Ingeniería de sistemas",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Ingenier%C3%ADa_de_sistemas",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 100,
+      "asignatura_id": 6,
+      "titulo": "Wikipedia - Teoría de sistemas",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Teor%C3%ADa_de_sistemas",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 101,
+      "asignatura_id": 7,
+      "titulo": "Wikipedia - Impacto tecnológico",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Impacto_tecnol%C3%B3gico",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 102,
+      "asignatura_id": 7,
+      "titulo": "Wikipedia - Brecha digital",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Brecha_digital",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 103,
+      "asignatura_id": 7,
+      "titulo": "Wikipedia - Revolución digital",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Revoluci%C3%B3n_digital",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 104,
+      "asignatura_id": 7,
+      "titulo": "Wikipedia - Tecnologías de la información y la comunicación",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Tecnolog%C3%ADa_de_la_informaci%C3%B3n_y_la_comunicaci%C3%B3n",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 105,
+      "asignatura_id": 7,
+      "titulo": "OCDE - Estudios de sociedad y tecnología",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.oecd.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 106,
+      "asignatura_id": 7,
+      "titulo": "World Economic Forum - Agenda tecnológica global",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.weforum.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 107,
+      "asignatura_id": 7,
+      "titulo": "TEDx Talks - Charlas sobre tecnología y sociedad",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.youtube.com/@TEDxTalks",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 108,
+      "asignatura_id": 8,
+      "titulo": "Corte Constitucional de Colombia - Sentencias y doctrina",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.corteconstitucional.gov.co/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 109,
+      "asignatura_id": 8,
+      "titulo": "Senado de la República - Texto de la Constitución",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.senado.gov.co/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 110,
+      "asignatura_id": 8,
+      "titulo": "Cámara de Representantes - Trabajo legislativo",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.camara.gov.co/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 111,
+      "asignatura_id": 8,
+      "titulo": "Wikipedia - Constitución de Colombia (1991)",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Constituci%C3%B3n_de_Colombia",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 112,
+      "asignatura_id": 8,
+      "titulo": "Wikipedia - Estado social de derecho",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Estado_social_de_derecho",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 113,
+      "asignatura_id": 8,
+      "titulo": "Wikipedia - Derechos fundamentales",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Derechos_fundamentales",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 114,
+      "asignatura_id": 8,
+      "titulo": "Wikipedia - Constitucionalismo y control de constitucionalidad",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Constitucionalismo",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 115,
+      "asignatura_id": 9,
+      "titulo": "Khan Academy - Termodinámica (física)",
+      "tipo_recurso": "enlace",
+      "enlace": "https://es.khanacademy.org/science/physics/thermodynamics",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 116,
+      "asignatura_id": 9,
+      "titulo": "HyperPhysics - Heat and thermodynamics",
+      "tipo_recurso": "documento",
+      "enlace": "https://hyperphysics.phy-astr.gsu.edu/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 117,
+      "asignatura_id": 9,
+      "titulo": "PhET Colorado - Simulaciones de calor y gases",
+      "tipo_recurso": "enlace",
+      "enlace": "https://phet.colorado.edu/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 118,
+      "asignatura_id": 9,
+      "titulo": "NASA Glenn Research Center - Thermodynamics",
+      "tipo_recurso": "documento",
+      "enlace": "https://www.grc.nasa.gov/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 119,
+      "asignatura_id": 9,
+      "titulo": "Wikipedia - Leyes de la termodinámica",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Leyes_de_la_termodin%C3%A1mica",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 120,
+      "asignatura_id": 9,
+      "titulo": "Wikipedia - Calor (transferencia de energía térmica)",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Calor",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 121,
+      "asignatura_id": 9,
+      "titulo": "Wikipedia - Entropía",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Entrop%C3%ADa",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 122,
+      "asignatura_id": 10,
+      "titulo": "geekific/programming-algorithms - Algoritmos explicados visualmente",
+      "tipo_recurso": "repositorio",
+      "enlace": "https://github.com/geekific/programming-algorithms",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 123,
+      "asignatura_id": 10,
+      "titulo": "donnemartin/interactive-coding-challenges - Retos con pruebas unitarias",
+      "tipo_recurso": "repositorio",
+      "enlace": "https://github.com/donnemartin/interactive-coding-challenges",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 124,
+      "asignatura_id": 10,
+      "titulo": "TheAlgorithms/JavaScript - Algoritmos base en JavaScript",
+      "tipo_recurso": "repositorio",
+      "enlace": "https://github.com/TheAlgorithms/JavaScript",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 125,
+      "asignatura_id": 10,
+      "titulo": "Exercism - Pistas de práctica en múltiples lenguajes",
+      "tipo_recurso": "enlace",
+      "enlace": "https://exercism.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 126,
+      "asignatura_id": 10,
+      "titulo": "W3Schools - Java (referencia rápida)",
+      "tipo_recurso": "documento",
+      "enlace": "https://www.w3schools.com/java/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 127,
+      "asignatura_id": 10,
+      "titulo": "GeeksforGeeks - Array Data Structure",
+      "tipo_recurso": "documento",
+      "enlace": "https://www.geeksforgeeks.org/array-data-structure/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 128,
+      "asignatura_id": 10,
+      "titulo": "Oracle - The Java Tutorials (tutorial oficial)",
+      "tipo_recurso": "documento",
+      "enlace": "https://docs.oracle.com/javase/tutorial/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 129,
+      "asignatura_id": 10,
+      "titulo": "Programiz - Java Arrays con ejemplos",
+      "tipo_recurso": "documento",
+      "enlace": "https://www.programiz.com/java-programming/arrays",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 130,
+      "asignatura_id": 11,
+      "titulo": "Khan Academy - Cálculo diferencial",
+      "tipo_recurso": "enlace",
+      "enlace": "https://es.khanacademy.org/math/differential-calculus",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 131,
+      "asignatura_id": 11,
+      "titulo": "Paul's Online Math Notes - Calculus I",
+      "tipo_recurso": "documento",
+      "enlace": "https://tutorial.math.lamar.edu/classes/calculi/calculi.aspx",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 132,
+      "asignatura_id": 11,
+      "titulo": "MIT OpenCourseWare 18.01SC - Single Variable Calculus",
+      "tipo_recurso": "documento",
+      "enlace": "https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 133,
+      "asignatura_id": 11,
+      "titulo": "MathWorld - Derivative (referencia formal)",
+      "tipo_recurso": "documento",
+      "enlace": "https://mathworld.wolfram.com/Derivative.html",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 134,
+      "asignatura_id": 11,
+      "titulo": "3Blue1Brown - Cálculo (visualización)",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.3blue1brown.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 135,
+      "asignatura_id": 11,
+      "titulo": "GeoGebra - Graficador de funciones y tangentes",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.geogebra.org/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 136,
+      "asignatura_id": 11,
+      "titulo": "Wikipedia - Derivada",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Derivada",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 137,
+      "asignatura_id": 12,
+      "titulo": "Khan Academy - Álgebra lineal",
+      "tipo_recurso": "enlace",
+      "enlace": "https://es.khanacademy.org/math/linear-algebra",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 138,
+      "asignatura_id": 12,
+      "titulo": "MIT OpenCourseWare 18.06SC - Linear Algebra",
+      "tipo_recurso": "documento",
+      "enlace": "https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 139,
+      "asignatura_id": 12,
+      "titulo": "Álgebra Para Todos - Canal de ejercicios resueltos",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.youtube.com/c/algebraparatodos",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 140,
+      "asignatura_id": 12,
+      "titulo": "matrixmultiplication.xyz - Visualización interactiva de productos matriciales",
+      "tipo_recurso": "enlace",
+      "enlace": "https://matrixmultiplication.xyz/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 141,
+      "asignatura_id": 12,
+      "titulo": "Desmos - Graficador con álgebra de matrices",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.desmos.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 142,
+      "asignatura_id": 12,
+      "titulo": "Wikipedia - Álgebra lineal",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/%C3%81lgebra_lineal",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 143,
+      "asignatura_id": 12,
+      "titulo": "Wikipedia - Valor propio y autovector",
+      "tipo_recurso": "documento",
+      "enlace": "https://es.wikipedia.org/wiki/Valor_propio_y_autovector",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 144,
+      "asignatura_id": 13,
+      "titulo": "MoureDev hello-java - Repositorio del curso de Java",
+      "tipo_recurso": "repositorio",
+      "enlace": "https://github.com/mouredev/hello-java",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 145,
+      "asignatura_id": 13,
+      "titulo": "Oracle Java Documentation - Language Basics",
+      "tipo_recurso": "documento",
+      "enlace": "https://docs.oracle.com/en/java/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 146,
+      "asignatura_id": 13,
+      "titulo": "Python Software Foundation - Tutorial oficial (funciones y listas)",
+      "tipo_recurso": "documento",
+      "enlace": "https://docs.python.org/3/tutorial/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 147,
+      "asignatura_id": 13,
+      "titulo": "TheAlgorithms/Java - Algoritmos y estructuras en Java",
+      "tipo_recurso": "repositorio",
+      "enlace": "https://github.com/TheAlgorithms/Java",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 148,
+      "asignatura_id": 13,
+      "titulo": "Codecademy - Ruta de Java",
+      "tipo_recurso": "enlace",
+      "enlace": "https://www.codecademy.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 149,
+      "asignatura_id": 13,
+      "titulo": "Programiz - Java Arrays Tutorial con ejemplos",
+      "tipo_recurso": "documento",
+      "enlace": "https://www.programiz.com/java-programming/arrays",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 150,
+      "asignatura_id": 13,
+      "titulo": "LeetCode - Sección de problemas fáciles",
+      "tipo_recurso": "enlace",
+      "enlace": "https://leetcode.com/",
+      "estado_revision": "aprobado"
+    },
+    {
+      "id": 151,
+      "asignatura_id": 13,
+      "titulo": "Exercism - Ejercicios guiados de programación",
+      "tipo_recurso": "enlace",
+      "enlace": "https://exercism.org/",
+      "estado_revision": "aprobado"
+    }
+  ]
+}

@@ -1,6 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
 import { RecursoContenido } from './resource.model';
 import { ProgresoEstudiante } from './progress.model';
+import { Area } from './area.model';
+import { LeccionEvaluacion } from './leccion.model';
 
 @Entity('asignaturas')
 export class Asignatura {
@@ -16,6 +18,10 @@ export class Asignatura {
     @Column('int')
     area_id!: number;
 
+    @ManyToOne(() => Area, area => area.asignaturas)
+    @JoinColumn({ name: 'area_id' })
+    area!: Area;
+
     @ManyToMany(() => Asignatura)
     @JoinTable({
         name: 'prerrequisitos',
@@ -29,4 +35,8 @@ export class Asignatura {
 
     @OneToMany(() => ProgresoEstudiante, progreso => progreso.asignatura)
     progresos!: ProgresoEstudiante[];
+
+    @OneToOne(() => LeccionEvaluacion, leccion => leccion.asignatura)
+    leccion!: LeccionEvaluacion;
 }
+
