@@ -1,0 +1,117 @@
+<!-- ============================================================
+     Ilustración conceptual de Sequora (sin texto: los estados ya
+     se explican en la sección "Cómo funciona").
+     variant = 'hero' → composición ancha (landing)
+     variant = 'auth' → composición compacta (login / register)
+     ============================================================ -->
+@if (variant === 'auth') {
+<svg class="illus-svg" viewBox="0 0 320 320" fill="none" role="img"
+  aria-label="Materias completadas desbloquean la siguiente materia; las materias avanzadas siguen bloqueadas.">
+  <defs>
+    <pattern id="ill-auth-dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.4" class="ill-dot" />
+    </pattern>
+  </defs>
+
+  <rect class="ill-grid" width="320" height="320" rx="20" fill="url(#ill-auth-dots)" />
+
+  <!-- Conectores -->
+  <path class="ill-link" d="M124 88c0 20 8 28 22 38" />
+  <path class="ill-link ill-link-dash" d="M170 200c-2 14-10 22-20 30" />
+  <path class="ill-arrow" d="m140 118 6 8-9 3z" />
+  <path class="ill-arrow ill-arrow-muted" d="m146 222 7 7-9 3z" />
+
+  <!-- Materia completada -->
+  <g class="ill-card ill-card-done">
+    <rect x="24" y="28" width="200" height="60" rx="13" />
+    <rect class="ill-icon-bg ill-icon-done" x="40" y="44" width="28" height="28" rx="8" />
+    <path class="ill-check" d="m47 58 4.5 4.5 8.5-9.5" />
+    <rect class="ill-line" x="80" y="48" width="110" height="7" rx="3.5" />
+    <rect class="ill-line-soft" x="80" y="63" width="70" height="6" rx="3" />
+  </g>
+
+  <!-- Materia disponible (destacada) -->
+  <g class="ill-card ill-card-active">
+    <rect x="76" y="126" width="216" height="74" rx="15" />
+    <rect class="ill-icon-bg ill-icon-active" x="94" y="147" width="32" height="32" rx="9" />
+    <circle class="ill-pulse-ring" cx="110" cy="163" r="7" />
+    <circle class="ill-pulse-core" cx="110" cy="163" r="5.5" />
+    <rect class="ill-line-strong" x="138" y="150" width="112" height="8" rx="4" />
+    <rect class="ill-line-soft" x="138" y="166" width="74" height="6" rx="3" />
+    <rect class="ill-track" x="94" y="186" width="176" height="6" rx="3" />
+    <rect class="ill-track-fill" x="94" y="186" width="104" height="6" rx="3" />
+  </g>
+
+  <!-- Materia bloqueada -->
+  <g class="ill-card ill-card-locked">
+    <rect x="40" y="230" width="200" height="60" rx="13" />
+    <rect class="ill-icon-bg ill-icon-locked" x="56" y="246" width="28" height="28" rx="8" />
+    <rect class="ill-lock-body" x="63" y="259" width="14" height="10" rx="2" />
+    <path class="ill-lock-shackle" d="M65.5 259v-3a4.5 4.5 0 0 1 9 0v3" />
+    <rect class="ill-line" x="96" y="250" width="100" height="7" rx="3.5" />
+    <rect class="ill-line-soft" x="96" y="265" width="64" height="6" rx="3" />
+  </g>
+</svg>
+} @else {
+<svg class="illus-svg" viewBox="0 0 520 400" fill="none" role="img"
+  aria-label="Materias completadas conectadas con una materia disponible y una materia avanzada bloqueada.">
+  <defs>
+    <pattern id="ill-hero-dots" width="26" height="26" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.5" class="ill-dot" />
+    </pattern>
+  </defs>
+
+  <rect class="ill-grid" width="520" height="400" rx="22" fill="url(#ill-hero-dots)" />
+
+  <!-- Halo detrás del nodo destacado -->
+  <circle class="ill-halo" cx="300" cy="220" r="132" />
+
+  <!-- Conectores -->
+  <path class="ill-link" d="M146 118c0 30 18 48 54 62" />
+  <path class="ill-link ill-link-dash" d="M340 180c6-24 32-40 76-52" />
+  <path class="ill-link" d="M210 262c-6 18-20 30-38 42" />
+  <path class="ill-arrow" d="m194 172 8 8-10 4z" />
+  <path class="ill-arrow ill-arrow-muted" d="m410 122 9 6-9 5z" />
+  <path class="ill-arrow" d="m166 296 8 8-10 4z" />
+
+  <!-- Materia completada (arriba izquierda) -->
+  <g class="ill-card ill-card-done">
+    <rect x="40" y="50" width="212" height="68" rx="14" />
+    <rect class="ill-icon-bg ill-icon-done" x="56" y="68" width="32" height="32" rx="9" />
+    <path class="ill-check" d="m64 84 5 5 9.5-11" />
+    <rect class="ill-line" x="100" y="72" width="118" height="8" rx="4" />
+    <rect class="ill-line-soft" x="100" y="88" width="76" height="7" rx="3.5" />
+  </g>
+
+  <!-- Materia disponible (centro, destacada) -->
+  <g class="ill-card ill-card-active">
+    <rect x="150" y="180" width="240" height="82" rx="16" />
+    <rect class="ill-icon-bg ill-icon-active" x="170" y="202" width="38" height="38" rx="11" />
+    <circle class="ill-pulse-ring" cx="189" cy="221" r="8" />
+    <circle class="ill-pulse-core" cx="189" cy="221" r="6.5" />
+    <rect class="ill-line-strong" x="222" y="205" width="132" height="9" rx="4.5" />
+    <rect class="ill-line-soft" x="222" y="223" width="90" height="7" rx="3.5" />
+    <rect class="ill-track" x="170" y="244" width="200" height="8" rx="4" />
+    <rect class="ill-track-fill" x="170" y="244" width="118" height="8" rx="4" />
+  </g>
+
+  <!-- Materia completada (abajo izquierda) -->
+  <g class="ill-card ill-card-done">
+    <rect x="70" y="304" width="200" height="66" rx="14" />
+    <rect class="ill-icon-bg ill-icon-done" x="86" y="321" width="32" height="32" rx="9" />
+    <path class="ill-check" d="m94 337 5 5 9.5-11" />
+    <rect class="ill-line" x="130" y="325" width="110" height="8" rx="4" />
+    <rect class="ill-line-soft" x="130" y="341" width="70" height="7" rx="3.5" />
+  </g>
+
+  <!-- Materia avanzada bloqueada (arriba derecha) -->
+  <g class="ill-card ill-card-locked">
+    <rect x="356" y="56" width="128" height="72" rx="14" />
+    <rect class="ill-icon-bg ill-icon-locked" x="372" y="74" width="30" height="30" rx="9" />
+    <rect class="ill-lock-body" x="380" y="88" width="14" height="10" rx="2" />
+    <path class="ill-lock-shackle" d="M382.5 88v-3a4.5 4.5 0 0 1 9 0v3" />
+    <rect class="ill-line" x="412" y="78" width="56" height="7" rx="3.5" />
+    <rect class="ill-line-soft" x="412" y="93" width="40" height="6" rx="3" />
+  </g>
+</svg>
+}

@@ -1,0 +1,395 @@
+<div class="aula">
+  <!-- ════════ Barra superior pegajosa ════════ -->
+  <header class="aula-top">
+    <button type="button" class="btn-back" (click)="volver()">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </svg>
+      <span>Volver a la ruta</span>
+    </button>
+
+    <div class="aula-titulo">
+      @if (asig; as a) {
+        <p class="aula-kicker">Semestre {{ a.semestre }} · {{ a.areaNombre }}</p>
+        <h1 class="aula-nombre">{{ a.nombre }}</h1>
+      } @else {
+        <h1 class="aula-nombre">Cargando materia…</h1>
+      }
+    </div>
+
+    @if (asig; as a) {
+      <span class="aula-estado" [attr.data-state]="a.estado">{{ a.estado }}</span>
+    }
+
+    @if (!isLeccionLoading && !leccionError && leccion) {
+      <div class="aula-progreso" aria-hidden="true">
+        <span [style.width.%]="avancePasosPct"></span>
+      </div>
+    }
+  </header>
+
+  <!-- ════════ Camino de pasos ════════ -->
+  @if (!isLeccionLoading && !leccionError && leccion) {
+    <nav class="camino" aria-label="Pasos de la lección">
+      @for (p of pasos; track p.key) {
+        <button
+          type="button"
+          class="camino-paso"
+          [attr.data-estado]="p.hecho ? 'hecho' : (seccionActual === p.key ? 'actual' : 'pendiente')"
+          [attr.aria-current]="seccionActual === p.key ? 'step' : null"
+          (click)="irA(p.key)"
+        >
+          <span class="camino-nodo" aria-hidden="true">
+            @if (p.hecho) {
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            } @else {
+              {{ p.numero }}
+            }
+          </span>
+          <span class="camino-label">{{ p.label }}</span>
+        </button>
+      }
+    </nav>
+  }
+
+  <!-- ════════ Cuerpo ════════ -->
+  <main class="aula-cuerpo">
+    @if (isLeccionLoading) {
+      <div class="aula-estado-vista" role="status">
+        <div class="skeleton" aria-hidden="true">
+          <span class="skeleton-line"></span>
+          <span class="skeleton-line"></span>
+          <span class="skeleton-line"></span>
+          <span class="skeleton-line"></span>
+        </div>
+        <p class="aula-estado-titulo">Cargando contenido de «{{ asig?.nombre }}»…</p>
+      </div>
+    } @else if (leccionError) {
+      <div class="aula-estado-vista is-error" role="alert">
+        <span class="aula-estado-icono" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </span>
+        <p class="aula-estado-titulo">No se pudo cargar el contenido</p>
+        <p class="aula-estado-texto">No hubo respuesta del servidor. Revisa tu conexión e inténtalo de nuevo.</p>
+        <button type="button" class="btn btn-ghost" (click)="retryLeccion()">Reintentar</button>
+      </div>
+    } @else if (!leccion) {
+      <div class="aula-estado-vista" role="status">
+        <span class="aula-estado-icono" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+          </svg>
+        </span>
+        <p class="aula-estado-titulo">«{{ asig?.nombre }}» aún no tiene contenido curado</p>
+        <p class="aula-estado-texto">El equipo docente está preparando la lectura, el video y los recursos de esta materia.</p>
+        <button type="button" class="btn btn-ghost" (click)="volver()">Volver a la ruta</button>
+      </div>
+    } @else {
+      <!-- ① Lectura -->
+      <section id="paso-lectura" class="paso" data-paso="lectura">
+        <p class="paso-kicker">Paso 01 · Lectura</p>
+        <article class="editorial">{{ leccion.contenido_lectura }}</article>
+        <div id="fin-lectura" class="fin-lectura" aria-hidden="true"></div>
+
+        <button
+          type="button"
+          class="btn"
+          [class.is-ready]="readingComplete && !readingConfirmed"
+          [disabled]="!readingComplete || readingConfirmed"
+          (click)="confirmarLectura()"
+        >
+          @if (readingConfirmed) {
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span>Lectura confirmada</span>
+          } @else {
+            <span>Confirmar lectura</span>
+          }
+        </button>
+      </section>
+
+      <!-- ② Video -->
+      <section id="paso-video" class="paso" data-paso="video">
+        <p class="paso-kicker">Paso 02 · Video</p>
+        @if (videoId; as vid) {
+          @if (videoIniciado) {
+            <div class="video-embed">
+              <iframe
+                [src]="videoEmbedUrl!"
+                title="Video de la asignatura"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+          } @else {
+            <button type="button" class="video-fachada" (click)="iniciarVideo()" aria-label="Reproducir el video de la asignatura">
+              @if (miniaturaVisible) {
+                <img
+                  class="video-miniatura"
+                  [src]="'https://i.ytimg.com/vi/' + vid + '/hqdefault.jpg'"
+                  alt=""
+                  (error)="miniaturaVisible = false"
+                />
+              }
+              <span class="video-play" aria-hidden="true">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="7 4 20 12 7 20 7 4"/>
+                </svg>
+              </span>
+              <span class="video-fachada-texto">Reproducir la clase</span>
+            </button>
+          }
+        } @else {
+          <p class="paso-nota">El video de refuerzo estará disponible próximamente.</p>
+        }
+      </section>
+
+      <!-- ③ Recursos -->
+      <section id="paso-recursos" class="paso" data-paso="recursos">
+        <p class="paso-kicker">Paso 03 · Recursos</p>
+        @if (recursos.length > 0) {
+          <ul class="resource-list">
+            @for (rec of recursos; track rec.id) {
+              <li class="resource-row">
+                <span class="resource-type">{{ rec.tipo_recurso }}</span>
+                <div class="resource-info">
+                  <h4 class="resource-name">{{ rec.titulo }}</h4>
+                </div>
+                <a [href]="rec.enlace" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">
+                  <span>Abrir</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                    <polyline points="15 3 21 3 21 9"/>
+                    <line x1="10" y1="14" x2="21" y2="3"/>
+                  </svg>
+                </a>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="paso-nota">Los recursos de esta asignatura están en proceso de indexación.</p>
+        }
+      </section>
+
+      <!-- ④ Reto de código (solo si la materia tiene uno) -->
+      @if (reto; as r) {
+        <section id="paso-reto" class="paso" data-paso="reto">
+          <p class="paso-kicker">Paso 04 · Reto de código</p>
+          <h2 class="paso-titulo">Practica aquí mismo</h2>
+          <p class="paso-texto">{{ r.enunciado }}</p>
+
+          <div class="code-grid">
+            <div class="code-lab">
+              <div class="code-lab-bar">
+                <span class="code-lab-nombre">editor.js</span>
+                <div class="code-lab-acciones">
+                  <button type="button" class="btn btn-ghost btn-sm" (click)="reiniciarCodigo()">Reiniciar</button>
+                  <button type="button" class="btn btn-primary btn-sm" [disabled]="retoCorriendo" (click)="correrReto()">
+                    @if (retoCorriendo) {
+                      <span>Verificando… {{ retoProgresoPct }}%</span>
+                    } @else {
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <polygon points="6 4 20 12 6 20 6 4"/>
+                      </svg>
+                      <span>Ejecutar pruebas</span>
+                    }
+                  </button>
+                </div>
+              </div>
+              <div class="code-wrap">
+                <pre class="code-highlight" #codigoHighlight aria-hidden="true"><code [innerHTML]="codigoHtml"></code></pre>
+                <textarea
+                  class="code-editor"
+                  [(ngModel)]="codigo"
+                  (ngModelChange)="onCodigoChange()"
+                  (scroll)="sincronizarScroll($event)"
+                  spellcheck="false"
+                  autocomplete="off"
+                  autocapitalize="off"
+                  rows="10"
+                  aria-label="Editor de código del reto"
+                ></textarea>
+              </div>
+            </div>
+
+            <aside class="code-panel" aria-live="polite">
+              <p class="code-panel-kicker">
+                <span>Casos de prueba</span>
+                @if (retoResultados !== null) {
+                  <span class="code-panel-pct">{{ retoAprobados }}/{{ retoTotalCasos }} · {{ retoProgresoPct }}%</span>
+                }
+              </p>
+
+              @if (retoResultados !== null) {
+                <div class="code-progreso" aria-hidden="true">
+                  <span [class.is-ok]="retoPasado" [style.width.%]="retoProgresoPct"></span>
+                </div>
+              }
+
+              @if (retoErrorRuntime) {
+                <div class="code-resultado is-error" role="alert">
+                  <p>{{ retoErrorRuntime }}</p>
+                </div>
+              }
+
+              @if (retoResultados !== null) {
+                <ul class="code-resultado-lista">
+                  @for (fila of filasCasos; track fila.numero) {
+                    <li
+                      class="code-resultado"
+                      [class.is-ok]="fila.estado === 'ok'"
+                      [class.is-error]="fila.estado === 'error'"
+                      [class.is-running]="fila.estado === 'corriendo'"
+                      [class.is-pendiente]="fila.estado === 'pendiente' || fila.estado === 'omitido'"
+                    >
+                      <span class="code-resultado-badge" aria-hidden="true">
+                        @switch (fila.estado) {
+                          @case ('ok') {
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                              <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                          }
+                          @case ('error') {
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                              <line x1="18" y1="6" x2="6" y2="18"/>
+                              <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                          }
+                          @case ('corriendo') {
+                            <span class="code-spinner"></span>
+                          }
+                          @default() {
+                            {{ fila.numero }}
+                          }
+                        }
+                      </span>
+                      <div>
+                        <p class="code-resultado-titulo">
+                          @switch (fila.estado) {
+                            @case ('ok') { Caso {{ fila.numero }}: correcto }
+                            @case ('error') { Caso {{ fila.numero }}: incorrecto }
+                            @case ('corriendo') { Caso {{ fila.numero }}: ejecutando… }
+                            @case ('pendiente') { Caso {{ fila.numero }}: pendiente }
+                            @default() { Caso {{ fila.numero }}: no ejecutado }
+                          }
+                        </p>
+                        @if (fila.resultado; as caso) {
+                          <p class="code-resultado-detalle">
+                            Esperado: <code>{{ caso.esperado | json }}</code>
+                            @if (!caso.ok) {
+                              <br />
+                              @if (caso.error) {
+                                Error: {{ caso.error }}
+                              } @else {
+                                Obtenido: <code>{{ caso.obtenido | json }}</code>
+                              }
+                            }
+                          </p>
+                        } @else if (fila.estado === 'pendiente') {
+                          <p class="code-resultado-detalle">Se ejecuta cuando pasen los casos anteriores.</p>
+                        } @else if (fila.estado === 'omitido') {
+                          <p class="code-resultado-detalle">No se ejecutó: la corrida se detuvo antes.</p>
+                        }
+                      </div>
+                    </li>
+                  }
+                </ul>
+                @if (retoPasado) {
+                  <p class="paso-nota is-ok">Reto superado: todos los casos pasaron.</p>
+                }
+              } @else if (!retoErrorRuntime) {
+                <p class="code-panel-hint">
+                  Escribe tu solución y pulsa «Ejecutar pruebas»: los casos se ejecutan uno a uno
+                  (si pasa el 1 se carga el 2, y así hasta el final) y el panel va mostrando el % de avance.
+                </p>
+              }
+            </aside>
+          </div>
+        </section>
+      }
+
+      <!-- ⑤ Evaluación -->
+      <section id="paso-evaluacion" class="paso" data-paso="evaluacion">
+        <p class="paso-kicker">Paso {{ pasos.length.toString().padStart(2, '0') }} · Evaluación</p>
+        <h2 class="paso-titulo">Comprobación formativa</h2>
+        <p class="paso-texto">{{ leccion.pregunta }}</p>
+
+        <div class="quiz-opciones" role="radiogroup" aria-label="Opciones de respuesta">
+          @for (op of leccion.opciones; track $index) {
+            <button
+              type="button"
+              class="quiz-opcion"
+              [class.is-selected]="exerciseAnswer === $index"
+              [class.is-approved]="exercisePassed && exerciseAnswer === $index"
+              [disabled]="exercisePassed"
+              (click)="onSelectAnswer($index)"
+              role="radio"
+              [attr.aria-checked]="exerciseAnswer === $index"
+            >
+              <span class="quiz-opcion-letra">{{ ['A', 'B', 'C', 'D'][$index] }}</span>
+              <span>{{ op }}</span>
+            </button>
+          }
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="exerciseAnswer === null || exercisePassed"
+          (click)="checkExercise()"
+        >
+          Verificar respuesta
+        </button>
+
+        @if (exerciseFeedback) {
+          <div class="quiz-feedback" [class.is-ok]="exercisePassed" role="status">
+            <span class="quiz-feedback-icono" aria-hidden="true">
+              {{ exercisePassed ? '✓' : 'i' }}
+            </span>
+            <p>{{ exerciseFeedback }}</p>
+          </div>
+        }
+      </section>
+    }
+  </main>
+
+  <!-- ════════ Footer pegajoso con la acción del camino ════════ -->
+  @if (!isLeccionLoading && !leccionError && leccion) {
+    <div class="aula-accion">
+      <div class="completion-checks">
+        <span class="check-pill" [class.is-met]="readingConfirmed">
+          <span class="check-pill-dot" aria-hidden="true"></span>
+          Lectura
+        </span>
+        <span class="check-pill" [class.is-met]="exercisePassed">
+          <span class="check-pill-dot" aria-hidden="true"></span>
+          Quiz
+        </span>
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-certify"
+        [disabled]="isCompleting || accionPrincipal.accion === 'ninguna' || (accionPrincipal.accion === 'lectura' && !readingComplete)"
+        (click)="ejecutarAccionPrincipal()"
+      >
+        <span>{{ accionPrincipal.label }}</span>
+        @if (accionPrincipal.accion === 'aprobar') {
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        }
+      </button>
+    </div>
+  }
+</div>

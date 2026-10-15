@@ -1,0 +1,233 @@
+<section class="page" aria-labelledby="page-title">
+  <header class="page-header">
+    <div>
+      <h1 id="page-title" class="page-title">Panel de curaduría y administración</h1>
+      <p class="page-subtitle">
+        @if (user) { Sesión como {{ user.nombre }}. } Gestión de la malla académica, recursos y soporte.
+      </p>
+    </div>
+
+    <dl class="page-stats">
+      <div class="stat">
+        <dt>Líneas activas</dt>
+        <dd class="tabular">{{ rows.length }}</dd>
+      </div>
+      <div class="stat">
+        <dt>Nodos totales</dt>
+        <dd class="tabular">{{ totalNodos }}</dd>
+      </div>
+      <div class="stat">
+        <dt>Recursos pendientes</dt>
+        <dd class="tabular" style="color: #f59e0b;">{{ recursosPendientesCount }}</dd>
+      </div>
+    </dl>
+  </header>
+
+  @if (curacionMensaje) {
+    <div class="alert-info" style="padding: 0.85rem 1.25rem; margin-bottom: 1.5rem; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; color: #60a5fa; font-weight: 500;">
+      {{ curacionMensaje }}
+    </div>
+  }
+
+  <!-- Pestañas de Navegación del Administrador -->
+  <div class="admin-tabs" role="tablist" style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+    <button
+      type="button"
+      class="tab-btn"
+      (click)="setTab('lineas')"
+      style="padding: 0.55rem 1.25rem; border-radius: 9999px; font-weight: 500; font-size: 0.9rem; cursor: pointer; border: 1px solid; transition: all 0.2s;"
+      [style.background]="activeTab === 'lineas' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255, 255, 255, 0.05)'"
+      [style.borderColor]="activeTab === 'lineas' ? '#3b82f6' : 'rgba(255, 255, 255, 0.15)'"
+      [style.color]="activeTab === 'lineas' ? '#60a5fa' : '#94a3b8'"
+    >
+      📚 Malla y Líneas de Aprendizaje
+    </button>
+    <button
+      type="button"
+      class="tab-btn"
+      (click)="setTab('recursos')"
+      style="padding: 0.55rem 1.25rem; border-radius: 9999px; font-weight: 500; font-size: 0.9rem; cursor: pointer; border: 1px solid; transition: all 0.2s;"
+      [style.background]="activeTab === 'recursos' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255, 255, 255, 0.05)'"
+      [style.borderColor]="activeTab === 'recursos' ? '#3b82f6' : 'rgba(255, 255, 255, 0.15)'"
+      [style.color]="activeTab === 'recursos' ? '#60a5fa' : '#94a3b8'"
+    >
+      🔍 Curaduría de Recursos @if (recursosPendientesCount > 0) { ({{ recursosPendientesCount }}) }
+    </button>
+    <button
+      type="button"
+      class="tab-btn"
+      (click)="setTab('tickets')"
+      style="padding: 0.55rem 1.25rem; border-radius: 9999px; font-weight: 500; font-size: 0.9rem; cursor: pointer; border: 1px solid; transition: all 0.2s;"
+      [style.background]="activeTab === 'tickets' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255, 255, 255, 0.05)'"
+      [style.borderColor]="activeTab === 'tickets' ? '#3b82f6' : 'rgba(255, 255, 255, 0.15)'"
+      [style.color]="activeTab === 'tickets' ? '#60a5fa' : '#94a3b8'"
+    >
+      🛠️ Tickets de Soporte ({{ tickets.length }})
+    </button>
+  </div>
+
+  <!-- PESTAÑA 1: Líneas de Aprendizaje -->
+  @if (activeTab === 'lineas') {
+    @if (rows.length === 0) {
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14" />
+          <path d="M4 19a2 2 0 0 0 2 2h14" />
+          <path d="M8 7h8M8 11h5" />
+        </svg>
+        <h2>No hay líneas de aprendizaje</h2>
+        <p>Crea la primera línea para empezar a estructurar nodos y prerrequisitos.</p>
+        <a class="btn-primary" routerLink="/node-editor">Ir al editor de nodos</a>
+      </div>
+    } @else {
+      <div class="table-wrap">
+        <table class="ruta-table">
+          <caption class="visually-hidden">
+            Líneas de aprendizaje activas con número de nodos y última actualización
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Línea de aprendizaje</th>
+              <th scope="col" class="num">Nodos</th>
+              <th scope="col" class="num">Avance estudiantes</th>
+              <th scope="col">Última actualización</th>
+              <th scope="col"><span class="visually-hidden">Acciones</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of rows; track row.ruta.id) {
+              <tr>
+                <th scope="row" class="cell-title">
+                  <span class="ruta-name">{{ row.ruta.titulo }}</span>
+                  @if (row.ruta.descripcion) {
+                    <span class="ruta-desc">{{ row.ruta.descripcion }}</span>
+                  }
+                </th>
+                <td class="num tabular">{{ row.totalNodos }}</td>
+                <td class="num">
+                  <span class="cell-progress">
+                    <span class="mini-progress" role="progressbar"
+                      [attr.aria-valuenow]="pct(row)"
+                      aria-valuemin="0" aria-valuemax="100"
+                      [attr.aria-label]="'Avance de estudiantes en ' + row.ruta.titulo">
+                      <span class="mini-fill" [style.width.%]="pct(row)"></span>
+                    </span>
+                    <span class="tabular mini-label">{{ pct(row) }}%</span>
+                  </span>
+                </td>
+                <td class="cell-date tabular">{{ formatDate(row.ruta.actualizadoEn) }}</td>
+                <td class="cell-action">
+                  <a class="btn-outline btn-sm" [routerLink]="['/node-editor']">Editar</a>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-foot">
+        <a class="btn-primary" routerLink="/node-editor">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+          Nuevo nodo en una línea
+        </a>
+      </div>
+    }
+  }
+
+  <!-- PESTAÑA 2: Curaduría de Recursos -->
+  @if (activeTab === 'recursos') {
+    @if (recursos.length === 0) {
+      <div class="empty-state">
+        <h2>No hay recursos registrados</h2>
+        <p>Los recursos propuestos por los docentes aparecerán aquí para revisión.</p>
+      </div>
+    } @else {
+      <div class="table-wrap">
+        <table class="ruta-table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Título del Recurso</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Enlace</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (rec of recursos; track rec.id) {
+              <tr>
+                <td class="tabular">#{{ rec.id }}</td>
+                <td class="cell-title">
+                  <span class="ruta-name">{{ rec.titulo }}</span>
+                </td>
+                <td>{{ rec.tipo_recurso }}</td>
+                <td>
+                  <span
+                    style="display: inline-block; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase;"
+                    [style.background]="rec.estado_revision === 'aprobado' ? 'rgba(16, 185, 129, 0.2)' : (rec.estado_revision === 'pendiente' ? 'rgba(245, 158, 11, 0.2)' : 'rgba(239, 68, 68, 0.2)')"
+                    [style.color]="rec.estado_revision === 'aprobado' ? '#10b981' : (rec.estado_revision === 'pendiente' ? '#f59e0b' : '#ef4444')"
+                  >
+                    {{ rec.estado_revision }}
+                  </span>
+                </td>
+                <td>
+                  <a [href]="rec.enlace" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: underline;">
+                    Ver recurso ↗
+                  </a>
+                </td>
+                <td style="display: flex; gap: 0.5rem; align-items: center;">
+                  @if (rec.estado_revision !== 'aprobado') {
+                    <button type="button" class="btn-primary btn-sm" (click)="aprobarRecurso(rec.id)">
+                      Aprobar
+                    </button>
+                  }
+                  @if (rec.estado_revision !== 'rechazado') {
+                    <button type="button" class="btn-outline btn-sm" (click)="rechazarRecurso(rec.id)">
+                      Rechazar
+                    </button>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+
+  <!-- PESTAÑA 3: Tickets de Soporte -->
+  @if (activeTab === 'tickets') {
+    @if (tickets.length === 0) {
+      <div class="empty-state">
+        <h2>No hay reportes de soporte abiertos</h2>
+        <p>Todos los recursos pedagógicos están funcionando sin incidencias reportadas.</p>
+      </div>
+    } @else {
+      <div class="table-wrap">
+        <table class="ruta-table">
+          <thead>
+            <tr>
+              <th scope="col">ID Ticket</th>
+              <th scope="col">Recurso ID</th>
+              <th scope="col">Descripción de la Incidencia</th>
+              <th scope="col">Reportado por</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (ticket of tickets; track ticket.id) {
+              <tr>
+                <td class="tabular">#{{ ticket.id }}</td>
+                <td class="tabular">Recurso #{{ ticket.recurso_id }}</td>
+                <td>{{ ticket.descripcion }}</td>
+                <td>{{ ticket.usuario?.nombre || ('Usuario #' + ticket.usuario_id) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</section>

@@ -1,0 +1,112 @@
+<section class="page" aria-labelledby="page-title">
+  <header class="page-header">
+    <div>
+      <h1 id="page-title" class="page-title">Editor de nodos</h1>
+      <p class="page-subtitle">Crea nodos dentro de una línea de aprendizaje y define sus prerrequisitos.</p>
+    </div>
+  </header>
+
+  <div class="editor-grid">
+    <!-- Formulario -->
+    <form class="editor-card" (submit)="$event.preventDefault(); createNodo()" novalidate aria-labelledby="form-title">
+      <fieldset>
+        <legend id="form-title" class="card-title">Nuevo nodo</legend>
+
+        <!-- Ruta destino -->
+        <div class="field">
+          <label for="ruta-select">Línea de aprendizaje</label>
+          <select id="ruta-select" [(ngModel)]="selectedRutaId" name="ruta" (ngModelChange)="onRutaChange()">
+            @for (r of rutas; track r.id) {
+              <option [value]="r.id">{{ r.titulo }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Título -->
+        <div class="field">
+          <label for="nodo-titulo">Título</label>
+          <input
+            id="nodo-titulo"
+            type="text"
+            name="titulo"
+            [(ngModel)]="titulo"
+            placeholder="Ej. Recursión"
+            required
+          />
+        </div>
+
+        <!-- Descripción -->
+        <div class="field">
+          <label for="nodo-desc">Descripción</label>
+          <textarea
+            id="nodo-desc"
+            name="descripcion"
+            [(ngModel)]="descripcion"
+            rows="3"
+            placeholder="Idea conceptual del nodo (opcional)"
+          ></textarea>
+        </div>
+
+        <!-- Prerrequisitos por selección (RF-05) -->
+        <fieldset class="prereq-group">
+          <legend>Prerrequisitos</legend>
+
+          @if (availablePrereqs.length === 0) {
+            <p class="prereq-empty">
+              No hay nodos previos en esta línea. El nuevo nodo quedará disponible desde el inicio.
+            </p>
+          } @else {
+            <ul class="prereq-list">
+              @for (nodo of availablePrereqs; track nodo.id) {
+                <li>
+                  <label class="prereq-item">
+                    <input
+                      type="checkbox"
+                      [checked]="isPrereqSelected(nodo.id)"
+                      (change)="togglePrereq(nodo.id)"
+                    />
+                    <span class="prereq-name">{{ nodo.titulo }}</span>
+                    <span class="prereq-id tabular">{{ nodo.id }}</span>
+                  </label>
+                </li>
+              }
+            </ul>
+          }
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Crear nodo</button>
+        </div>
+
+        @if (msg) {
+          <p class="form-msg" [class.is-error]="msgType === 'error'" role="status">{{ msg }}</p>
+        }
+      </fieldset>
+    </form>
+
+    <!-- Resumen de la ruta -->
+    <aside class="editor-card" aria-labelledby="resumen-title">
+      <h2 id="resumen-title" class="card-title">Nodos de la línea</h2>
+
+      @if (!selectedRuta || selectedRuta.nodos.length === 0) {
+        <p class="prereq-empty">Esta línea todavía no tiene nodos.</p>
+      } @else {
+        <ul class="resumen-list">
+          @for (nodo of selectedRuta.nodos; track nodo.id) {
+            <li class="resumen-item">
+              <span class="resumen-name">{{ nodo.titulo }}</span>
+              <span class="resumen-meta">
+                @if (nodo.prerequisitos.length) {
+                  <span class="chip">Requiere {{ nodo.prerequisitos.length }}</span>
+                } @else {
+                  <span class="chip chip-free">Sin prerrequisitos</span>
+                }
+                <span class="tabular resumen-id">{{ nodo.id }}</span>
+              </span>
+            </li>
+          }
+        </ul>
+      }
+    </aside>
+  </div>
+</section>

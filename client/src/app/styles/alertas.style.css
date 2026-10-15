@@ -1,0 +1,109 @@
+/* Alertas globales (toasts) */
+.alertas-stack {
+  position: fixed;
+  top: 78px;
+  right: 20px;
+  z-index: 2400;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(360px, calc(100vw - 40px));
+  pointer-events: none;
+}
+
+.alerta {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 13px 14px;
+  border-radius: 14px;
+  background: var(--surface-raised, var(--surface));
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-2);
+  animation: alertaIn 280ms var(--ease) both;
+}
+
+.alerta[data-tipo='exito'] {
+  border-color: color-mix(in srgb, var(--energy) 45%, var(--line));
+}
+
+.alerta[data-tipo='error'] {
+  border-color: color-mix(in srgb, var(--danger) 45%, var(--line));
+}
+
+.alerta-icono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+}
+
+.alerta[data-tipo='exito'] .alerta-icono {
+  background: var(--energy-soft);
+  color: var(--energy-text);
+}
+
+.alerta[data-tipo='error'] .alerta-icono {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.alerta[data-tipo='info'] .alerta-icono {
+  background: var(--brand-soft);
+  color: var(--brand);
+}
+
+.alerta-cuerpo {
+  flex: 1;
+  min-width: 0;
+}
+
+.alerta-titulo {
+  margin: 2px 0 0;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--fg-strong);
+}
+
+.alerta-detalle {
+  margin: 3px 0 0;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.alerta-cerrar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+
+.alerta-cerrar:hover {
+  background: var(--surface-2);
+  color: var(--fg-strong);
+}
+
+@keyframes alertaIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

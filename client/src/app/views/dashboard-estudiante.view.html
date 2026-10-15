@@ -1,0 +1,445 @@
+<section class="campus-experience" aria-labelledby="campus-title">
+
+  <!-- ============ ARTE DE LA MASCOTA (reutilizable) ============ -->
+  <ng-template #robotArt>
+    <svg class="robot-art" viewBox="0 0 120 128" aria-hidden="true" focusable="false">
+      <!-- Antena -->
+      <line class="ant-stem" x1="60" y1="27" x2="60" y2="15"/>
+      <circle class="ant-ball" cx="60" cy="11" r="5"/>
+
+      <!-- Orejas -->
+      <rect class="bot-ear" x="15" y="45" width="9" height="20" rx="4.5"/>
+      <rect class="bot-ear" x="96" y="45" width="9" height="20" rx="4.5"/>
+
+      <!-- Cabeza -->
+      <rect class="bot-head" x="24" y="27" width="72" height="54" rx="20"/>
+
+      <!-- Pantalla facial -->
+      <rect class="bot-face" x="33" y="36" width="54" height="36" rx="14"/>
+
+      <!-- Ojos (parpadean) -->
+      <g class="bot-eyes">
+        <circle class="bot-eye" cx="49" cy="52" r="8"/>
+        <circle class="bot-eye" cx="71" cy="52" r="8"/>
+        <circle class="bot-glint" cx="46.5" cy="49" r="2.4"/>
+        <circle class="bot-glint" cx="68.5" cy="49" r="2.4"/>
+      </g>
+
+      <!-- Mejillas (solo mood feliz) -->
+      <ellipse class="bot-blush" cx="39" cy="63" rx="5" ry="3"/>
+      <ellipse class="bot-blush" cx="81" cy="63" rx="5" ry="3"/>
+
+      <!-- Boca según el estado de ánimo -->
+      @if (mascot.mood === 'happy') {
+        <path class="bot-mouth" d="M 51 62 Q 60 73 69 62"/>
+      } @else if (mascot.mood === 'ready') {
+        <path class="bot-mouth is-open" d="M 53 62 Q 60 71 67 62 Z"/>
+      } @else if (mascot.mood === 'think') {
+        <path class="bot-mouth is-wavy" d="M 52 65 q 4 -4 8 0 t 8 0"/>
+      } @else {
+        <path class="bot-mouth" d="M 54 64 Q 60 68 66 64"/>
+      }
+
+      <!-- Cuello y cuerpo -->
+      <rect class="bot-neck" x="54" y="80" width="12" height="8" rx="3"/>
+      <rect class="bot-body" x="34" y="87" width="52" height="33" rx="14"/>
+      <rect class="bot-panel" x="50" y="95" width="20" height="12" rx="4"/>
+
+      <!-- Brazos y pies -->
+      <rect class="bot-arm bot-arm-l" x="22" y="91" width="10" height="22" rx="5"/>
+      <rect class="bot-arm bot-arm-r" x="88" y="91" width="10" height="22" rx="5"/>
+      <rect class="bot-foot" x="41" y="118" width="15" height="7" rx="3.5"/>
+      <rect class="bot-foot" x="64" y="118" width="15" height="7" rx="3.5"/>
+    </svg>
+  </ng-template>
+
+  <!-- ============ 1. HERO DE CAMPUS ============ -->
+  <header class="campus-hero">
+    <div class="hero-identity">
+      <div class="hero-avatar">
+        <span>{{ userInitials }}</span>
+        <span class="hero-avatar-dot" aria-hidden="true"></span>
+      </div>
+      <div class="hero-text">
+        <p class="hero-kicker">
+          Corporación Universitaria Latinoamericana
+          <span class="kicker-sep" aria-hidden="true">·</span>
+          Ingeniería de Sistemas
+        </p>
+        <h1 id="campus-title" class="hero-name">{{ user?.nombre || 'Estudiante CUL' }}</h1>
+        <div class="hero-chips">
+          <span class="chip chip-brand">Semestre {{ user?.semestre || selectedSemestre }}</span>
+          <span class="chip">{{ totalCompletadas }} de {{ totalMaterias }} asignaturas aprobadas</span>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="hero-progress"
+      role="img"
+      [attr.aria-label]="'Avance global de la carrera: ' + avanceGlobal + ' por ciento'"
+    >
+      <div class="ring-wrap">
+        <svg class="progress-ring" viewBox="0 0 120 120" aria-hidden="true">
+          <defs>
+            <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%"/>
+              <stop offset="100%"/>
+            </linearGradient>
+          </defs>
+          <circle class="ring-track" cx="60" cy="60" r="52"/>
+          <circle
+            class="ring-fill"
+            cx="60"
+            cy="60"
+            r="52"
+            [style.stroke-dasharray]="ringCircumference"
+            [style.stroke-dashoffset]="ringOffset"
+          />
+        </svg>
+        <div class="ring-center">
+          <strong class="ring-value">{{ avanceGlobal }}%</strong>
+          <span class="ring-label">Avance global</span>
+        </div>
+      </div>
+      <p class="ring-aside">
+        <strong>Semestre {{ selectedSemestre }}</strong>
+        <span>{{ semestreActualData?.completadas || 0 }}/{{ semestreActualData?.total || 0 }} completadas aquí</span>
+      </p>
+    </div>
+  </header>
+
+  <!-- ============ 2. BARRA DE HERRAMIENTAS (vistas + resumen) ============ -->
+  <div class="route-toolbar">
+    <div class="route-tabs" role="tablist" aria-label="Vistas del mapa de carrera">
+      <button
+        type="button"
+        class="route-tab"
+        role="tab"
+        [class.is-active]="activeTab === 'roadmap'"
+        [attr.aria-selected]="activeTab === 'roadmap'"
+        (click)="setTab('roadmap')"
+      >
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="6" cy="6" r="3"/>
+          <circle cx="18" cy="18" r="3"/>
+          <path d="M6 9v12M18 3v12M6 15h12"/>
+        </svg>
+        <span>Ruta de aprendizaje</span>
+      </button>
+      <button
+        type="button"
+        class="route-tab"
+        role="tab"
+        [class.is-active]="activeTab === 'areas'"
+        [attr.aria-selected]="activeTab === 'areas'"
+        (click)="setTab('areas')"
+      >
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+          <polyline points="2 17 12 22 22 17"/>
+          <polyline points="2 12 12 17 22 12"/>
+        </svg>
+        <span>Líneas de formación</span>
+      </button>
+    </div>
+
+    <p class="route-summary">
+      <strong>Semestre {{ selectedSemestre }}</strong>
+      <span aria-hidden="true">·</span>
+      {{ semestreActualData?.completadas || 0 }}/{{ semestreActualData?.total || 0 }} aprobadas
+      <span aria-hidden="true">·</span>
+      <strong class="route-summary-pct">{{ semestreActualData?.porcentaje || 0 }}%</strong>
+    </p>
+  </div>
+
+  <!-- ==================== PESTAÑA 1: RUTA DE APRENDIZAJE ==================== -->
+  @if (activeTab === 'roadmap') {
+
+    <!-- Stepper de semestres + filtros -->
+    <div class="stepper-bar">
+      <div
+        class="stepper-nav"
+        (keydown.arrowLeft)="$event.preventDefault(); prevSemestre()"
+        (keydown.arrowRight)="$event.preventDefault(); nextSemestre()"
+      >
+        <button
+          type="button"
+          class="stepper-arrow"
+          [disabled]="!canPrevSemestre"
+          (click)="prevSemestre()"
+          aria-label="Semestre anterior"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
+
+        <div class="sem-pills" role="group" aria-label="Seleccionar semestre">
+          @for (sem of semestresList; track sem.semestre) {
+            <button
+              type="button"
+              class="sem-pill"
+              [class.is-selected]="selectedSemestre === sem.semestre"
+              [class.is-current]="user?.semestre === sem.semestre"
+              [attr.aria-pressed]="selectedSemestre === sem.semestre"
+              (click)="selectSemestre(sem.semestre)"
+            >
+              <span class="sem-pill-num">S{{ sem.semestre }}</span>
+              <span class="sem-pill-meter" aria-hidden="true">
+                <span class="sem-pill-meter-fill" [style.width.%]="sem.porcentaje"></span>
+              </span>
+              @if (user?.semestre === sem.semestre) {
+                <span class="sem-pill-you">Tu nivel</span>
+              }
+            </button>
+          }
+        </div>
+
+        <button
+          type="button"
+          class="stepper-arrow"
+          [disabled]="!canNextSemestre"
+          (click)="nextSemestre()"
+          aria-label="Siguiente semestre"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="filter-group" role="group" aria-label="Filtrar materias por estado">
+        <button type="button" class="filter-chip" [class.is-active]="statusFilter === 'all'" [attr.aria-pressed]="statusFilter === 'all'" (click)="setStatusFilter('all')">
+          Todas <span class="filter-count">{{ semestreActualData?.total || 0 }}</span>
+        </button>
+        <button type="button" class="filter-chip is-open" [class.is-active]="statusFilter === 'Disponible'" [attr.aria-pressed]="statusFilter === 'Disponible'" (click)="setStatusFilter('Disponible')">
+          Disponibles
+        </button>
+        <button type="button" class="filter-chip is-done" [class.is-active]="statusFilter === 'Completado'" [attr.aria-pressed]="statusFilter === 'Completado'" (click)="setStatusFilter('Completado')">
+          Aprobadas
+        </button>
+        <button type="button" class="filter-chip is-lock" [class.is-active]="statusFilter === 'Bloqueado'" [attr.aria-pressed]="statusFilter === 'Bloqueado'" (click)="setStatusFilter('Bloqueado')">
+          Bloqueadas
+        </button>
+      </div>
+    </div>
+
+    <!-- Estado vacío / Ruta viva -->
+    @if (materiasDelSemestre.length === 0) {
+      <div class="path-empty">
+        <div class="path-empty-bot" aria-hidden="true">
+          <ng-container *ngTemplateOutlet="robotArt"></ng-container>
+        </div>
+        <h3 class="path-empty-title">Nada por aquí</h3>
+        <p class="path-empty-text">Ninguna materia del Semestre {{ selectedSemestre }} coincide con este filtro.</p>
+        <button type="button" class="btn btn-ghost" (click)="setStatusFilter('all')">
+          Ver todas las materias
+        </button>
+      </div>
+    } @else {
+      <!-- Ruta viva: nodos conectados por una línea de progreso -->
+      <ol class="learning-path">
+        @for (materia of materiasDelSemestre; track materia.id; let idx = $index) {
+          <li
+            class="path-step"
+            [attr.data-state]="materia.estado"
+            [style.--step-i]="idx"
+          >
+            <div class="path-rail" aria-hidden="true">
+              <span class="path-node">
+                @if (materia.estado === 'Completado') {
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                } @else if (materia.estado === 'Disponible') {
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="6 4 20 12 6 20 6 4"/>
+                  </svg>
+                } @else {
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="4" y="11" width="16" height="10" rx="2"/>
+                    <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+                  </svg>
+                }
+              </span>
+              <span class="path-line"></span>
+            </div>
+
+            <article
+              class="path-card"
+              [style.--area]="materia.areaColor"
+            >
+              <div class="path-card-top">
+                <span class="area-chip">
+                  <span class="area-dot" aria-hidden="true"></span>
+                  {{ materia.areaNombre }}
+                </span>
+                <span class="state-badge" [attr.data-state]="materia.estado">
+                  @if (materia.estado === 'Completado') {
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Aprobada
+                  } @else if (materia.estado === 'Disponible') {
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <polygon points="6 4 20 12 6 20 6 4"/>
+                    </svg>
+                    Disponible
+                  } @else {
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="4" y="11" width="16" height="10" rx="2"/>
+                      <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+                    </svg>
+                    Bloqueada
+                  }
+                </span>
+              </div>
+
+              <div class="path-card-grid">
+                <div class="path-card-info">
+                  <h3 class="path-title">{{ materia.nombre }}</h3>
+
+                  @if (materia.prerrequisitos.length > 0) {
+                    <div class="prereq">
+                      <span class="prereq-label">Prerrequisitos</span>
+                      <ul class="prereq-list">
+                        @for (pre of materia.prerrequisitos; track pre.id) {
+                          <li class="prereq-chip" [class.is-cleared]="pre.completado">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                              @if (pre.completado) {
+                                <polyline points="20 6 9 17 4 12"/>
+                              } @else {
+                                <rect x="4" y="11" width="16" height="10" rx="2"/>
+                                <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+                              }
+                            </svg>
+                            {{ pre.nombre }}
+                          </li>
+                        }
+                      </ul>
+                    </div>
+                  } @else {
+                    <p class="prereq-free">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                      Sin prerrequisitos · entrada directa
+                    </p>
+                  }
+                </div>
+
+                <div class="path-action">
+                  @if (materia.estado === 'Disponible') {
+                    <button type="button" class="btn btn-primary" (click)="irAlAula(materia.id)">
+                      <span>Entrar a la clase</span>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                      </svg>
+                    </button>
+                  } @else if (materia.estado === 'Completado') {
+                    <button type="button" class="btn btn-energy" (click)="irAlAula(materia.id)">
+                      <span>Repasar contenido</span>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                      </svg>
+                    </button>
+                  } @else {
+                    <p class="locked-note">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="4" y="11" width="16" height="10" rx="2"/>
+                        <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+                      </svg>
+                      Supera los prerrequisitos
+                    </p>
+                  }
+                </div>
+              </div>
+            </article>
+          </li>
+        }
+      </ol>
+    }
+  }
+
+  <!-- ==================== PESTAÑA 2: LÍNEAS DE FORMACIÓN ==================== -->
+  @if (activeTab === 'areas') {
+    <div class="areas-grid">
+      @for (area of areasList; track area.id) {
+        <article class="track-card" [style.--area]="area.color">
+          <header class="track-head">
+            <div class="track-head-top">
+              <span class="track-tag">
+                <span class="area-dot" aria-hidden="true"></span>
+                Línea de formación
+              </span>
+              <span class="track-pct" [style.color]="area.color">{{ area.porcentajeAvance }}%</span>
+            </div>
+            <h3 class="track-title">{{ area.nombre }}</h3>
+            <p class="track-desc">{{ area.descripcion }}</p>
+            <div class="track-meter" role="img" [attr.aria-label]="area.porcentajeAvance + '% completado'">
+              <span class="track-meter-fill" [style.width.%]="area.porcentajeAvance" [style.background]="area.color"></span>
+            </div>
+          </header>
+
+          <div class="track-flow">
+            @for (nodo of area.nodos; track nodo.id) {
+              <button
+                type="button"
+                class="flow-chip"
+                [attr.data-state]="nodo.estado"
+                (click)="irAlAula(nodo.id)"
+              >
+                <span class="flow-chip-dot" aria-hidden="true">
+                  @if (nodo.estado === 'Completado') {
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  } @else if (nodo.estado === 'Disponible') {
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+                  } @else {
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+                  }
+                </span>
+                <span class="flow-chip-text">
+                  <span class="flow-chip-sem">Semestre {{ nodo.semestre }}</span>
+                  <span class="flow-chip-name">{{ nodo.nombre }}</span>
+                </span>
+              </button>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  }
+
+  <!-- ============ MASCOTA GUÍA (Byte) ============ -->
+  <aside class="mascot" [attr.data-mood]="mascot.mood" [class.is-open]="isMascotOpen">
+      @if (isMascotOpen) {
+        <div class="mascot-bubble" role="status">
+          <button type="button" class="mascot-close" (click)="toggleMascot()" aria-label="Cerrar mensaje de Byte">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+          <span class="mascot-name">Byte · tu guía</span>
+          <p class="mascot-msg">{{ mascot.message }}</p>
+        </div>
+      }
+      <button
+        type="button"
+        class="mascot-bot"
+        (click)="toggleMascot()"
+        [attr.aria-expanded]="isMascotOpen"
+        aria-label="Byte, asistente de tu ruta"
+      >
+        <span class="mascot-bot-inner">
+          <ng-container *ngTemplateOutlet="robotArt"></ng-container>
+        </span>
+        @if (!isMascotOpen) {
+          <span class="mascot-alert" aria-hidden="true"></span>
+        }
+      </button>
+    </aside>
+</section>

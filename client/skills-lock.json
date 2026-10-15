@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "skills": {
+    "angular-developer": {
+      "source": "angular/skills",
+      "sourceType": "github",
+      "skillPath": "angular-developer/SKILL.md",
+      "computedHash": "32f8bbf4f42515bd122eccb7aebf0b9e3acb87fde3fdd65a5b560384fbc0f80a"
+    },
+    "better-accessibility": {
+      "source": "jakubkrehel/skills",
+      "sourceType": "github",
+      "skillPath": "skills/better-accessibility/SKILL.md",
+      "computedHash": "6b7ce68b54e8899f2678d47b0cc772c4aeb9ce178a2eec93c945948c1b044f19"
+    },
+    "better-ui": {
+      "source": "jakubkrehel/skills",
+      "sourceType": "github",
+      "skillPath": "skills/better-ui/SKILL.md",
+      "computedHash": "907e6137d2019fe2b7de2357246ad8041d1b8318ba5c085cd0cb560ebb97025a"
+    }
+  }
+}

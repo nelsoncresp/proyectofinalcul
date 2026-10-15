@@ -1,0 +1,375 @@
+/* ============ TAILWIND DIRECTIVES ============ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============ COLOR TOKENS (CSS Variables) ============ */
+:root {
+  --bg: #f5f7fb;
+  --fg: #111827;
+  --fg-strong: #0b1220;
+  --surface: #ffffff;
+  --muted: #5f6b7a;
+  --link: #2563eb;
+  --line: rgba(17, 24, 39, 0.12);
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-contrast: #ffffff;
+  --accent-soft: rgba(37, 99, 235, 0.12);
+  --danger: #b42318;
+  --danger-soft: rgba(180, 35, 24, 0.1);
+  --img-outline: rgba(0, 0, 0, 0.06);
+  --transition-ease: cubic-bezier(0.2, 0, 0, 1);
+  --font-display: "Space Grotesk", Inter, system-ui, sans-serif;
+
+  /* ── Marca y energía (rediseño campus) ─────────────────────────── */
+  --brand: #0056d2;
+  --brand-hover: #0042a8;
+  --brand-soft: rgba(0, 86, 210, 0.1);
+  --brand-glow: rgba(0, 86, 210, 0.35);
+  --energy: #00d261;
+  --energy-soft: rgba(0, 210, 97, 0.14);
+  --energy-glow: rgba(0, 210, 97, 0.4);
+  /* Verde accesible como texto sobre superficies claras */
+  --energy-text: #057a3e;
+
+  /* ── Superficies escalonadas ───────────────────────────────────── */
+  --surface-2: rgba(17, 24, 39, 0.04);
+  --surface-raised: #ffffff;
+
+  /* ── Sombras por capas (elevación, no bordes) ──────────────────── */
+  --shadow-1: 0 1px 2px rgba(11, 18, 32, 0.05), 0 4px 12px -6px rgba(11, 18, 32, 0.1);
+  --shadow-2: 0 2px 4px rgba(11, 18, 32, 0.05), 0 14px 30px -12px rgba(11, 18, 32, 0.16);
+  --shadow-3: 0 8px 20px -8px rgba(11, 18, 32, 0.16), 0 30px 64px -20px rgba(11, 18, 32, 0.26);
+
+  /* ── Escala de radios (concéntricos: externo = interno + padding) ─ */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 26px;
+
+  /* ── Movimiento ────────────────────────────────────────────────── */
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --t-fast: 150ms;
+  --t-med: 250ms;
+  --t-slow: 400ms;
+}
+
+.dark-mode {
+  --bg: #0b1220;
+  --fg: #eef4ff;
+  --fg-strong: #f8fafc;
+  --surface: #111827;
+  --muted: #9aa7bb;
+  --link: #60a5fa;
+  --line: rgba(238, 244, 255, 0.14);
+  --accent: #3b82f6;
+  --accent-hover: #60a5fa;
+  --accent-contrast: #ffffff;
+  --accent-soft: rgba(59, 130, 246, 0.18);
+  --danger: #fda4a4;
+  --danger-soft: rgba(253, 164, 164, 0.12);
+  --img-outline: rgba(255, 255, 255, 0.08);
+
+  /* ── Tokens del campus en modo oscuro ──────────────────────────── */
+  --brand: #4d94ff;
+  --brand-hover: #7db4ff;
+  --brand-soft: rgba(77, 148, 255, 0.16);
+  --brand-glow: rgba(77, 148, 255, 0.4);
+  --energy: #00d261;
+  --energy-soft: rgba(0, 210, 97, 0.18);
+  --energy-glow: rgba(0, 210, 97, 0.4);
+  --energy-text: #3ddc84;
+
+  --surface-2: rgba(255, 255, 255, 0.05);
+  --surface-raised: #151d2e;
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 12px -6px rgba(0, 0, 0, 0.5);
+  --shadow-2: 0 2px 4px rgba(0, 0, 0, 0.4), 0 14px 30px -12px rgba(0, 0, 0, 0.6);
+  --shadow-3: 0 8px 20px -8px rgba(0, 0, 0, 0.55), 0 30px 64px -20px rgba(0, 0, 0, 0.7);
+}
+
+/* ============ BASE STYLES ============ */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @apply bg-white text-gray-900 antialiased;
+  background-color: var(--bg);
+  color: var(--fg);
+  transition: background-color 200ms var(--transition-ease), color 200ms var(--transition-ease);
+}
+
+.dark-mode body {
+  @apply bg-gray-950 text-gray-100;
+}
+
+a {
+  @apply text-blue-600 hover:text-blue-700 transition-colors;
+  color: var(--link);
+  transition: color 160ms var(--transition-ease);
+}
+
+/* ============ ACCESSIBILITY RECIPES ============ */
+
+/* Focus-visible for keyboard navigation.
+   Sin :where(): el minificador de producción descarta este selector y se
+   perdería el anillo de foco global. Specificity (0,1,0) queda por debajo
+   de los estilos por componente (.btn-primary:focus-visible etc.). */
+:focus-visible {
+  outline: 2px solid Highlight;
+  outline-offset: 2px;
+}
+
+/* Image outline for depth */
+img {
+  outline: 1px solid var(--img-outline);
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Suppress transitions (used during theme toggle) */
+.suppress-transitions,
+.suppress-transitions *,
+.suppress-transitions *::before,
+.suppress-transitions *::after {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Visually hidden (accessibility) */
+.visually-hidden {
+  @apply absolute h-1 w-1 overflow-hidden whitespace-nowrap;
+  clip: rect(1px, 1px, 1px, 1px);
+}
+
+/* ============ NAVBAR: swap de iconos de tema (crossfade global) ============
+   El botón ofrece el modo al que SE VA a cambiar (no el actual): en claro se
+   ve la luna → "pasa a oscuro"; en oscuro se ve el sol → "pasa a claro".
+   El componente usa encapsulación emulada y el estado .dark-mode vive en
+   <html>, así que aquí va el respaldo; el controlador también marca el host
+   con .is-dark, cuyos estilos son los que mandan. */
+.dark-mode .icon-btn .icon-sun {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+.dark-mode .icon-btn .icon-moon {
+  opacity: 0;
+  transform: scale(0.25);
+  filter: blur(4px);
+}
+
+/* ============ NAVBAR auto-hide en el aula ============
+   Mientras la barra está escondida (.nav-oculto), la cabecera pegajosa del
+   aula sube al borde superior para que no quede un hueco de 60px. */
+html.nav-oculto .aula-top {
+  top: 0;
+}
+
+/* ============ SKIP LINK (AppComponent) ============ */
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: 12px;
+  z-index: 100;
+  padding: 10px 16px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0 0 10px 10px;
+  transition: top 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Contenido principal bajo el navbar (compensación por navbar fixed) */
+main#main-content {
+  display: block;
+  padding-top: 61px;
+}
+
+/* ============ PRIMITIVAS DE PÁGINA (compartidas entre vistas) ============ */
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--fg);
+  margin: 0 0 6px;
+}
+
+.page-subtitle {
+  font-size: 0.9375rem;
+  color: var(--muted);
+  margin: 0;
+}
+
+.page-stats {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+}
+
+.stat {
+  min-width: 118px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.stat dt {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.stat dd {
+  margin: 4px 0 0;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Botones ---- */
+.btn-primary,
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 20px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: 12px;
+  cursor: pointer;
+  transition:
+    background-color 150ms cubic-bezier(0.2, 0, 0, 1),
+    color 150ms cubic-bezier(0.2, 0, 0, 1),
+    border-color 150ms cubic-bezier(0.2, 0, 0, 1),
+    transform 100ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.btn-primary {
+  color: var(--accent-contrast);
+  background: var(--accent);
+  border: 1px solid transparent;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-outline {
+  color: var(--fg);
+  background: transparent;
+  border: 1px solid var(--line);
+}
+
+.btn-outline:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-primary:active,
+.btn-outline:active {
+  transform: scale(0.96);
+}
+
+.btn-primary:focus-visible,
+.btn-outline:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.btn-primary svg,
+.btn-outline svg {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-sm {
+  min-height: 36px;
+  padding: 7px 14px;
+  font-size: 0.8125rem;
+  border-radius: 10px;
+}
+
+/* ---- Estado vacío ---- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  padding: 56px 24px;
+  background: var(--surface);
+  border: 1px dashed var(--line);
+  border-radius: 16px;
+}
+
+.empty-state svg {
+  width: 40px;
+  height: 40px;
+  color: var(--muted);
+}
+
+.empty-state h2 {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--fg);
+  margin: 4px 0 0;
+}
+
+.empty-state p {
+  font-size: 0.875rem;
+  color: var(--muted);
+  margin: 0;
+  max-width: 42ch;
+}

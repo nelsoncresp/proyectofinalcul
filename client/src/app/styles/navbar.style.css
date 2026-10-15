@@ -1,0 +1,407 @@
+/* ============ NAVBAR ============ */
+:host {
+  display: block;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  /* Transición suave para el auto-hide al bajar scroll */
+  transition: transform 300ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Navbar oculta (desliza hacia arriba) */
+:host(.is-hidden) {
+  transform: translateY(-100%);
+}
+
+.navbar {
+  width: 100%;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+
+.navbar-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 20px;
+  min-height: 60px;
+  /* 3 columnas: marca (izq) | enlaces (centro exacto) | acciones (der) */
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 24px;
+}
+
+/* ---- Marca ---- */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  flex-shrink: 0;
+  border-radius: 10px;
+}
+
+.navbar-brand .brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px; /* radio externo: 10 = interno(0) + padding; sin hijos radios */
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.navbar-brand .brand-mark svg {
+  width: 20px;
+  height: 20px;
+}
+
+.brand-copy {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.brand-copy strong {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+}
+
+.brand-copy span {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #2563eb;
+}
+
+/* ---- Enlaces (centrados en la barra) ---- */
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 8px 14px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--fg-strong);
+  text-decoration: none;
+  border-radius: 10px;
+  transition:
+    background-color 150ms cubic-bezier(0.2, 0, 0, 1),
+    color 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.nav-link:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.nav-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Activo: color + subrayado (nunca sólo color) */
+.nav-link.is-active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.nav-link.is-active::after {
+  content: '';
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 4px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+/* ---- Acciones ---- */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* Siempre en la 3ª columna aunque no haya enlaces (nav ausente) */
+  grid-column: 3;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    color 150ms cubic-bezier(0.2, 0, 0, 1),
+    background-color 150ms cubic-bezier(0.2, 0, 0, 1),
+    transform 100ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.icon-btn:hover {
+  color: var(--fg);
+  background: var(--accent-soft);
+}
+
+.icon-btn:active {
+  transform: scale(0.96);
+}
+
+.icon-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Crossfade sol/luna */
+.icon-btn svg {
+  width: 19px;
+  height: 19px;
+  position: absolute;
+  transition:
+    opacity 300ms cubic-bezier(0.2, 0, 0, 1),
+    transform 300ms cubic-bezier(0.2, 0, 0, 1),
+    filter 300ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.icon-btn {
+  position: relative;
+}
+
+/* Modo claro (default): mostrar LUNA → "cambiar a oscuro" */
+.icon-btn .icon-sun {
+  opacity: 0;
+  transform: scale(0.25);
+  filter: blur(4px);
+}
+
+.icon-btn .icon-moon {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+/* Modo oscuro: mostrar SOL → "cambiar a claro"
+   Se activa con la clase del host .is-dark (HostBinding en el controlador),
+   así el ícono no depende de :host-context ni de estilos globales. */
+:host(.is-dark) .icon-btn .icon-sun {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+:host(.is-dark) .icon-btn .icon-moon {
+  opacity: 0;
+  transform: scale(0.25);
+  filter: blur(4px);
+}
+
+/* ---- Usuario ---- */
+.nav-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px 4px 4px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.user-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-display);
+}
+
+.user-copy {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.user-name {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.user-role {
+  font-size: 0.6875rem;
+  color: var(--muted);
+}
+
+/* ---- Logout ---- */
+.nav-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 8px 14px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
+  transition:
+    color 150ms cubic-bezier(0.2, 0, 0, 1),
+    background-color 150ms cubic-bezier(0.2, 0, 0, 1),
+    transform 100ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.nav-logout svg {
+  width: 16px;
+  height: 16px;
+}
+
+.nav-logout:hover {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-color: var(--danger-soft);
+}
+
+.nav-logout:active {
+  transform: scale(0.96);
+}
+
+.nav-logout:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---- CTAs para invitados (landing / login / register) ---- */
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 16px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-family: inherit;
+  text-decoration: none;
+  border: 2px solid var(--fg);
+  border-radius: 10px;
+  cursor: pointer;
+  transition:
+    transform 150ms cubic-bezier(0.2, 0, 0, 1),
+    background-color 150ms cubic-bezier(0.2, 0, 0, 1),
+    color 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.nav-cta-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.nav-cta-primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.nav-cta-outline {
+  background: transparent;
+  color: var(--fg);
+}
+
+.nav-cta-outline:hover {
+  background: var(--accent-soft);
+}
+
+.nav-cta:active {
+  transform: scale(0.96);
+}
+
+.nav-cta:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 720px) {
+  .navbar-inner {
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .brand-copy span {
+    display: none;
+  }
+
+  /* Enlaces en su propia fila, alineados a la izquierda */
+  .navbar-nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .navbar-actions {
+    grid-column: 2;
+    justify-self: end;
+  }
+
+  .nav-user .user-copy {
+    display: none;
+  }
+
+  .nav-logout span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .nav-logout {
+    width: 40px;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .nav-cta {
+    min-height: 36px;
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon-btn svg {
+    transition: none;
+  }
+}

@@ -1,0 +1,36 @@
+/* ============ REGISTER — aportes exclusivos de la vista de registro ============ */
+/* La base compartida (ojo de contraseña, spinner, alerta y link al login) vive
+   en auth.style.css, incluido en styleUrls de este componente. Aquí sólo se
+   declaran los elementos exclusivos del registro: opción de jornada seleccionada,
+   colores del desplegable de semestre y el mensaje de éxito.                    */
+
+/* ---- Jornada seleccionada (gana a las utilidades Tailwind por especificidad) ---- */
+.jornada-option.is-selected {
+  background-color: #2563eb;
+  border-color: #000;
+  color: #fff;
+  box-shadow: 4px 4px 0 #000;
+}
+
+/* ---- Select de semestre: el desplegable nativo usa los colores del sistema,
+       en dark mode se verían letras claras sobre fondo claro sin esto ---- */
+select option {
+  background-color: #fff;
+  color: #111827;
+}
+
+/* ---- Mensaje de éxito ---- */
+.reg-success {
+  animation: loginEnter 420ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+@keyframes loginEnter {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reg-success {
+    animation: none;
+  }
+}
