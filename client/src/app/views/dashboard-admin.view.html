@@ -1,72 +1,319 @@
 <section class="page" aria-labelledby="page-title">
   <header class="page-header">
     <div>
-      <h1 id="page-title" class="page-title">Panel de curaduría y administración</h1>
+      <h1 id="page-title" class="page-title">Panel de administración</h1>
       <p class="page-subtitle">
-        @if (user) { Sesión como {{ user.nombre }}. } Gestión de la malla académica, recursos y soporte.
+        @if (user) { Sesión como {{ user.nombre }}. } Gestión de usuarios, malla académica, contenido y soporte.
       </p>
     </div>
 
     <dl class="page-stats">
       <div class="stat">
+        <dt>Usuarios</dt>
+        <dd class="tabular">{{ stats ? stats.usuarios.total : usuarios.length }}</dd>
+      </div>
+      <div class="stat">
         <dt>Líneas activas</dt>
         <dd class="tabular">{{ rows.length }}</dd>
       </div>
       <div class="stat">
-        <dt>Nodos totales</dt>
-        <dd class="tabular">{{ totalNodos }}</dd>
-      </div>
-      <div class="stat">
         <dt>Recursos pendientes</dt>
-        <dd class="tabular" style="color: #f59e0b;">{{ recursosPendientesCount }}</dd>
+        <dd class="tabular stat-warn">{{ recursosPendientesCount }}</dd>
       </div>
     </dl>
   </header>
 
-  @if (curacionMensaje) {
-    <div class="alert-info" style="padding: 0.85rem 1.25rem; margin-bottom: 1.5rem; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; color: #60a5fa; font-weight: 500;">
-      {{ curacionMensaje }}
-    </div>
+  @if (mensaje) {
+    <div class="alert-info" role="status">{{ mensaje }}</div>
   }
 
   <!-- Pestañas de Navegación del Administrador -->
-  <div class="admin-tabs" role="tablist" style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+  <div class="admin-tabs" role="tablist">
     <button
       type="button"
       class="tab-btn"
+      [class.is-active]="activeTab === 'usuarios'"
+      (click)="setTab('usuarios')"
+      role="tab"
+      [attr.aria-selected]="activeTab === 'usuarios'"
+    >
+      Gestión de Usuarios
+    </button>
+    <button
+      type="button"
+      class="tab-btn"
+      [class.is-active]="activeTab === 'metricas'"
+      (click)="setTab('metricas')"
+      role="tab"
+      [attr.aria-selected]="activeTab === 'metricas'"
+    >
+      Métricas y Reportes
+    </button>
+    <button
+      type="button"
+      class="tab-btn"
+      [class.is-active]="activeTab === 'lineas'"
       (click)="setTab('lineas')"
-      style="padding: 0.55rem 1.25rem; border-radius: 9999px; font-weight: 500; font-size: 0.9rem; cursor: pointer; border: 1px solid; transition: all 0.2s;"
-      [style.background]="activeTab === 'lineas' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255, 255, 255, 0.05)'"
-      [style.borderColor]="activeTab === 'lineas' ? '#3b82f6' : 'rgba(255, 255, 255, 0.15)'"
-      [style.color]="activeTab === 'lineas' ? '#60a5fa' : '#94a3b8'"
+      role="tab"
+      [attr.aria-selected]="activeTab === 'lineas'"
     >
-      📚 Malla y Líneas de Aprendizaje
+      Malla y Líneas de Aprendizaje
     </button>
     <button
       type="button"
       class="tab-btn"
+      [class.is-active]="activeTab === 'recursos'"
       (click)="setTab('recursos')"
-      style="padding: 0.55rem 1.25rem; border-radius: 9999px; font-weight: 500; font-size: 0.9rem; cursor: pointer; border: 1px solid; transition: all 0.2s;"
-      [style.background]="activeTab === 'recursos' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255, 255, 255, 0.05)'"
-      [style.borderColor]="activeTab === 'recursos' ? '#3b82f6' : 'rgba(255, 255, 255, 0.15)'"
-      [style.color]="activeTab === 'recursos' ? '#60a5fa' : '#94a3b8'"
+      role="tab"
+      [attr.aria-selected]="activeTab === 'recursos'"
     >
-      🔍 Curaduría de Recursos @if (recursosPendientesCount > 0) { ({{ recursosPendientesCount }}) }
+      Curaduría de Recursos @if (recursosPendientesCount > 0) { ({{ recursosPendientesCount }}) }
     </button>
     <button
       type="button"
       class="tab-btn"
+      [class.is-active]="activeTab === 'tickets'"
       (click)="setTab('tickets')"
-      style="padding: 0.55rem 1.25rem; border-radius: 9999px; font-weight: 500; font-size: 0.9rem; cursor: pointer; border: 1px solid; transition: all 0.2s;"
-      [style.background]="activeTab === 'tickets' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(255, 255, 255, 0.05)'"
-      [style.borderColor]="activeTab === 'tickets' ? '#3b82f6' : 'rgba(255, 255, 255, 0.15)'"
-      [style.color]="activeTab === 'tickets' ? '#60a5fa' : '#94a3b8'"
+      role="tab"
+      [attr.aria-selected]="activeTab === 'tickets'"
     >
-      🛠️ Tickets de Soporte ({{ tickets.length }})
+      Tickets de Soporte ({{ tickets.length }})
+    </button>
+    <button
+      type="button"
+      class="tab-btn"
+      [class.is-active]="activeTab === 'auditoria'"
+      (click)="setTab('auditoria')"
+      role="tab"
+      [attr.aria-selected]="activeTab === 'auditoria'"
+    >
+      Registro de Auditoría
     </button>
   </div>
 
-  <!-- PESTAÑA 1: Líneas de Aprendizaje -->
+  <!-- PESTAÑA: Gestión de Usuarios (R-17) -->
+  @if (activeTab === 'usuarios') {
+    <div class="toolbar">
+      <input
+        type="search"
+        class="search-input"
+        placeholder="Buscar por nombre o correo"
+        aria-label="Buscar usuarios"
+        [(ngModel)]="busqueda"
+      />
+      <select class="filter-select" aria-label="Filtrar por rol" [(ngModel)]="filtroRol">
+        <option [ngValue]="0">Todos los roles</option>
+        <option [ngValue]="1">Administradores</option>
+        <option [ngValue]="2">Docentes</option>
+        <option [ngValue]="3">Estudiantes</option>
+      </select>
+      <button type="button" class="btn-primary" (click)="alternarFormUsuario()">
+        {{ mostrarFormUsuario ? 'Cancelar alta' : 'Nuevo usuario' }}
+      </button>
+    </div>
+
+    @if (mostrarFormUsuario) {
+      <form class="user-form" (ngSubmit)="crearUsuario()" novalidate>
+        <h2 class="form-title">Alta de usuario</h2>
+        <div class="form-grid">
+          <label class="field">
+            <span>Nombre completo</span>
+            <input type="text" name="nombre" required [(ngModel)]="formNombre" placeholder="Ej: Ing. María Pérez" />
+          </label>
+          <label class="field">
+            <span>Correo electrónico</span>
+            <input type="email" name="email" required [(ngModel)]="formEmail" placeholder="usuario@cul.edu" />
+          </label>
+          <label class="field">
+            <span>Contraseña</span>
+            <input type="password" name="password" required [(ngModel)]="formPassword" placeholder="Mínimo 6 caracteres" />
+          </label>
+          <label class="field">
+            <span>Rol</span>
+            <select name="rol" [(ngModel)]="formRol">
+              <option [ngValue]="3">Estudiante</option>
+              <option [ngValue]="2">Docente</option>
+              <option [ngValue]="1">Administrador</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Género</span>
+            <select name="genero" [(ngModel)]="formGenero">
+              <option value="Masculino">Masculino</option>
+              <option value="Femenino">Femenino</option>
+              <option value="Otro">Otro</option>
+              <option value="No especificado">Prefiero no decirlo</option>
+            </select>
+          </label>
+          @if (formRol === 3) {
+            <label class="field">
+              <span>Semestre</span>
+              <input type="number" name="semestre" min="1" max="10" [(ngModel)]="formSemestre" />
+            </label>
+            <label class="field">
+              <span>Jornada</span>
+              <select name="jornada" [(ngModel)]="formJornada">
+                <option value="">Sin definir</option>
+                <option value="Diurno">Diurno</option>
+                <option value="Nocturno">Nocturno</option>
+              </select>
+            </label>
+          }
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Crear usuario</button>
+        </div>
+      </form>
+    }
+
+    @if (resetId !== null) {
+      <div class="reset-panel" role="alert">
+        <p>Nueva contraseña para <strong>{{ resetEmail }}</strong>:</p>
+        <input
+          type="password"
+          placeholder="Mínimo 6 caracteres"
+          aria-label="Nueva contraseña"
+          [(ngModel)]="resetPassword"
+        />
+        <div class="reset-actions">
+          <button type="button" class="btn-primary btn-sm" (click)="guardarReset()">Guardar</button>
+          <button type="button" class="btn-outline btn-sm" (click)="cancelarReset()">Cancelar</button>
+        </div>
+      </div>
+    }
+
+    @if (usuariosFiltrados.length === 0) {
+      <div class="empty-state">
+        <h2>No hay usuarios que coincidan</h2>
+        <p>Ajusta los filtros o crea un usuario nuevo.</p>
+      </div>
+    } @else {
+      <div class="table-wrap">
+        <table class="ruta-table">
+          <caption class="visually-hidden">Usuarios registrados con su rol y semestre</caption>
+          <thead>
+            <tr>
+              <th scope="col" class="num">ID</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Correo</th>
+              <th scope="col">Rol</th>
+              <th scope="col">Semestre / Jornada</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (u of usuariosFiltrados; track u.id) {
+              <tr>
+                <td class="num tabular">{{ u.id }}</td>
+                <td class="ruta-name">{{ u.nombre }}</td>
+                <td>{{ u.email }}</td>
+                <td>
+                  <span class="badge" [class]="'badge rol-' + u.rol_id">{{ nombreRol(u.rol_id) }}</span>
+                </td>
+                <td>
+                  @if (u.rol_id === 3) {
+                    {{ u.semestre ? 'Semestre ' + u.semestre : '—' }}@if (u.jornada) { · {{ u.jornada }} }
+                  } @else {
+                    —
+                  }
+                </td>
+                <td class="cell-action">
+                  <button type="button" class="btn-outline btn-sm" (click)="abrirReset(u)">
+                    Restablecer contraseña
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">{{ usuariosFiltrados.length }} de {{ usuarios.length }} usuarios</p>
+    }
+  }
+
+  <!-- PESTAÑA: Métricas y Reportes -->
+  @if (activeTab === 'metricas') {
+    @if (!stats) {
+      <div class="empty-state">
+        <h2>Cargando métricas</h2>
+        <p>Esperando la respuesta del servidor.</p>
+      </div>
+    } @else {
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-label">Usuarios totales</span>
+          <span class="kpi-value tabular">{{ stats.usuarios.total }}</span>
+          <span class="kpi-sub">
+            {{ contarUsuarios(1) }} administradores · {{ contarUsuarios(2) }} docentes · {{ contarUsuarios(3) }} estudiantes
+          </span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Avance promedio</span>
+          <span class="kpi-value tabular">{{ promedioGlobal }}%</span>
+          <span class="kpi-sub">de los estudiantes sobre el pensum completo</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Recursos</span>
+          <span class="kpi-value tabular">{{ stats.recursos.aprobado }}</span>
+          <span class="kpi-sub">
+            aprobados · {{ stats.recursos.pendiente }} pendientes · {{ stats.recursos.rechazado }} rechazados
+          </span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Tickets de soporte</span>
+          <span class="kpi-value tabular">{{ stats.tickets.abiertos }}</span>
+          <span class="kpi-sub">abiertos · {{ stats.tickets.resueltos }} resueltos de {{ stats.tickets.total }}</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Cobertura de contenido</span>
+          <span class="kpi-value tabular">{{ stats.cobertura.con_leccion }}/{{ stats.cobertura.total_materias }}</span>
+          <span class="kpi-sub">lecciones publicadas · {{ stats.cobertura.con_reto }} con reto de código</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Inicios de sesión (30 días)</span>
+          <span class="kpi-value tabular">{{ loginsTotales }}</span>
+          <span class="kpi-sub">sesiones registradas en auditoría</span>
+        </div>
+      </div>
+
+      <h2 class="section-title">Avance promedio por área de conocimiento</h2>
+      <div class="area-bars">
+        @for (area of stats.avancePorArea; track area.area_id) {
+          <div class="area-bar-row">
+            <span class="area-bar-name">
+              <span class="area-dot" [style.background]="area.color" aria-hidden="true"></span>
+              {{ area.nombre }}
+              <span class="area-bar-count">{{ area.total_materias }} materias</span>
+            </span>
+            <span class="bar-track" role="progressbar"
+              [attr.aria-valuenow]="area.avance_promedio"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              [attr.aria-label]="'Avance en ' + area.nombre">
+              <span class="bar-fill" [style.width.%]="area.avance_promedio" [style.background]="area.color"></span>
+            </span>
+            <span class="area-bar-value tabular">{{ area.avance_promedio }}%</span>
+          </div>
+        }
+      </div>
+
+      <h2 class="section-title">Inicios de sesión por día (últimos 30 días)</h2>
+      @if (stats.loginsPorDia.length === 0) {
+        <p class="table-note">Aún no hay inicios de sesión registrados en este periodo.</p>
+      } @else {
+        <div class="logins-chart" aria-label="Gráfica de inicios de sesión por día">
+          @for (dia of stats.loginsPorDia; track dia.fecha) {
+            <div class="login-bar" [attr.title]="dia.fecha + ': ' + dia.total + ' sesiones'">
+              <span class="login-fill" [style.height.%]="(dia.total / maxLoginsDiarios) * 100"></span>
+              <span class="login-day">{{ dia.fecha | date:'dd/MM' }}</span>
+            </div>
+          }
+        </div>
+      }
+    }
+  }
+
+  <!-- PESTAÑA: Malla y Líneas de Aprendizaje -->
   @if (activeTab === 'lineas') {
     @if (rows.length === 0) {
       <div class="empty-state">
@@ -83,7 +330,7 @@
       <div class="table-wrap">
         <table class="ruta-table">
           <caption class="visually-hidden">
-            Líneas de aprendizaje activas con número de nodos y última actualización
+            Líneas de aprendizaje activas con número de nodos y avance promedio de estudiantes
           </caption>
           <thead>
             <tr>
@@ -107,17 +354,17 @@
                 <td class="num">
                   <span class="cell-progress">
                     <span class="mini-progress" role="progressbar"
-                      [attr.aria-valuenow]="pct(row)"
+                      [attr.aria-valuenow]="pctArea(row)"
                       aria-valuemin="0" aria-valuemax="100"
                       [attr.aria-label]="'Avance de estudiantes en ' + row.ruta.titulo">
-                      <span class="mini-fill" [style.width.%]="pct(row)"></span>
+                      <span class="mini-fill" [style.width.%]="pctArea(row)"></span>
                     </span>
-                    <span class="tabular mini-label">{{ pct(row) }}%</span>
+                    <span class="tabular mini-label">{{ pctArea(row) }}%</span>
                   </span>
                 </td>
                 <td class="cell-date tabular">{{ formatDate(row.ruta.actualizadoEn) }}</td>
                 <td class="cell-action">
-                  <a class="btn-outline btn-sm" [routerLink]="['/node-editor']">Editar</a>
+                  <a class="btn-outline btn-sm" [routerLink]="['/node-editor']">Abrir editor</a>
                 </td>
               </tr>
             }
@@ -136,7 +383,7 @@
     }
   }
 
-  <!-- PESTAÑA 2: Curaduría de Recursos -->
+  <!-- PESTAÑA: Curaduría de Recursos -->
   @if (activeTab === 'recursos') {
     @if (recursos.length === 0) {
       <div class="empty-state">
@@ -165,20 +412,16 @@
                 </td>
                 <td>{{ rec.tipo_recurso }}</td>
                 <td>
-                  <span
-                    style="display: inline-block; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase;"
-                    [style.background]="rec.estado_revision === 'aprobado' ? 'rgba(16, 185, 129, 0.2)' : (rec.estado_revision === 'pendiente' ? 'rgba(245, 158, 11, 0.2)' : 'rgba(239, 68, 68, 0.2)')"
-                    [style.color]="rec.estado_revision === 'aprobado' ? '#10b981' : (rec.estado_revision === 'pendiente' ? '#f59e0b' : '#ef4444')"
-                  >
+                  <span class="badge" [class]="'badge estado-' + rec.estado_revision">
                     {{ rec.estado_revision }}
                   </span>
                 </td>
                 <td>
-                  <a [href]="rec.enlace" target="_blank" rel="noopener noreferrer" style="color: #60a5fa; text-decoration: underline;">
-                    Ver recurso ↗
+                  <a [href]="rec.enlace" target="_blank" rel="noopener noreferrer" class="link-ext">
+                    Ver recurso
                   </a>
                 </td>
-                <td style="display: flex; gap: 0.5rem; align-items: center;">
+                <td class="cell-inline">
                   @if (rec.estado_revision !== 'aprobado') {
                     <button type="button" class="btn-primary btn-sm" (click)="aprobarRecurso(rec.id)">
                       Aprobar
@@ -198,7 +441,7 @@
     }
   }
 
-  <!-- PESTAÑA 3: Tickets de Soporte -->
+  <!-- PESTAÑA: Tickets de Soporte -->
   @if (activeTab === 'tickets') {
     @if (tickets.length === 0) {
       <div class="empty-state">
@@ -210,24 +453,114 @@
         <table class="ruta-table">
           <thead>
             <tr>
-              <th scope="col">ID Ticket</th>
-              <th scope="col">Recurso ID</th>
+              <th scope="col">ID</th>
+              <th scope="col">Recurso</th>
               <th scope="col">Descripción de la Incidencia</th>
               <th scope="col">Reportado por</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Acciones</th>
             </tr>
           </thead>
           <tbody>
             @for (ticket of tickets; track ticket.id) {
               <tr>
                 <td class="tabular">#{{ ticket.id }}</td>
-                <td class="tabular">Recurso #{{ ticket.recurso_id }}</td>
-                <td>{{ ticket.descripcion }}</td>
+                <td>
+                  @if (ticket.recurso) {
+                    <a [href]="ticket.recurso.enlace" target="_blank" rel="noopener noreferrer" class="link-ext">
+                      {{ ticket.recurso.titulo }}
+                    </a>
+                  } @else if (ticket.recurso_id) {
+                    Recurso #{{ ticket.recurso_id }}
+                  } @else {
+                    <span class="tk-gen">Reporte general</span>
+                  }
+                </td>
+                <td>
+                  @if (ticket.asunto) {
+                    <strong class="tk-asunto">{{ ticket.asunto }}</strong>
+                  }
+                  <span class="tk-desc">{{ ticket.descripcion }}</span>
+                </td>
                 <td>{{ ticket.usuario?.nombre || ('Usuario #' + ticket.usuario_id) }}</td>
+                <td>
+                  <span class="badge" [class]="'badge estado-' + (ticket.estado || 'abierto')">
+                    {{ ticket.estado || 'abierto' }}
+                  </span>
+                </td>
+                <td class="cell-inline">
+                  @if (ticket.estado !== 'resuelto') {
+                    <button type="button" class="btn-primary btn-sm" (click)="cambiarEstadoTicket(ticket, 'resuelto')">
+                      Marcar resuelto
+                    </button>
+                  } @else {
+                    <button type="button" class="btn-outline btn-sm" (click)="cambiarEstadoTicket(ticket, 'abierto')">
+                      Reabrir
+                    </button>
+                  }
+                </td>
               </tr>
             }
           </tbody>
         </table>
       </div>
+    }
+  }
+
+  <!-- PESTAÑA: Auditoría del Sistema -->
+  @if (activeTab === 'auditoria') {
+    @if (auditoria.length === 0) {
+      <div class="empty-state">
+        <h2>No hay eventos de auditoría registrados</h2>
+        <p>Los eventos del sistema (inicios de sesión, cambios en recursos y progreso) se registrarán aquí.</p>
+      </div>
+    } @else {
+      <div class="table-wrap">
+        <table class="ruta-table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Acción</th>
+              <th scope="col">Usuario</th>
+              <th scope="col">Detalle</th>
+              <th scope="col">Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (log of auditoria; track log.id) {
+              <tr>
+                <td class="tabular">#{{ log.id }}</td>
+                <td>
+                  <span class="badge badge-accion">{{ log.accion }}</span>
+                </td>
+                <td>{{ log.usuario_nombre }}</td>
+                <td>{{ log.detalle }}</td>
+                <td class="cell-date tabular">{{ log.fecha | date:'short' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <nav class="pagination" aria-label="Paginación de auditoría">
+        <button
+          type="button"
+          class="btn-outline btn-sm"
+          (click)="paginaAnterior()"
+          [disabled]="auditoriaPage <= 1"
+        >
+          Anterior
+        </button>
+        <span class="pagination-info tabular">Página {{ auditoriaPage }} de {{ auditoriaTotalPages }}</span>
+        <button
+          type="button"
+          class="btn-outline btn-sm"
+          (click)="paginaSiguiente()"
+          [disabled]="auditoriaPage >= auditoriaTotalPages"
+        >
+          Siguiente
+        </button>
+      </nav>
     }
   }
 </section>

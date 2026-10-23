@@ -63,9 +63,15 @@
       </div>
       } @else {
 
+      @if (paso === 1) {
+      <div class="step-indicator">
+        <span class="step-badge">1</span>
+        <span>Paso 1 de 2 · Datos básicos</span>
+      </div>
+
       <h2 class="auth-card-title">CREAR CUENTA</h2>
 
-      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <form [formGroup]="form" (ngSubmit)="avanzarPaso()" novalidate>
         <!-- Nombre -->
         <div class="relative mb-5">
           <label for="reg-nombre">NOMBRE COMPLETO</label>
@@ -167,18 +173,87 @@
           </p>
         </div>
 
-        @if (serverError) {
-        <p class="form-alert" role="alert">{{ serverError }}</p>
-        }
+        <!-- Género -->
+        <div class="relative mb-5">
+          <label id="reg-genero-label">GÉNERO</label>
+          <div class="jornada-group" role="radiogroup" aria-labelledby="reg-genero-label" aria-describedby="reg-genero-error">
+            <label class="jornada-option" [class.is-selected]="form.get('genero')?.value === 'Masculino'">
+              <input type="radio" formControlName="genero" value="Masculino" class="sr-only" />
+              Masculino
+            </label>
+            <label class="jornada-option" [class.is-selected]="form.get('genero')?.value === 'Femenino'">
+              <input type="radio" formControlName="genero" value="Femenino" class="sr-only" />
+              Femenino
+            </label>
+            <label class="jornada-option" [class.is-selected]="form.get('genero')?.value === 'Otro'">
+              <input type="radio" formControlName="genero" value="Otro" class="sr-only" />
+              Otro
+            </label>
+            <label class="jornada-option" [class.is-selected]="form.get('genero')?.value === 'No especificado'">
+              <input type="radio" formControlName="genero" value="No especificado" class="sr-only" />
+              Prefiero no decirlo
+            </label>
+          </div>
+          <p class="mt-1 min-h-[1.1em] text-[13px] font-bold text-[#dc2626]" id="reg-genero-error">
+            {{ fieldError('genero') }}
+          </p>
+        </div>
 
-        <!-- Botón azul de registro -->
-        <button id="reg-submit" type="submit" [disabled]="status === 'submitting'" class="auth-btn-primary">
-          @if (status === 'submitting') {
-          <span class="spinner" aria-hidden="true"></span>
-          }
-          Crear cuenta
+        <!-- Botón continuar al paso 2 -->
+        <button id="reg-submit" type="submit" class="auth-btn-primary">
+          Continuar a intereses →
         </button>
       </form>
+      } @else {
+      <!-- PASO 2: INTERESES -->
+      <div class="step-indicator">
+        <span class="step-badge">2</span>
+        <span>Paso 2 de 2 · Personaliza tu ruta</span>
+      </div>
+
+      <h2 class="auth-card-title">TUS INTERESES</h2>
+      <p style="margin: 0 0 16px; font-size: 0.875rem; color: var(--fg); opacity: 0.85;">
+        Elige las áreas que más te interesan para recomendarte rutas y materias (opcional):
+      </p>
+
+      <div class="intereses-grid" role="group" aria-label="Selección de intereses académicos">
+        @for (item of interesesDisponibles; track item) {
+        <button type="button" class="interest-chip" [class.is-selected]="isInteresSelected(item)"
+          (click)="toggleInteres(item)" [attr.aria-pressed]="isInteresSelected(item)">
+          @if (isInteresSelected(item)) {
+          <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+          }
+          {{ item }}
+        </button>
+        }
+      </div>
+
+      @if (serverError) {
+      <p class="form-alert" role="alert">{{ serverError }}</p>
+      }
+
+      <button type="button" id="reg-submit-final" [disabled]="status === 'submitting'" (click)="submit(true)"
+        class="auth-btn-primary">
+        @if (status === 'submitting') {
+        <span class="spinner" aria-hidden="true"></span>
+        }
+        Finalizar registro
+      </button>
+
+      <div style="display: flex; gap: 10px; margin-top: 12px;">
+        <button type="button" (click)="volverPaso1()" [disabled]="status === 'submitting'" class="auth-btn-secondary"
+          style="flex: 1;">
+          ← Volver
+        </button>
+        <button type="button" (click)="submit(false)" [disabled]="status === 'submitting'" class="auth-btn-secondary"
+          style="flex: 1;">
+          Omitir por ahora
+        </button>
+      </div>
+      }
 
       <p class="reg-login-link">
         ¿Ya tienes cuenta?

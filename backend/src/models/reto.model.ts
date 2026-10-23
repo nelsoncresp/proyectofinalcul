@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Asignatura } from './asignatura.model';
 
 /**
@@ -12,6 +12,9 @@ export class Reto {
 
     @Column('int')
     asignatura_id!: number;
+
+    @Column({ type: 'tinyint', default: 1 })
+    corte!: number;
 
     @Column('text')
     enunciado!: string;
@@ -28,7 +31,7 @@ export class Reto {
     @Column('simple-json')
     casos!: { entrada: unknown[]; esperado: unknown }[];
 
-    @OneToOne(() => Asignatura)
+    @ManyToOne(() => Asignatura)
     @JoinColumn({ name: 'asignatura_id' })
     asignatura!: Asignatura;
 }

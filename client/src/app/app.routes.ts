@@ -5,7 +5,9 @@ import { RegisterController } from './controllers/register.controller';
 import { DashboardEstudianteController } from './controllers/dashboard-estudiante.controller';
 import { AulaEstudianteController } from './controllers/aula-estudiante.controller';
 import { DashboardAdminController } from './controllers/dashboard-admin.controller';
+import { DashboardDocenteController } from './controllers/dashboard-docente.controller';
 import { NodeEditorController } from './controllers/node-editor.controller';
+import { PerfilController } from './controllers/perfil.controller';
 import { AuthGuard } from './services/auth.guard';
 import { AccessDeniedController } from './controllers/access-denied.controller';
 
@@ -26,12 +28,20 @@ export const routes: Routes = [
 		data: { roles: ['Estudiante'] }
 	},
 	{
+		path: 'dashboard-docente',
+		component: DashboardDocenteController,
+		canActivate: [AuthGuard],
+		data: { roles: ['Docente'] }
+	},
+	{
 		path: 'dashboard-admin',
 		component: DashboardAdminController,
 		canActivate: [AuthGuard],
 		data: { roles: ['Administrador'] }
 	},
-	{ path: 'node-editor', component: NodeEditorController, canActivate: [AuthGuard], data: { roles: ['Administrador'] } },
+	{ path: 'node-editor', component: NodeEditorController, canActivate: [AuthGuard], data: { roles: ['Administrador', 'Docente'] } },
+	// Perfil: disponible para cualquier rol autenticado (sin data.roles).
+	{ path: 'perfil', component: PerfilController, canActivate: [AuthGuard] },
 	{ path: 'access-denied', component: AccessDeniedController },
 	{ path: '**', redirectTo: '' }
 ];

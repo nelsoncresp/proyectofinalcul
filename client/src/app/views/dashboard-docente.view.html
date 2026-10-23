@@ -1,0 +1,328 @@
+<div class="docente-page">
+  <header class="docente-header">
+    <div class="docente-header-inner">
+      <div class="docente-header-brand">
+        <span class="docente-badge">Portal Docente</span>
+        <h1 class="docente-title">Bienvenido, {{ user?.nombre ?? 'Docente' }}</h1>
+        <p class="docente-subtitle">Gestiona tus rutas de aprendizaje, recursos de estudio y atención a estudiantes.</p>
+      </div>
+      <div class="docente-header-actions">
+        <a routerLink="/node-editor" class="docente-btn-primary">
+          <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Editor de Nodos
+        </a>
+        <button class="docente-logout-btn" (click)="logout()" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          Cerrar sesión
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="docente-main">
+    <!-- Métricas rápidas -->
+    <div class="docente-metrics-grid">
+      <div class="metric-card" (click)="setTab('rutas')">
+        <div class="metric-icon metric-icon--purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3" />
+            <circle cx="4" cy="6" r="2" />
+            <circle cx="20" cy="6" r="2" />
+            <line x1="6" y1="6" x2="9" y2="11" />
+            <line x1="18" y1="6" x2="15" y2="11" />
+          </svg>
+        </div>
+        <div class="metric-info">
+          <span class="metric-num">{{ rutas.length }}</span>
+          <span class="metric-label">Rutas y Materias Asignadas</span>
+        </div>
+      </div>
+
+      <div class="metric-card" (click)="setTab('recursos')">
+        <div class="metric-icon metric-icon--blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+          </svg>
+        </div>
+        <div class="metric-info">
+          <span class="metric-num">{{ recursos.length }}</span>
+          <span class="metric-label">Recursos en Catálogo</span>
+        </div>
+      </div>
+
+      <div class="metric-card" (click)="setTab('tickets')">
+        <div class="metric-icon metric-icon--amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+        </div>
+        <div class="metric-info">
+          <span class="metric-num">{{ tickets.length }}</span>
+          <span class="metric-label">Reportes de Estudiantes</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navegación por pestañas -->
+    <nav class="docente-tabs" aria-label="Secciones del panel">
+      <button class="docente-tab" [class.is-active]="activeTab === 'rutas'" (click)="setTab('rutas')">
+        Mis Rutas de Aprendizaje
+      </button>
+      <button class="docente-tab" [class.is-active]="activeTab === 'recursos'" (click)="setTab('recursos')">
+        Curaduría de Recursos
+      </button>
+      <button class="docente-tab" [class.is-active]="activeTab === 'tickets'" (click)="setTab('tickets')">
+        Bandeja de Tickets
+      </button>
+    </nav>
+
+    <!-- PESTAÑA 1: MIS RUTAS -->
+    @if (activeTab === 'rutas') {
+    <section class="docente-section">
+      <div class="section-top">
+        <div>
+          <h2 class="section-title">Líneas y Materias Creadas</h2>
+          <p class="section-desc">Visualiza las asignaturas registradas y sus lecciones activas.</p>
+        </div>
+        <a routerLink="/node-editor" class="btn-create-route">
+          + Crear Nodo en Editor
+        </a>
+      </div>
+
+      @if (loadingRutas) {
+      <div class="panel-loading">Cargando rutas...</div>
+      } @else if (rutas.length === 0) {
+      <div class="empty-panel">
+        <p>No tienes rutas propias creadas aún. Puedes usar el Editor de Nodos para crear nuevas materias personalizadas.</p>
+        <a routerLink="/node-editor" class="docente-btn-primary" style="margin-top: 12px; display: inline-flex;">
+          Ir al Editor de Nodos
+        </a>
+      </div>
+      } @else {
+      <div class="rutas-grid">
+        @for (r of rutas; track r.id) {
+        <div class="ruta-item-card">
+          <div class="ruta-card-header">
+            <span class="ruta-area-chip" [style.borderColor]="r.area?.color || '#a78bfa'">
+              {{ r.area?.nombre || 'General' }}
+            </span>
+            <span class="ruta-semestre-badge">Semestre {{ r.semestre }}</span>
+          </div>
+
+          <h3 class="ruta-item-title">{{ r.nombre }}</h3>
+
+          <div class="ruta-details">
+            <span class="detail-row">
+              <strong>Tipo:</strong> {{ r.tipo === 'ruta_profesor' ? 'Ruta Docente' : 'Pensum' }}
+            </span>
+            <span class="detail-row">
+              <strong>Prerrequisitos:</strong> {{ r.prerrequisitos?.length || 0 }} previos
+            </span>
+            <span class="detail-row">
+              <strong>Lección:</strong>
+              <span [class.badge-active]="r.leccion" [class.badge-inactive]="!r.leccion">
+                {{ r.leccion ? (r.leccion.estado === 'publicada' ? 'Publicada' : 'Borrador') : 'Sin lección' }}
+              </span>
+            </span>
+          </div>
+
+          <div class="ruta-card-footer">
+            <a [routerLink]="['/aula', r.id]" class="card-btn-view">
+              Ver Aula →
+            </a>
+            <a routerLink="/node-editor" class="card-btn-edit">
+              Editar en Nodos
+            </a>
+          </div>
+        </div>
+        }
+      </div>
+      }
+    </section>
+    }
+
+    <!-- PESTAÑA 2: RECURSOS -->
+    @if (activeTab === 'recursos') {
+    <section class="docente-section">
+      <div class="section-top">
+        <div>
+          <h2 class="section-title">Recursos Académicos</h2>
+          <p class="section-desc">Propón recursos de apoyo (videos, guías, repositorios) para las asignaturas.</p>
+        </div>
+        <button type="button" class="btn-create-route" (click)="abrirModalProponer()">
+          + Proponer Nuevo Recurso
+        </button>
+      </div>
+
+      @if (loadingRecursos) {
+      <div class="panel-loading">Cargando recursos...</div>
+      } @else if (recursos.length === 0) {
+      <div class="empty-panel">No hay recursos en la plataforma actualmente.</div>
+      } @else {
+      <div class="table-container">
+        <table class="docente-table">
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Materia</th>
+              <th>Tipo</th>
+              <th>Estado</th>
+              <th>Enlace</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (rec of recursos; track rec.id) {
+            <tr>
+              <td class="td-title">{{ rec.titulo }}</td>
+              <td>{{ rec.asignatura?.nombre || ('Materia #' + rec.asignatura_id) }}</td>
+              <td><span class="type-pill">{{ rec.tipo_recurso }}</span></td>
+              <td>
+                <span class="status-badge" [class.status-aprobado]="rec.estado_revision === 'aprobado'"
+                  [class.status-pendiente]="rec.estado_revision === 'pendiente'"
+                  [class.status-rechazado]="rec.estado_revision === 'rechazado'">
+                  {{ rec.estado_revision }}
+                </span>
+              </td>
+              <td>
+                <a [href]="rec.enlace" target="_blank" rel="noopener" class="link-external">
+                  Visitar ↗
+                </a>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      }
+    </section>
+    }
+
+    <!-- PESTAÑA 3: TICKETS -->
+    @if (activeTab === 'tickets') {
+    <section class="docente-section">
+      <div class="section-top">
+        <div>
+          <h2 class="section-title">Bandeja de Tickets de Soporte</h2>
+          <p class="section-desc">Reportes generados por estudiantes sobre enlaces caídos o dudas de contenido.</p>
+        </div>
+      </div>
+
+      @if (loadingTickets) {
+      <div class="panel-loading">Cargando tickets...</div>
+      } @else if (tickets.length === 0) {
+      <div class="empty-panel">No hay tickets de soporte reportados actualmente.</div>
+      } @else {
+      @if (mensajeTicket) {
+      <div class="ticket-msg" role="status">{{ mensajeTicket }}</div>
+      }
+      <div class="tickets-list">
+        @for (t of tickets; track t.id) {
+        <div class="ticket-card">
+          <div class="ticket-header">
+            <span class="ticket-id">Ticket #{{ t.id }}</span>
+            <span class="ticket-estado" [class.resuelto]="(t.estado || 'abierto') === 'resuelto'">
+              {{ t.estado || 'abierto' }}
+            </span>
+            <span class="ticket-author">{{ t.usuario?.nombre || ('Usuario #' + t.usuario_id) }}</span>
+          </div>
+          @if (t.asunto) {
+          <p class="ticket-asunto">{{ t.asunto }}</p>
+          }
+          <p class="ticket-body">{{ t.descripcion }}</p>
+          @if (t.recurso) {
+          <div class="ticket-recurso-ref">
+            <strong>Recurso reportado:</strong> {{ t.recurso.titulo }}
+            (<a [href]="t.recurso.enlace" target="_blank" rel="noopener" class="link-external">revisar</a>)
+          </div>
+          }
+          <div class="ticket-actions">
+            @if (t.estado !== 'resuelto') {
+            <button type="button" class="ticket-btn primary" (click)="cambiarEstadoTicket(t, 'resuelto')">
+              Marcar resuelto
+            </button>
+            } @else {
+            <button type="button" class="ticket-btn" (click)="cambiarEstadoTicket(t, 'abierto')">
+              Reabrir
+            </button>
+            }
+          </div>
+        </div>
+        }
+      </div>
+      }
+    </section>
+    }
+  </main>
+
+  <!-- MODAL: PROPONER RECURSO -->
+  @if (showModalProponer) {
+  <div class="modal-backdrop" (click)="cerrarModalProponer()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">Proponer Nuevo Recurso</h3>
+        <button class="modal-close" (click)="cerrarModalProponer()">&times;</button>
+      </div>
+
+      <form (submit)="$event.preventDefault(); proponerRecurso()" class="modal-form">
+        <div class="modal-field">
+          <label for="prop-asig">Asignatura Destino</label>
+          <select id="prop-asig" [(ngModel)]="nuevoRecurso.asignatura_id" name="asignatura_id">
+            @for (a of asignaturasParaRecurso; track a.id) {
+            <option [value]="a.id">{{ a.nombre }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="modal-field">
+          <label for="prop-titulo">Título del Recurso</label>
+          <input id="prop-titulo" type="text" [(ngModel)]="nuevoRecurso.titulo" name="titulo"
+            placeholder="Ej: Documentación oficial de TypeScript" required />
+        </div>
+
+        <div class="modal-field">
+          <label for="prop-tipo">Tipo de Recurso</label>
+          <select id="prop-tipo" [(ngModel)]="nuevoRecurso.tipo_recurso" name="tipo_recurso">
+            <option value="Documento">Documento / Artículo</option>
+            <option value="Video">Video explicativo</option>
+            <option value="Repositorio">Repositorio GitHub</option>
+            <option value="Biblioteca">Biblioteca / Framework</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+
+        <div class="modal-field">
+          <label for="prop-enlace">Enlace (URL completa)</label>
+          <input id="prop-enlace" type="url" [(ngModel)]="nuevoRecurso.enlace" name="enlace"
+            placeholder="https://ejemplo.com/recurso" required />
+        </div>
+
+        @if (errorRecurso) {
+        <p class="modal-error">{{ errorRecurso }}</p>
+        }
+        @if (mensajeRecurso) {
+        <p class="modal-success">{{ mensajeRecurso }}</p>
+        }
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" (click)="cerrarModalProponer()" [disabled]="submittingRecurso">
+            Cancelar
+          </button>
+          <button type="submit" class="docente-btn-primary" [disabled]="submittingRecurso">
+            Enviar a revisión
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+</div>

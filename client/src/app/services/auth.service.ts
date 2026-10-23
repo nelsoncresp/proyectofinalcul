@@ -21,7 +21,7 @@ export interface DemoAccount {
 // Backend: 1=Administrador, 2=Docente, 3=Estudiante
 const ROL_ID_MAP: Record<number, UserRole> = {
   1: 'Administrador',
-  2: 'Administrador', // Docente se trata como Admin en el front por ahora
+  2: 'Docente',
   3: 'Estudiante'
 };
 
@@ -29,6 +29,7 @@ const ROL_ID_MAP: Record<number, UserRole> = {
 // Se usan SOLO cuando el backend no está disponible o para pruebas rápidas.
 const DEMO_ACCOUNTS: DemoAccount[] = [
   { email: 'admin@cul.edu',         password: 'admin123', rol: 'Administrador' },
+  { email: 'docente@cul.edu',       password: 'docente123', rol: 'Docente' },
   { email: 'estudiante1@cul.edu',   password: 'clave123',  rol: 'Estudiante' },
   { email: 'estudiante2@cul.edu',   password: 'clave123',  rol: 'Estudiante' },
   { email: 'estudiante3@cul.edu.co', password: 'clave123', rol: 'Estudiante' }
@@ -61,7 +62,9 @@ export class AuthService {
           email: response.user.email,
           rol,
           semestre: response.user.semestre,
-          jornada: response.user.jornada
+          jornada: response.user.jornada,
+          genero: response.user.genero,
+          intereses: response.user.intereses
         };
         // Guardamos token y usuario en localStorage
         this.api.saveToken(response.token);
@@ -86,6 +89,34 @@ export class AuthService {
     localStorage.removeItem(STORAGE_KEY_USER);
     this.api.clearToken();
     this.currentUserSubject.next(null);
+  }
+
+  /**
+   * Sincroniza el usuario en memoria con el backend (tras editar el perfil)
+   * y persiste el cambio. Devuelve el usuario actualizado o null si falla.
+   */
+  refreshUser(): Observable<Usuario | null> {
+    if (!this.api.getToken()) return of(null);
+    return this.api.getMe().pipe(
+      map(me => {
+        const actual = this.getCurrentUser();
+        const rol = ROL_ID_MAP[me.rol_id] ?? actual?.rol ?? 'Estudiante';
+        const user: Usuario = {
+          id: String(me.id),
+          nombre: me.nombre,
+          email: me.email,
+          rol,
+          semestre: me.semestre,
+          jornada: me.jornada,
+          genero: me.genero,
+          intereses: me.intereses
+        };
+        this.saveUserToStorage(user);
+        this.currentUserSubject.next(user);
+        return user;
+      }),
+      catchError(() => of(null))
+    );
   }
 
   // ── Getters ────────────────────────────────────────────────────────────────

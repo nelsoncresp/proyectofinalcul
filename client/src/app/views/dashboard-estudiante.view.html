@@ -142,6 +142,23 @@
         </svg>
         <span>Líneas de formación</span>
       </button>
+      <button
+        type="button"
+        class="route-tab"
+        role="tab"
+        [class.is-active]="activeTab === 'para-ti'"
+        [attr.aria-selected]="activeTab === 'para-ti'"
+        (click)="setTab('para-ti')"
+      >
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3l1.9 4.6L18.5 9.5 13.9 11.4 12 16l-1.9-4.6L5.5 9.5l4.6-1.9L12 3z"/>
+          <path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15z"/>
+        </svg>
+        <span>Para ti</span>
+        @if (hayRecomendacion) {
+          <span class="route-tab-dot" aria-hidden="true"></span>
+        }
+      </button>
     </div>
 
     <p class="route-summary">
@@ -367,7 +384,7 @@
   <!-- ==================== PESTAÑA 2: LÍNEAS DE FORMACIÓN ==================== -->
   @if (activeTab === 'areas') {
     <div class="areas-grid">
-      @for (area of areasList; track area.id) {
+      @for (area of areasOrdenadas; track area.id) {
         <article class="track-card" [style.--area]="area.color">
           <header class="track-head">
             <div class="track-head-top">
@@ -375,6 +392,14 @@
                 <span class="area-dot" aria-hidden="true"></span>
                 Línea de formación
               </span>
+              @if (esRecomendada(area.id)) {
+                <span class="track-rec">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M12 2l2.4 6.2L21 9.3l-4.8 4.3L17.6 21 12 17.4 6.4 21l1.4-7.4L3 9.3l6.6-1.1L12 2z"/>
+                  </svg>
+                  Para ti
+                </span>
+              }
               <span class="track-pct" [style.color]="area.color">{{ area.porcentajeAvance }}%</span>
             </div>
             <h3 class="track-title">{{ area.nombre }}</h3>
@@ -409,6 +434,520 @@
             }
           </div>
         </article>
+      }
+    </div>
+  }
+
+  <!-- ==================== PESTAÑA 3: PARA TI ==================== -->
+  @if (activeTab === 'para-ti') {
+    <div class="para-ti">
+
+      <!-- Hero: recomendaciones con base en el registro -->
+      <header class="pt-hero">
+        <div class="pt-hero-copy">
+          <p class="pt-kicker">Recomendaciones con base en tu registro</p>
+          <h2 class="pt-title">Para ti</h2>
+          <p class="pt-sub">
+            Cursos elegidos por tus intereses académicos: inscríbete y empieza en un solo clic.
+          </p>
+          @if (interesesUsuario.length > 0) {
+            <div class="pt-chips" aria-label="Tus intereses">
+              @for (it of interesesUsuario; track it) {
+                <span class="pt-chip">{{ it }}</span>
+              }
+            </div>
+          }
+        </div>
+        <div class="pt-hero-side">
+          <dl class="pt-stats">
+            <div class="pt-stat">
+              <dt>Listos para empezar</dt>
+              <dd>{{ statsListos }}</dd>
+            </div>
+            <div class="pt-stat">
+              <dt>En curso</dt>
+              <dd>{{ statsEnCurso }}</dd>
+            </div>
+            <div class="pt-stat">
+              <dt>Líneas recomendadas</dt>
+              <dd>{{ areasParaTi.length }}</dd>
+            </div>
+          </dl>
+          <a class="btn btn-outline pt-edit" routerLink="/perfil">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+            {{ interesesUsuario.length > 0 ? 'Editar intereses' : 'Configurar intereses' }}
+          </a>
+        </div>
+      </header>
+
+      <!-- Avisos y errores de inscripción -->
+      @if (avisoInscripcion || errorInscripcion) {
+        <div class="pt-aviso" [class.is-error]="!!errorInscripcion" role="status">
+          @if (errorInscripcion) {
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          } @else {
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          }
+          <span>{{ errorInscripcion || avisoInscripcion }}</span>
+          <button type="button" class="pt-aviso-close" (click)="limpiarAvisos()" aria-label="Cerrar aviso">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      }
+
+      @if (!hayRecomendacion) {
+        <!-- Sin intereses: invitación a configurarlos -->
+        <div class="path-empty">
+          <div class="path-empty-bot" aria-hidden="true">
+            <ng-container *ngTemplateOutlet="robotArt"></ng-container>
+          </div>
+          <h3 class="path-empty-title">Aún no conocemos tus gustos</h3>
+          <p class="path-empty-text">
+            Elige tus intereses académicos y aquí verás tus líneas de formación
+            recomendadas y las materias listas para cursar en ellas.
+          </p>
+          <a class="btn btn-primary" routerLink="/perfil">
+            <span>Configurar mis intereses</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </a>
+        </div>
+      } @else {
+        <!-- En curso: continúa donde ibas -->
+        @if (materiasInscritas.length > 0 || cursosInscritos.length > 0) {
+          <section class="pt-curso" aria-label="Cursos en curso">
+            <div class="pt-curso-head">
+              <h3 class="pt-curso-title">Continúa donde ibas</h3>
+              <span class="pt-curso-count">{{ statsEnCurso }} en curso</span>
+            </div>
+            <div class="pt-curso-lista">
+              @for (m of materiasInscritas; track m.id) {
+                <button type="button" class="pt-curso-chip" [style.--area]="m.areaColor" (click)="irAlAula(m.id)">
+                  <span class="area-dot" aria-hidden="true"></span>
+                  <span class="pt-curso-chip-copy">
+                    <span class="pt-curso-chip-name">{{ m.nombre }}</span>
+                    <span class="pt-curso-chip-meta">Pensum · {{ m.areaNombre }}</span>
+                  </span>
+                  <span class="pt-curso-chip-cta">
+                    Continuar
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                      <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                  </span>
+                </button>
+              }
+              @for (c of cursosInscritos; track c.id) {
+                <button type="button" class="pt-curso-chip" [style.--area]="c.color" (click)="abrirDetalleCurso(c)">
+                  <span class="area-dot" aria-hidden="true"></span>
+                  <span class="pt-curso-chip-copy">
+                    <span class="pt-curso-chip-name">{{ c.titulo }}</span>
+                    <span class="pt-curso-chip-meta">Especialización · {{ avanceCurso(c) }}% avanzado</span>
+                  </span>
+                  <span class="pt-curso-chip-cta">
+                    Continuar
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                      <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                  </span>
+                </button>
+              }
+            </div>
+          </section>
+        }
+
+        <!-- ① Especializaciones extracurriculares por interés -->
+        <section class="pt-seccion">
+          <div class="pt-seccion-head">
+            <div>
+              <span class="pt-badge-cat">Especializaciones extracurriculares</span>
+              <h3 class="pt-seccion-title">Cursos recomendados para tu perfil</h3>
+            </div>
+            <p class="pt-seccion-sub">Rutas independientes del pensum elegidas por tus intereses: inscríbete, marca tus módulos y avanza.</p>
+          </div>
+
+          <div class="cursos-interes-grid">
+            @for (curso of cursosRecomendados; track curso.id) {
+              <article class="curso-card" [class.is-inscrito]="estaInscritoCurso(curso.id)">
+                <div class="curso-visual">
+                  @if (estaInscritoCurso(curso.id)) {
+                    <span class="curso-inscrito-badge">Inscrito</span>
+                  }
+                  <span class="curso-nivel-badge">{{ curso.nivel }}</span>
+                  <div class="curso-iconos" aria-hidden="true">
+                    @for (icono of iconosCurso(curso); track icono) {
+                      <img [src]="icono" alt="" [class.icono-invertido]="iconoInvertido(icono)" (error)="ocultarIcono($event)">
+                    }
+                  </div>
+                </div>
+
+                <div class="curso-content">
+                  <p class="curso-category">{{ curso.interes }}</p>
+                  <h4 class="curso-title">{{ curso.titulo }}</h4>
+
+                  <div class="curso-tags">
+                    @for (tag of curso.tags; track tag) {
+                      <span class="curso-tag">{{ tag }}</span>
+                    }
+                  </div>
+
+                  <footer class="curso-foot">
+                    <div class="curso-meta">
+                      <span class="curso-meta-duracion">{{ curso.duracion.split('·')[0].trim() }}</span>
+                      <span class="curso-meta-sub">
+                        @if (estaInscritoCurso(curso.id)) {
+                          {{ avanceCurso(curso) }}% completado
+                        } @else {
+                          {{ curso.clasesCount }} clases
+                        }
+                      </span>
+                    </div>
+                    <button type="button" class="curso-btn" (click)="abrirDetalleCurso(curso)">
+                      {{ estaInscritoCurso(curso.id) ? 'Continuar curso' : 'Ver temario' }}
+                    </button>
+                  </footer>
+                </div>
+              </article>
+            }
+          </div>
+        </section>
+
+        <!-- ② Materias del pensum listas para cursar -->
+        <section class="pt-seccion">
+          <div class="pt-seccion-head">
+            <div>
+              <span class="pt-badge-cat">Plan curricular activo</span>
+              <h3 class="pt-seccion-title">Materias listas para cursar</h3>
+            </div>
+            <p class="pt-seccion-sub">
+              Inscríbete y entra directo al aula de la materia. Las de tus áreas recomendadas van primero.
+            </p>
+          </div>
+
+          @if (materiasParaTi.length === 0) {
+            <div class="pt-nota">
+              <p>No tienes materias disponibles ahora mismo. Cuando avances en tus prerrequisitos aparecerán aquí.</p>
+              <button type="button" class="btn btn-ghost" (click)="setTab('roadmap')">Ver mi ruta completa</button>
+            </div>
+          } @else {
+            <div class="materias-grid">
+              @for (m of materiasParaTi; track m.id) {
+                <article class="materia-card" [style.--area]="m.areaColor">
+                  <div class="materia-meta">
+                    <span class="state-badge" data-state="Disponible">Disponible</span>
+                    <span class="area-chip">
+                      <span class="area-dot" aria-hidden="true"></span>
+                      {{ m.areaNombre }}
+                    </span>
+                    <span class="materia-sem">Semestre {{ m.semestre }}</span>
+                  </div>
+                  <h4 class="materia-title">{{ m.nombre }}</h4>
+                  <p class="materia-razon">{{ razonRecomendacion(m) }}</p>
+                  <div class="materia-acciones">
+                    @if (!m.inscrito) {
+                      <button type="button" class="btn btn-primary" (click)="inscribirMateria(m)">
+                        <span>Inscribirme y empezar</span>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <line x1="5" y1="12" x2="19" y2="12"/>
+                          <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                      </button>
+                    } @else {
+                      <button type="button" class="btn btn-primary" (click)="irAlAula(m.id)">
+                        <span>Continuar curso</span>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <line x1="5" y1="12" x2="19" y2="12"/>
+                          <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                      </button>
+                      <button type="button" class="btn btn-ghost btn-sm" (click)="salirMateria(m)">Salir del curso</button>
+                    }
+                  </div>
+                </article>
+              }
+            </div>
+          }
+        </section>
+
+        <!-- Pie: mapa completo -->
+        <div class="pt-pie">
+          <p>¿Quieres ver el mapa completo de tu carrera?</p>
+          <button type="button" class="btn btn-outline" (click)="setTab('areas')">
+            <span>Ver mis líneas de formación</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </button>
+        </div>
+      }
+
+    <!-- Modal de Temario / Detalle del Curso Extracurricular -->
+    @if (cursoSeleccionado; as cSel) {
+      <div class="modal-overlay" (click)="cerrarDetalleCurso()" role="dialog" aria-modal="true" aria-labelledby="modal-curso-title">
+        <div class="modal-card card" (click)="$event.stopPropagation()">
+          <header class="modal-head">
+            <div>
+              <span class="curso-interest-badge">
+                <span class="curso-dot" [style.background]="cSel.color" aria-hidden="true"></span>
+                {{ cSel.interes }} · {{ cSel.nivel }}
+              </span>
+              <h3 id="modal-curso-title" class="modal-title">{{ cSel.titulo }}</h3>
+              <p class="modal-sub">{{ cSel.subtitulo }}</p>
+            </div>
+            <button type="button" class="modal-close" (click)="cerrarDetalleCurso()" aria-label="Cerrar modal">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </header>
+
+          <div class="modal-body">
+            <p class="modal-desc">{{ cSel.descripcion }}</p>
+
+            <div class="modal-meta-grid">
+              <div class="meta-box">
+                <span class="meta-label">Duración</span>
+                <span class="meta-value">{{ cSel.duracion }}</span>
+              </div>
+              <div class="meta-box">
+                <span class="meta-label">Modalidad</span>
+                <span class="meta-value">100% Online · Asíncrono</span>
+              </div>
+              <div class="meta-box">
+                <span class="meta-label">Certificación</span>
+                <span class="meta-value">Insignia Digital Sequora</span>
+              </div>
+            </div>
+
+            <div class="modal-temario-head">
+              <h4 class="modal-section-title">Temario y módulos de aprendizaje</h4>
+              @if (estaInscritoCurso(cSel.id)) {
+                <span class="modal-progreso-text">
+                  {{ modulosVistos(cSel.id).length }} de {{ cSel.modulos.length }} vistos
+                </span>
+              }
+            </div>
+            @if (estaInscritoCurso(cSel.id)) {
+              <div class="modal-progreso-barra" aria-hidden="true">
+                <span [style.width.%]="avanceCurso(cSel)" [style.background]="cSel.color"></span>
+              </div>
+            }
+
+            <ol class="temario-list">
+              @for (mod of cSel.modulos; track mod; let idx = $index) {
+                <li class="temario-item" [class.is-visto]="estaInscritoCurso(cSel.id) && estaVisto(cSel.id, idx)">
+                  <div class="temario-copy">
+                    <span class="temario-num">Módulo {{ idx + 1 }}</span>
+                    <span class="temario-name">{{ mod }}</span>
+                  </div>
+                  @if (estaInscritoCurso(cSel.id)) {
+                    <button
+                      type="button"
+                      class="temario-check"
+                      [class.is-checked]="estaVisto(cSel.id, idx)"
+                      role="checkbox"
+                      [attr.aria-checked]="estaVisto(cSel.id, idx)"
+                      [attr.aria-label]="'Marcar módulo ' + (idx + 1) + ' como visto'"
+                      (click)="toggleModulo(cSel, idx)"
+                    >
+                      @if (estaVisto(cSel.id, idx)) {
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                      }
+                    </button>
+                  }
+                </li>
+              }
+            </ol>
+
+            @if (errorInscripcion) {
+              <p class="modal-error" role="alert">{{ errorInscripcion }}</p>
+            }
+          </div>
+
+          <footer class="modal-foot">
+            @if (!estaInscritoCurso(cSel.id)) {
+              <button type="button" class="btn btn-outline" (click)="cerrarDetalleCurso()">
+                Cerrar
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                [disabled]="inscribiendoCursoId !== null"
+                (click)="inscribirExtracurricular(cSel)"
+              >
+                <span>{{ inscribiendoCursoId === cSel.id ? 'Inscribiéndome…' : 'Inscribirme en esta especialización' }}</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </button>
+            } @else {
+              <button type="button" class="btn btn-ghost" (click)="salirExtracurricular(cSel)">
+                Darme de baja
+              </button>
+              <button type="button" class="btn btn-primary" (click)="cerrarDetalleCurso()">
+                <span>Continuar curso</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                  <polyline points="12 5 19 12 12 19"/>
+                </svg>
+              </button>
+            }
+          </footer>
+        </div>
+      </div>
+    }
+    </div>
+  }
+
+  <!-- ============ FAB DE SOPORTE (Fase 3) ============ -->
+  <button
+    type="button"
+    class="soporte-fab"
+    (click)="abrirSoporte('nuevo')"
+    aria-label="Reportar un problema"
+  >
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="9"/>
+      <circle cx="12" cy="12" r="4"/>
+      <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/>
+      <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/>
+      <line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/>
+      <line x1="9.17" y1="14.83" x2="4.93" y2="19.07"/>
+    </svg>
+    <span class="soporte-fab-text">Reportar un problema</span>
+  </button>
+
+  <!-- ============ PANEL DE SOPORTE ============ -->
+  @if (mostrarSoporte) {
+    <div class="soporte-backdrop" (click)="cerrarSoporte()" aria-hidden="true"></div>
+    <div class="soporte-modal" role="dialog" aria-modal="true" aria-labelledby="soporte-title">
+      <header class="soporte-head">
+        <div class="soporte-head-copy">
+          <h2 id="soporte-title">Soporte Sequora</h2>
+          <p>Reporta un problema o consulta el estado de tus reportes.</p>
+        </div>
+        <button type="button" class="soporte-close" (click)="cerrarSoporte()" aria-label="Cerrar soporte">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </header>
+
+      <div class="soporte-tabs" role="tablist" aria-label="Secciones de soporte">
+        <button
+          type="button"
+          class="soporte-tab"
+          role="tab"
+          [class.is-active]="soporteTab === 'nuevo'"
+          [attr.aria-selected]="soporteTab === 'nuevo'"
+          (click)="cambiarSoporteTab('nuevo')"
+        >
+          Nuevo reporte
+        </button>
+        <button
+          type="button"
+          class="soporte-tab"
+          role="tab"
+          [class.is-active]="soporteTab === 'mis-tickets'"
+          [attr.aria-selected]="soporteTab === 'mis-tickets'"
+          (click)="cambiarSoporteTab('mis-tickets')"
+        >
+          Mis reportes
+          @if (misTickets.length > 0) {
+            <span class="soporte-count">{{ misTickets.length }}</span>
+          }
+        </button>
+      </div>
+
+      @if (soporteTab === 'nuevo') {
+        <div class="soporte-body">
+          <div class="soporte-field">
+            <label for="tk-asunto">Asunto</label>
+            <input
+              id="tk-asunto"
+              type="text"
+              maxlength="150"
+              [(ngModel)]="ticketAsunto"
+              placeholder="Ej: El video de la lección no carga"
+            />
+          </div>
+          <div class="soporte-field">
+            <label for="tk-desc">¿Qué pasó?</label>
+            <textarea
+              id="tk-desc"
+              rows="4"
+              [(ngModel)]="ticketDescripcion"
+              placeholder="Describe el problema: en qué materia, paso o página ocurrió…"
+            ></textarea>
+          </div>
+
+          @if (mensajeTicket) { <p class="soporte-ok" role="status">{{ mensajeTicket }}</p> }
+          @if (errorTicket) { <p class="soporte-err" role="alert">{{ errorTicket }}</p> }
+
+          <div class="soporte-actions">
+            <button type="button" class="btn btn-ghost" (click)="cerrarSoporte()">Cancelar</button>
+            <button type="button" class="btn btn-primary" (click)="enviarTicket()">
+              <span>Enviar reporte</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      } @else {
+        <div class="soporte-body">
+          @if (cargandoTickets) {
+            <p class="soporte-note">Cargando tus reportes…</p>
+          } @else if (misTickets.length === 0) {
+            <div class="soporte-empty">
+              <h3>Aún no has reportado nada</h3>
+              <p>Cuando envíes un reporte aparecerá aquí con su estado.</p>
+              <button type="button" class="btn btn-primary" (click)="cambiarSoporteTab('nuevo')">
+                Crear mi primer reporte
+              </button>
+            </div>
+          } @else {
+            <ul class="soporte-list">
+              @for (t of misTickets; track t.id) {
+                <li class="soporte-item">
+                  <div class="soporte-item-top">
+                    <span class="soporte-item-id">Reporte #{{ t.id }}</span>
+                    <span class="soporte-estado" [class.is-resuelto]="t.estado === 'resuelto'">
+                      {{ t.estado === 'resuelto' ? 'Resuelto' : 'Abierto' }}
+                    </span>
+                  </div>
+                  <p class="soporte-item-asunto">{{ t.asunto }}</p>
+                  <p class="soporte-item-desc">{{ t.descripcion }}</p>
+                  @if (t.fecha_creacion) {
+                    <p class="soporte-item-fecha">{{ t.fecha_creacion | date: 'dd MMM yyyy, HH:mm' }}</p>
+                  }
+                </li>
+              }
+            </ul>
+          }
+        </div>
       }
     </div>
   }

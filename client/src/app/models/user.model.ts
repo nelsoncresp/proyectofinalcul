@@ -7,4 +7,6 @@ export interface Usuario {
   rol: UserRole;
   semestre?: number | null;
   jornada?: 'Diurno' | 'Nocturno' | null;
+  genero?: 'Masculino' | 'Femenino' | 'Otro' | 'No especificado' | null;
+  intereses?: string[] | null;
 }

@@ -80,19 +80,53 @@
         <p class="aula-estado-texto">No hubo respuesta del servidor. Revisa tu conexión e inténtalo de nuevo.</p>
         <button type="button" class="btn btn-ghost" (click)="retryLeccion()">Reintentar</button>
       </div>
-    } @else if (!leccion) {
-      <div class="aula-estado-vista" role="status">
-        <span class="aula-estado-icono" aria-hidden="true">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-          </svg>
-        </span>
-        <p class="aula-estado-titulo">«{{ asig?.nombre }}» aún no tiene contenido curado</p>
-        <p class="aula-estado-texto">El equipo docente está preparando la lectura, el video y los recursos de esta materia.</p>
-        <button type="button" class="btn btn-ghost" (click)="volver()">Volver a la ruta</button>
-      </div>
     } @else {
+      <!-- Panel selector de cortes -->
+      @if (cortes.length > 0) {
+        <div class="cortes-panel" role="tablist" aria-label="Cortes de la materia">
+          @for (c of cortes; track c.corte) {
+            <button
+              type="button"
+              role="tab"
+              class="corte-tab"
+              [attr.data-estado]="c.estado"
+              [attr.aria-selected]="corteActual === c.corte"
+              (click)="cambiarCorte(c.corte)"
+            >
+              <span class="corte-num">Corte {{ c.corte }}</span>
+              <span class="corte-estado">
+                @if (c.estado === 'aprobada') {
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                  Aprobado
+                } @else if (c.estado === 'publicada') {
+                  Disponible
+                } @else if (c.estado === 'borrador') {
+                  Borrador
+                } @else {
+                  Pendiente
+                }
+              </span>
+            </button>
+          }
+        </div>
+      }
+
+      <!-- Corte sin contenido todavia -->
+      @if (!leccion && !isLeccionLoading) {
+        <div class="aula-estado-vista" role="status">
+          <span class="aula-estado-icono" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+          </span>
+          <p class="aula-estado-titulo">El corte {{ corteActual }} de «{{ asig?.nombre }}» aun no tiene contenido</p>
+          <p class="aula-estado-texto">El equipo docente esta preparando la lectura, el video y los recursos de este corte.</p>
+          <button type="button" class="btn btn-ghost" (click)="volver()">Volver a la ruta</button>
+        </div>
+      }
+
+      @if (leccion) {
       <!-- ① Lectura -->
       <section id="paso-lectura" class="paso" data-paso="lectura">
         <p class="paso-kicker">Paso 01 · Lectura</p>
@@ -360,7 +394,8 @@
           </div>
         }
       </section>
-    }
+      } <!-- fin @if (leccion) -->
+    } <!-- fin @else principal de carga -->
   </main>
 
   <!-- ════════ Footer pegajoso con la acción del camino ════════ -->

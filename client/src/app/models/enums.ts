@@ -1,4 +1,4 @@
-export type UserRole = 'Estudiante' | 'Administrador';
+export type UserRole = 'Estudiante' | 'Administrador' | 'Docente';
 
 export type NodoEstado = 'Bloqueado' | 'Disponible' | 'Completado';
 

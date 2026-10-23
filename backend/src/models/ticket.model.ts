@@ -10,8 +10,12 @@ export class SoporteTicket {
     @Column('int')
     usuario_id!: number;
 
-    @Column('int')
-    recurso_id!: number;
+    /** Nullable: los reportes generales (desde el estudiante) no apuntan a un recurso. */
+    @Column('int', { nullable: true })
+    recurso_id!: number | null;
+
+    @Column({ type: 'varchar', length: 150 })
+    asunto!: string;
 
     @Column('text')
     descripcion!: string;
@@ -24,7 +28,7 @@ export class SoporteTicket {
 
     @ManyToOne(() => User)
     @JoinColumn({ name: 'usuario_id' })
-    user!: User;
+    usuario!: User;
 
     @ManyToOne(() => RecursoContenido)
     @JoinColumn({ name: 'recurso_id' })

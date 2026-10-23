@@ -25,6 +25,12 @@ export class User {
     @Column({ type: 'enum', enum: ['Diurno', 'Nocturno'], nullable: true })
     jornada!: 'Diurno' | 'Nocturno' | null;
 
+    @Column({ type: 'enum', enum: ['Masculino', 'Femenino', 'Otro', 'No especificado'], nullable: true })
+    genero!: 'Masculino' | 'Femenino' | 'Otro' | 'No especificado' | null;
+
+    @Column({ type: 'json', nullable: true })
+    intereses!: string[] | null;
+
     @ManyToOne(() => Role, role => role.users)
     @JoinColumn({ name: 'rol_id' })
     role!: Role;

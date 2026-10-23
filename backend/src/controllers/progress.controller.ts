@@ -3,6 +3,7 @@ import { AuthRequest } from '../middlewares/auth.middleware';
 import { AppDataSource } from '../config/database';
 import { ProgresoEstudiante } from '../models/progress.model';
 import { Asignatura } from '../models/asignatura.model';
+import { AuditoriaPensum } from '../models/auditoria.model';
 
 export const ProgressController = {
     async updateProgress(req: AuthRequest, res: Response): Promise<void> {
@@ -54,6 +55,19 @@ export const ProgressController = {
                 progress = progressRepository.create({ usuario_id, asignatura_id, estado });
             }
             await progressRepository.save(progress);
+
+            // Registrar auditoría de progreso (R-14)
+            try {
+                const auditRepo = AppDataSource.getRepository(AuditoriaPensum);
+                const audit = auditRepo.create({
+                    usuario_id,
+                    accion: 'ACTUALIZAR_PROGRESO',
+                    detalle: `Asignatura "${asignatura.nombre}" (ID: ${asignatura_id}) marcada como "${estado}"`
+                });
+                await auditRepo.save(audit);
+            } catch (auditErr) {
+                console.error('[Auditoria Progreso Error]:', auditErr);
+            }
 
             // Calcular qué materias quedaron recién desbloqueadas
             const recienDesbloqueadas: { id: number; nombre: string; semestre: number }[] = [];

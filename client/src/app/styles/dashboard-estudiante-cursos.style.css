@@ -1,0 +1,528 @@
+/* ══════════════════════════════════════════════════════════════════════
+   ESPECIALIZACIONES / CURSOS RECOMENDADOS POR INTERESES (Fase 2)
+   Card de referencia del usuario: cabecera visual oscura con íconos
+   tecnológicos, badge de nivel, categoría + título + tags y footer con
+   meta + botón. Tokens del sistema: --surface, --line, --r-*, --shadow-*.
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* Antetítulo de sección: solo tipografía, sin píldora */
+.pt-badge-cat {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.cursos-interes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* ── Tarjeta de curso ─────────────────────────────────────────────────────── */
+.curso-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-1);
+  transition:
+    transform var(--t-med) var(--ease),
+    box-shadow var(--t-med) var(--ease);
+}
+
+.curso-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+}
+
+/* Cabecera visual: degradado oscuro + retícula de puntos */
+.curso-visual {
+  position: relative;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+.curso-visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(#334155 1px, transparent 1px);
+  background-size: 16px 16px;
+  opacity: 0.3;
+}
+
+/* Badges de cristal (nivel a la derecha, inscrito a la izquierda) */
+.curso-nivel-badge,
+.curso-inscrito-badge {
+  position: absolute;
+  top: 16px;
+  padding: 6px 12px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.curso-nivel-badge {
+  right: 16px;
+}
+
+.curso-inscrito-badge {
+  left: 16px;
+}
+
+.curso-iconos {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.curso-iconos img {
+  width: 48px;
+  height: 48px;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.curso-iconos img:hover {
+  transform: translateY(-8px) scale(1.1);
+}
+
+/* Ícono del medio escalonado hacia abajo (solo cuando hay 3 íconos) */
+.curso-iconos img:nth-child(2):not(:last-child) {
+  margin-top: 24px;
+}
+
+/* Variante invertida para logos oscuros (Unity) sobre cabecera oscura */
+.curso-iconos img.icono-invertido {
+  filter: invert(1) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.4));
+}
+
+/* ── Contenido ────────────────────────────────────────────────────────────── */
+.curso-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 24px 24px 32px;
+}
+
+.curso-category {
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.curso-title {
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--fg-strong);
+}
+
+.curso-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.curso-tag {
+  padding: 6px 12px;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.curso-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.curso-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.curso-meta-duracion {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--fg-strong);
+}
+
+.curso-meta-sub {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.curso-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 12px;
+  background: var(--fg-strong);
+  color: var(--surface);
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--t-fast) var(--ease),
+    transform 0.1s;
+}
+
+.curso-btn:hover {
+  background: color-mix(in srgb, var(--fg-strong) 85%, var(--surface));
+}
+
+.curso-btn:active {
+  transform: scale(0.96);
+}
+
+/* ── Modal detalle de curso ───────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 620px;
+  max-height: 90vh;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-3, var(--shadow-2));
+  animation: modalSlideUp 0.25s ease-out;
+}
+
+@keyframes modalSlideUp {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.5rem 1.75rem 1rem 1.75rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.modal-title {
+  margin: 0.35rem 0 0.25rem;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--fg-strong);
+}
+
+.modal-sub {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.modal-close {
+  padding: 6px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+
+.modal-close:hover {
+  background: var(--surface-2);
+  color: var(--fg-strong);
+}
+
+.modal-body {
+  flex: 1;
+  padding: 1.5rem 1.75rem;
+  overflow-y: auto;
+}
+
+.modal-desc {
+  margin-bottom: 1.25rem;
+  color: var(--fg);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.modal-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.meta-box {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 0.85rem;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+}
+
+.meta-label {
+  margin-bottom: 3px;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.meta-value {
+  color: var(--fg-strong);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+/* Encabezado del temario + barra de progreso (inscrito) */
+.modal-temario-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.modal-section-title {
+  margin: 0;
+  color: var(--fg-strong);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.modal-progreso-text {
+  color: var(--fg-strong);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.modal-progreso-barra {
+  height: 8px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.modal-progreso-barra span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width var(--t-slow) var(--ease);
+}
+
+.temario-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.temario-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+
+.temario-copy {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.temario-num {
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.temario-name {
+  color: var(--fg-strong);
+  font-size: 0.86rem;
+  font-weight: 500;
+}
+
+/* Módulo visto (solo inscritos): estado en tachado + casilla */
+.temario-item.is-visto .temario-name {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.temario-check {
+  flex-shrink: 0;
+  width: 27px;
+  height: 27px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: transparent;
+  cursor: pointer;
+  transition:
+    background var(--t-fast) var(--ease),
+    border-color var(--t-fast) var(--ease),
+    color var(--t-fast) var(--ease);
+}
+
+.temario-check:hover {
+  border-color: var(--accent);
+}
+
+.temario-check.is-checked {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.modal-error {
+  margin: 1rem 0 0;
+  padding: 10px 14px;
+  background: var(--danger-soft);
+  border: 1px solid var(--danger);
+  border-radius: var(--r-sm);
+  color: var(--fg-strong);
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.modal-foot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.75rem;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .cursos-interes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pt-edit {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .curso-visual {
+    height: 132px;
+  }
+
+  .curso-iconos img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .curso-content {
+    padding: 20px 20px 24px;
+  }
+
+  .curso-foot {
+    flex-wrap: wrap;
+  }
+
+  .modal-head {
+    padding: 1rem;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .modal-foot {
+    padding: 0.85rem 1rem;
+    flex-direction: column;
+  }
+
+  .modal-foot .btn {
+    width: 100%;
+  }
+}

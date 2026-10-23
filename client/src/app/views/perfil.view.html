@@ -1,0 +1,166 @@
+<section class="page perfil-page" aria-labelledby="perfil-title">
+
+  <!-- ============ HERO DE IDENTIDAD ============ -->
+  <header class="perfil-hero">
+    <div class="perfil-avatar" aria-hidden="true">
+      <span>{{ iniciales }}</span>
+      <span class="perfil-avatar-dot"></span>
+    </div>
+    <div class="perfil-hero-copy">
+      <p class="perfil-kicker">Corporación Universitaria Latinoamericana · Ingeniería de Sistemas</p>
+      <h1 id="perfil-title" class="perfil-nombre">{{ nombre || 'Tu perfil' }}</h1>
+      <p class="perfil-email">{{ user?.email }}</p>
+      <div class="perfil-chips">
+        <span class="perfil-chip is-rol">{{ nombreRol }}</span>
+        @if (esEstudiante && user?.semestre) {
+          <span class="perfil-chip">Semestre {{ user?.semestre }}</span>
+        }
+        @if (user?.jornada) {
+          <span class="perfil-chip">Jornada {{ user?.jornada }}</span>
+        }
+        @if (user?.genero) {
+          <span class="perfil-chip">{{ user?.genero }}</span>
+        }
+        @if (esEstudiante && user?.intereses?.length) {
+          <span class="perfil-chip">{{ user?.intereses?.length }} intereses</span>
+        }
+      </div>
+    </div>
+    <a class="btn-outline perfil-volver" routerLink="/">Volver al inicio</a>
+  </header>
+
+  <div class="perfil-grid">
+
+    <!-- ============ DATOS PERSONALES ============ -->
+    <article class="panel">
+      <div class="panel-head">
+        <h2 class="panel-title">Datos personales</h2>
+        <p class="panel-desc">Nombre, género y datos académicos de tu cuenta.</p>
+      </div>
+
+      <div class="field">
+        <label for="pf-nombre">Nombre completo</label>
+        <input id="pf-nombre" type="text" [(ngModel)]="nombre" autocomplete="name" placeholder="Tu nombre" />
+      </div>
+
+      <div class="field">
+        <label for="pf-genero">Género</label>
+        <select id="pf-genero" [(ngModel)]="genero">
+          <option value="">Sin definir</option>
+          @for (g of generos; track g) {
+            <option [value]="g">{{ g === 'No especificado' ? 'Prefiero no decirlo' : g }}</option>
+          }
+        </select>
+      </div>
+
+      @if (esEstudiante) {
+        <div class="field-row">
+          <div class="field">
+            <label for="pf-semestre">Semestre</label>
+            <select id="pf-semestre" [(ngModel)]="semestre">
+              @for (s of [1,2,3,4,5,6,7,8,9,10]; track s) {
+                <option [ngValue]="s">Semestre {{ s }}</option>
+              }
+            </select>
+          </div>
+          <div class="field">
+            <label for="pf-jornada">Jornada</label>
+            <select id="pf-jornada" [(ngModel)]="jornada">
+              <option value="">Sin definir</option>
+              <option value="Diurno">Diurno</option>
+              <option value="Nocturno">Nocturno</option>
+            </select>
+          </div>
+        </div>
+      }
+
+      @if (mensajePersonal) { <p class="alert-ok" role="status">{{ mensajePersonal }}</p> }
+      @if (errorPersonal) { <p class="alert-err" role="alert">{{ errorPersonal }}</p> }
+
+      <div class="panel-actions">
+        <button type="button" class="btn-primary" (click)="guardarPersonal()">Guardar cambios</button>
+      </div>
+    </article>
+
+    <!-- ============ SEGURIDAD ============ -->
+    <article class="panel">
+      <div class="panel-head">
+        <h2 class="panel-title">Seguridad</h2>
+        <p class="panel-desc">Cambia tu contraseña. Se requiere la actual.</p>
+      </div>
+
+      <div class="field">
+        <label for="pf-pass-actual">Contraseña actual</label>
+        <input id="pf-pass-actual" type="password" [(ngModel)]="passActual" autocomplete="current-password" placeholder="••••••••" />
+      </div>
+      <div class="field">
+        <label for="pf-pass-nueva">Nueva contraseña</label>
+        <input id="pf-pass-nueva" type="password" [(ngModel)]="passNueva" autocomplete="new-password" placeholder="Mínimo 6 caracteres" />
+      </div>
+      <div class="field">
+        <label for="pf-pass-repetir">Confirmar nueva contraseña</label>
+        <input id="pf-pass-repetir" type="password" [(ngModel)]="passRepetir" autocomplete="new-password" placeholder="Repite la nueva contraseña" />
+      </div>
+
+      @if (mensajePass) { <p class="alert-ok" role="status">{{ mensajePass }}</p> }
+      @if (errorPass) { <p class="alert-err" role="alert">{{ errorPass }}</p> }
+
+      <div class="panel-actions">
+        <button type="button" class="btn-outline" (click)="cambiarPassword()">Actualizar contraseña</button>
+      </div>
+    </article>
+
+    <!-- ============ INTERESES (solo estudiantes) ============ -->
+    @if (esEstudiante) {
+      <article class="panel panel-span">
+        <div class="panel-head">
+          <h2 class="panel-title">Tus intereses</h2>
+          <p class="panel-desc">Definen qué líneas de formación te recomendamos en tu ruta.</p>
+        </div>
+
+        <div class="intereses-grid" role="group" aria-label="Selección de intereses académicos">
+          @for (item of interesesDisponibles; track item) {
+            <button type="button" class="interest-chip" [class.is-selected]="isInteresSelected(item)"
+              (click)="toggleInteres(item)" [attr.aria-pressed]="isInteresSelected(item)">
+              @if (isInteresSelected(item)) {
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+              }
+              {{ item }}
+            </button>
+          }
+        </div>
+
+        @if (mensajeIntereses) { <p class="alert-ok" role="status">{{ mensajeIntereses }}</p> }
+
+        <div class="panel-actions">
+          <button type="button" class="btn-primary" (click)="guardarIntereses()">Guardar intereses</button>
+        </div>
+      </article>
+    }
+
+    <!-- ============ RESUMEN SEGÚN ROL ============ -->
+    <article class="panel panel-span">
+      <div class="panel-head">
+        <h2 class="panel-title">Tu resumen</h2>
+        <p class="panel-desc">Indicadores clave de tu actividad en Sequora.</p>
+      </div>
+
+      @if (cargandoResumen) {
+        <p class="panel-note">Cargando indicadores…</p>
+      } @else {
+        <div class="perfil-kpis">
+          @for (r of resumen; track r.etiqueta) {
+            <div class="perfil-kpi">
+              <span class="perfil-kpi-valor tabular">{{ r.valor }}</span>
+              <span class="perfil-kpi-etiqueta">{{ r.etiqueta }}</span>
+              <span class="perfil-kpi-detalle">{{ r.detalle }}</span>
+            </div>
+          }
+        </div>
+      }
+    </article>
+  </div>
+</section>

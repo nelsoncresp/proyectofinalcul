@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Asignatura } from './asignatura.model';
+import { User } from './user.model';
 
 @Entity('lecciones_evaluaciones')
 export class LeccionEvaluacion {
@@ -8,6 +9,9 @@ export class LeccionEvaluacion {
 
     @Column('int')
     asignatura_id!: number;
+
+    @Column({ type: 'tinyint', default: 1 })
+    corte!: number;
 
     @Column('text')
     contenido_lectura!: string;
@@ -30,7 +34,21 @@ export class LeccionEvaluacion {
     @Column('text')
     explicacion!: string;
 
-    @OneToOne(() => Asignatura, asignatura => asignatura.leccion)
+    @Column({
+        type: 'enum',
+        enum: ['borrador', 'publicada'],
+        default: 'publicada'
+    })
+    estado!: 'borrador' | 'publicada';
+
+    @Column({ type: 'int', nullable: true })
+    creado_por_id!: number | null;
+
+    @ManyToOne(() => User, { nullable: true })
+    @JoinColumn({ name: 'creado_por_id' })
+    creado_por?: User | null;
+
+    @ManyToOne(() => Asignatura, asignatura => asignatura.lecciones)
     @JoinColumn({ name: 'asignatura_id' })
     asignatura!: Asignatura;
 }

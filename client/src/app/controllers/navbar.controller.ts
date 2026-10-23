@@ -16,6 +16,10 @@ const NAV_BY_ROLE: Record<UserRole, NavLink[]> = {
   Administrador: [
     { path: '/dashboard-admin', label: 'Panel de curaduría' },
     { path: '/node-editor', label: 'Editor de nodos' }
+  ],
+  Docente: [
+    { path: '/dashboard-docente', label: 'Mi panel docente' },
+    { path: '/node-editor', label: 'Editor de nodos' }
   ]
 };
 
@@ -49,6 +53,9 @@ export class NavbarController implements OnInit, OnDestroy {
 
   user = this.auth.getCurrentUser();
 
+  /** Menú desplegable de la cuenta (Mi perfil / Cerrar sesión). */
+  menuAbierto = false;
+
   private lastScrollY = 0;
   /** Punto más bajo alcanzado mientras la barra estaba escondida. */
   private yOculto = 0;
@@ -60,10 +67,14 @@ export class NavbarController implements OnInit, OnDestroy {
     this.auth.currentUser$.subscribe(u => (this.user = u));
     // Restaurar preferencia de tema guardada en localStorage.
     this.applyStoredTheme();
-    // Al salir del aula la barra siempre vuelve (aunque se haya escondido).
+    // Al salir del aula la barra siempre vuelve (aunque se haya escondido) y el
+    // menú de cuenta se cierra en cada navegación.
     this.routerSub = this.router.events.subscribe(evento => {
-      if (evento instanceof NavigationEnd && !evento.urlAfterRedirects.startsWith('/aula/')) {
-        this.setOculto(false);
+      if (evento instanceof NavigationEnd) {
+        this.menuAbierto = false;
+        if (!evento.urlAfterRedirects.startsWith('/aula/')) {
+          this.setOculto(false);
+        }
       }
     });
   }
@@ -133,8 +144,17 @@ export class NavbarController implements OnInit, OnDestroy {
   }
 
   logout(): void {
+    this.menuAbierto = false;
     this.auth.logout();
     this.router.navigate(['/login']);
+  }
+
+  toggleMenu(): void {
+    this.menuAbierto = !this.menuAbierto;
+  }
+
+  cerrarMenu(): void {
+    this.menuAbierto = false;
   }
 
   toggleTheme(): void {

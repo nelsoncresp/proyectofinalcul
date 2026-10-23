@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { AuthRequest } from '../middlewares/auth.middleware';
 import { AppDataSource } from '../config/database';
 import { RecursoContenido } from '../models/resource.model';
+import { AuditoriaPensum } from '../models/auditoria.model';
 
 export const ResourceController = {
     /**
@@ -64,7 +65,8 @@ export const ResourceController = {
                 titulo,
                 tipo_recurso,
                 enlace,
-                estado_revision
+                estado_revision,
+                creado_por_id: req.user?.id ?? null
             });
             await resourceRepository.save(nuevoRecurso);
 
@@ -100,6 +102,21 @@ export const ResourceController = {
 
             recurso.estado_revision = estado_revision;
             await resourceRepository.save(recurso);
+
+            // Registrar auditoría de actualización de recurso (R-14)
+            if (req.user?.id) {
+                try {
+                    const auditRepo = AppDataSource.getRepository(AuditoriaPensum);
+                    const audit = auditRepo.create({
+                        usuario_id: req.user.id,
+                        accion: 'CAMBIO_ESTADO_RECURSO',
+                        detalle: `Recurso ID ${id} ("${recurso.titulo}") cambiado a estado "${estado_revision}"`
+                    });
+                    await auditRepo.save(audit);
+                } catch (auditErr) {
+                    console.error('[Auditoria Recurso Error]:', auditErr);
+                }
+            }
 
             res.status(200).json({
                 message: `Recurso actualizado a estado ${estado_revision}`,

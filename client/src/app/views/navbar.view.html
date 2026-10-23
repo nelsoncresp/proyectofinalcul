@@ -42,21 +42,49 @@
         </svg>
       </button>
 
-      <!-- Usuario -->
-      <div class="nav-user">
-        <span class="user-avatar" aria-hidden="true">{{ initials }}</span>
-        <span class="user-copy">
-          <span class="user-name">{{ user.nombre }}</span>
-          <span class="user-role">{{ user.rol }}</span>
-        </span>
-      </div>
+      <!-- Menú de cuenta -->
+      <div class="nav-user" [class.is-open]="menuAbierto">
+        <button
+          type="button"
+          class="nav-user-btn"
+          (click)="toggleMenu()"
+          [attr.aria-expanded]="menuAbierto"
+          aria-haspopup="menu"
+          aria-label="Menú de cuenta"
+        >
+          <span class="user-avatar" aria-hidden="true">{{ initials }}</span>
+          <span class="user-copy">
+            <span class="user-name">{{ user.nombre }}</span>
+            <span class="user-role">{{ user.rol }}</span>
+          </span>
+          <svg class="nav-user-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
 
-      <button type="button" class="nav-logout" (click)="logout()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M9 21H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3M16 17l5-5-5-5M21 12H9" />
-        </svg>
-        <span>Cerrar sesión</span>
-      </button>
+        @if (menuAbierto) {
+          <div class="nav-menu-backdrop" (click)="cerrarMenu()" aria-hidden="true"></div>
+          <div class="nav-menu" role="menu">
+            <div class="nav-menu-head">
+              <strong>{{ user.nombre }}</strong>
+              <span>{{ user.email }}</span>
+            </div>
+            <a class="nav-menu-item" routerLink="/perfil" role="menuitem" (click)="cerrarMenu()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              Mi perfil
+            </a>
+            <button type="button" class="nav-menu-item is-danger" role="menuitem" (click)="logout()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 21H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3M16 17l5-5-5-5M21 12H9" />
+              </svg>
+              Cerrar sesión
+            </button>
+          </div>
+        }
+      </div>
     </div>
   </div>
 </header>

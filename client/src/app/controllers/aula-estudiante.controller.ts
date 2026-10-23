@@ -1,10 +1,10 @@
-﻿import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { ApiService, PensumResponse, LeccionResponse, AsignaturaNodo, RetoData } from '../services/api.service';
+import { ApiService, PensumResponse, LeccionResponse, AsignaturaNodo, RetoData, CorteInfo } from '../services/api.service';
 import { AlertaService } from '../services/alerta.service';
 import { resaltarJs } from '../utils/resaltar-js';
 import { Usuario } from '../models';
@@ -48,6 +48,9 @@ export class AulaEstudianteController implements OnInit, OnDestroy {
   selectedLeccionBackend: LeccionResponse | null = null;
   isLeccionLoading = false;
   leccionError = false;
+
+  // Cortes (1, 2, 3)
+  corteActual = 1;
 
   // Flujo de estudio
   readingComplete = false;
@@ -168,7 +171,7 @@ export class AulaEstudianteController implements OnInit, OnDestroy {
     }
     const requestedId = this.asigId;
     this.isLeccionLoading = true;
-    this.api.getLeccion(requestedId).subscribe({
+    this.api.getLeccion(requestedId, this.corteActual).subscribe({
       next: (res) => {
         if (this.asigId !== requestedId) return;
         if (res.asignatura?.id !== requestedId) {
@@ -209,6 +212,10 @@ export class AulaEstudianteController implements OnInit, OnDestroy {
 
   get leccion() {
     return this.selectedLeccionBackend?.leccion ?? null;
+  }
+
+  get cortes(): CorteInfo[] {
+    return this.selectedLeccionBackend?.cortes ?? [];
   }
 
   get recursos() {
@@ -264,6 +271,24 @@ export class AulaEstudianteController implements OnInit, OnDestroy {
     else if (accion === 'scroll-reto') this.irA('reto');
     else if (accion === 'scroll-quiz') this.irA('evaluacion');
     else if (accion === 'aprobar') this.completarAsignatura();
+  }
+
+  cambiarCorte(corte: number): void {
+    if (corte === this.corteActual || corte < 1 || corte > 3) return;
+    this.corteActual = corte;
+    // Reiniciar estado del paso actual para el nuevo corte
+    this.exerciseAnswer = null;
+    this.exerciseFeedback = '';
+    this.exercisePassed = false;
+    this.readingComplete = false;
+    this.readingConfirmed = false;
+    this.reto = null;
+    this.retoResultados = null;
+    this.retoErrorRuntime = null;
+    this.retoPasado = false;
+    this.cancelarSecuencia();
+    this.terminarWorker();
+    this.cargarLeccion();
   }
 
   confirmarLectura(): void {
@@ -578,12 +603,15 @@ self.onmessage = function (e) {
 
   checkExercise(): void {
     if (!this.asigId || this.exerciseAnswer === null || this.exercisePassed) return;
-    this.api.evaluarLeccion(this.asigId, this.exerciseAnswer).subscribe({
+    this.api.evaluarLeccion(this.asigId, this.exerciseAnswer, this.corteActual).subscribe({
       next: (res) => {
         this.exercisePassed = res.esCorrecto;
         this.exerciseFeedback = res.explicacion;
         if (res.esCorrecto) {
-          this.alertas.exito('Evaluación superada', 'Tu respuesta es correcta.');
+          this.alertas.exito('Evaluacion superada', 'Tu respuesta es correcta.');
+          if (res.materiaCompletada) {
+            this.alertas.exito('Materia completada', 'Aprobaste los 3 cortes.');
+          }
         }
         this.guardarEstado();
       },

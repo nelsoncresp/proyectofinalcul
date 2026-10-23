@@ -111,6 +111,12 @@ export class LoginController implements OnInit {
 
   private redirectByRole(): void {
     const role = this.auth.getRole();
-    this.router.navigate([role === 'Administrador' ? '/dashboard-admin' : '/dashboard-estudiante']);
+    if (role === 'Administrador') {
+      this.router.navigate(['/dashboard-admin']);
+    } else if (role === 'Docente') {
+      this.router.navigate(['/dashboard-docente']);
+    } else {
+      this.router.navigate(['/dashboard-estudiante']);
+    }
   }
 }

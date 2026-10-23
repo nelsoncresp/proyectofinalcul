@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { RecursoContenido } from './resource.model';
 import { ProgresoEstudiante } from './progress.model';
 import { Area } from './area.model';
 import { LeccionEvaluacion } from './leccion.model';
+import { User } from './user.model';
 
 @Entity('asignaturas')
 export class Asignatura {
@@ -22,6 +23,20 @@ export class Asignatura {
     @JoinColumn({ name: 'area_id' })
     area!: Area;
 
+    @Column({
+        type: 'enum',
+        enum: ['pensum', 'ruta_profesor', 'ruta_personal'],
+        default: 'pensum'
+    })
+    tipo!: 'pensum' | 'ruta_profesor' | 'ruta_personal';
+
+    @Column({ type: 'int', nullable: true })
+    creador_id!: number | null;
+
+    @ManyToOne(() => User, { nullable: true })
+    @JoinColumn({ name: 'creador_id' })
+    creador?: User | null;
+
     @ManyToMany(() => Asignatura)
     @JoinTable({
         name: 'prerrequisitos',
@@ -36,7 +51,7 @@ export class Asignatura {
     @OneToMany(() => ProgresoEstudiante, progreso => progreso.asignatura)
     progresos!: ProgresoEstudiante[];
 
-    @OneToOne(() => LeccionEvaluacion, leccion => leccion.asignatura)
-    leccion!: LeccionEvaluacion;
+    @OneToMany(() => LeccionEvaluacion, leccion => leccion.asignatura)
+    lecciones!: LeccionEvaluacion[];
 }
 

@@ -56,3 +56,7 @@ testem.log
 .DS_Store
 Thumbs.db
 Desktop.ini
+# ========== Backups de base de datos ==========
+# Respaldos locales pre-migración (se conservan fuera del repo: Documents\backups-sequora)
+backend/backups/
+*.sql

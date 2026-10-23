@@ -5,6 +5,7 @@ export interface AuthRequest extends Request {
     user?: {
         id: number;
         rol_id: number;
+        semestre?: number | null;
     };
 }
 
@@ -17,7 +18,7 @@ export const authenticateJWT = (req: AuthRequest, res: Response, next: NextFunct
                 res.status(403).json({ error: 'Forbidden' });
                 return;
             }
-            req.user = decoded as { id: number; rol_id: number };
+            req.user = decoded as { id: number; rol_id: number; semestre?: number | null };
             next();
         });
     } else {

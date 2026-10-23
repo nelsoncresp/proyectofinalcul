@@ -295,16 +295,11 @@
 .form-alert {
   font-size: 0.8125rem;
   font-weight: 700;
-  color: #b42318;
-  background: #fee2e2;
+  color: var(--danger);
+  background: var(--danger-soft);
   border: 2px solid var(--fg);
   padding: 10px 14px;
   margin: 0 0 14px;
-}
-
-.dark-mode .form-alert {
-  background: #450a0a;
-  color: #fca5a5;
 }
 
 /* ============ BOTONES AZULES INSTITUCIONALES ============ */

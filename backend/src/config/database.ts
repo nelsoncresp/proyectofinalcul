@@ -11,6 +11,8 @@ import { AuditoriaPensum } from '../models/auditoria.model';
 import { Area } from '../models/area.model';
 import { LeccionEvaluacion } from '../models/leccion.model';
 import { Reto } from '../models/reto.model';
+import { CorteAprobado } from '../models/corte-aprobado.model';
+import { InscripcionCurso } from '../models/inscripcion-curso.model';
 
 dotenv.config();
 
@@ -33,6 +35,8 @@ export const AppDataSource = new DataSource({
         RecursoContenido,
         ProgresoEstudiante,
         SoporteTicket,
-        AuditoriaPensum
+        AuditoriaPensum,
+        CorteAprobado,
+        InscripcionCurso
     ]
 });

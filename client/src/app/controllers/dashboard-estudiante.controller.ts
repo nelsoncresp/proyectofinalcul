@@ -1,10 +1,19 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { MockDataService } from '../services/mock-data.service';
-import { ApiService, PensumResponse, AsignaturaNodo, SemestreGroup, AreaGroup } from '../services/api.service';
+import { ApiService, PensumResponse, AsignaturaNodo, SemestreGroup, AreaGroup, TicketItem, InscripcionCurso } from '../services/api.service';
 import { Usuario } from '../models';
+import {
+  areasRecomendadas,
+  CursoInteres,
+  obtenerCursosPorIntereses,
+  INTERES_AREAS,
+  CATALOGO_CURSOS_INTERES
+} from '../utils/intereses';
 import { Subscription } from 'rxjs';
 
 /**
@@ -13,17 +22,20 @@ import { Subscription } from 'rxjs';
  */
 @Component({
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   selector: 'app-dashboard-estudiante',
   templateUrl: '../views/dashboard-estudiante.view.html',
-  styleUrls: ['../styles/dashboard-estudiante.style.css']
+  styleUrls: [
+    '../styles/dashboard-estudiante.style.css',
+    '../styles/dashboard-estudiante-cursos.style.css'
+  ]
 })
 export class DashboardEstudianteController implements OnInit, OnDestroy {
   user: Usuario | null = null;
   pensumData: PensumResponse | null = null;
 
-  // Navegación principal del mapa: 'roadmap' (Grafo por semestre) | 'areas' (Líneas de especialidad)
-  activeTab: 'roadmap' | 'areas' = 'roadmap';
+  // Navegación principal del mapa: grafo por semestre | líneas | recomendaciones
+  activeTab: 'roadmap' | 'areas' | 'para-ti' = 'roadmap';
 
   // Filtro de estado para la vista de materias
   statusFilter: 'all' | 'Disponible' | 'Completado' | 'Bloqueado' = 'all';
@@ -72,8 +84,356 @@ export class DashboardEstudianteController implements OnInit, OnDestroy {
     this.router.navigate(['/aula', asigId]);
   }
 
-  setTab(tab: 'roadmap' | 'areas'): void {
+  setTab(tab: 'roadmap' | 'areas' | 'para-ti'): void {
     this.activeTab = tab;
+  }
+
+  // ── Recomendaciones por intereses (Fase 2) ──────────────────────────────────
+
+  get interesesUsuario(): string[] {
+    return this.user?.intereses ?? [];
+  }
+
+  get idsAreasRecomendadas(): number[] {
+    return areasRecomendadas(this.user?.intereses);
+  }
+
+  get hayRecomendacion(): boolean {
+    return this.idsAreasRecomendadas.length > 0;
+  }
+
+  esRecomendada(areaId: number): boolean {
+    return this.idsAreasRecomendadas.includes(areaId);
+  }
+
+  /** Líneas de formación ordenadas: las recomendadas primero. */
+  get areasOrdenadas(): AreaGroup[] {
+    const ids = this.idsAreasRecomendadas;
+    if (ids.length === 0) return this.areasList;
+    return [...this.areasList].sort((a, b) => Number(this.esRecomendada(b.id)) - Number(this.esRecomendada(a.id)));
+  }
+
+  /** Cursos extracurriculares independientes recomendados según los intereses del estudiante. */
+  get cursosRecomendados(): CursoInteres[] {
+    return obtenerCursosPorIntereses(this.user?.intereses);
+  }
+
+  cursoSeleccionado: CursoInteres | null = null;
+
+  abrirDetalleCurso(curso: CursoInteres): void {
+    this.errorInscripcion = '';
+    this.cursoSeleccionado = curso;
+  }
+
+  cerrarDetalleCurso(): void {
+    this.cursoSeleccionado = null;
+    this.errorInscripcion = '';
+  }
+
+  /** Solo las líneas recomendadas (pestaña "Para ti"). */
+  get areasParaTi(): AreaGroup[] {
+    const ids = this.idsAreasRecomendadas;
+    return this.areasList.filter(a => ids.includes(a.id));
+  }
+
+  /** Todas las materias listas para cursar; las de tus áreas recomendadas van primero. */
+  get materiasParaTi(): AsignaturaNodo[] {
+    return (this.pensumData?.semestres ?? [])
+      .flatMap(s => s.materias)
+      .filter(m => m.estado === 'Disponible')
+      .sort((a, b) =>
+        Number(this.esRecomendada(b.area_id)) - Number(this.esRecomendada(a.area_id)) ||
+        a.semestre - b.semestre
+      );
+  }
+
+  /** Motivo visible: intereses del usuario que apuntan al área de la materia. */
+  razonRecomendacion(m: AsignaturaNodo): string {
+    const vinculados = this.interesesUsuario.filter(i => (INTERES_AREAS[i] ?? []).includes(m.area_id));
+    if (vinculados.length === 1) return `Por tu interés en ${vinculados[0]}`;
+    if (vinculados.length > 1) {
+      return `Por tus intereses en ${vinculados.slice(0, -1).join(', ')} y ${vinculados[vinculados.length - 1]}`;
+    }
+    return 'Lista para cursar ahora mismo';
+  }
+
+  // ── Cabecera visual de tarjetas de curso (íconos devicon CDN) ─────────────
+
+  private readonly ICONOS_CURSO: Record<string, string[]> = {
+    'web-101': ['html5', 'css3', 'javascript'],
+    'web-102': ['css3', 'tailwindcss', 'bootstrap'],
+    'web-103': ['javascript', 'typescript'],
+    'web-104': ['react', 'angular', 'vuejs'],
+    'web-105': ['nodejs', 'mysql'],
+    'ai-101': ['python', 'pandas', 'scikitlearn'],
+    'ai-102': ['python', 'jupyter'],
+    'sec-101': ['linux', 'python'],
+    'sec-102': ['linux', 'debian'],
+    'mob-101': ['flutter', 'dart', 'android'],
+    'db-101': ['mongodb', 'redis'],
+    'net-101': ['linux', 'nginx'],
+    'devops-101': ['docker', 'jenkins', 'githubactions'],
+    'eng-101': ['git', 'java'],
+    'game-101': ['csharp', 'unity'],
+    'mgt-101': ['jira', 'trello']
+  };
+
+  /** URLs completas de los íconos de un curso (todas verificadas con respuesta 200). */
+  iconosCurso(curso: CursoInteres): string[] {
+    return (this.ICONOS_CURSO[curso.id] || []).map(
+      n => `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${n}/${n}-original.svg`
+    );
+  }
+
+  /** El ícono de Unity es gris oscuro: se invierte para verse sobre la cabecera oscura. */
+  iconoInvertido(src: string): boolean {
+    return src.includes('/unity/');
+  }
+
+  /** Sin red, el ícono no carga: se oculta en vez de dejar una imagen rota. */
+  ocultarIcono(e: Event): void {
+    (e.target as HTMLImageElement).style.display = 'none';
+  }
+
+  // ── Inscripciones: materias del pensum y cursos extracurriculares ──────────
+
+  inscripcionesCursos: InscripcionCurso[] = [];
+  errorInscripcion = '';
+  avisoInscripcion = '';
+  inscribiendoCursoId: string | null = null;
+
+  /** Materias del pensum inscritas y aún no aprobadas. */
+  get materiasInscritas(): AsignaturaNodo[] {
+    return (this.pensumData?.semestres ?? [])
+      .flatMap(s => s.materias)
+      .filter(m => m.inscrito && m.estado !== 'Completado');
+  }
+
+  /** Catálogo completo (todas las ramas de interés) para resolver inscripciones. */
+  private get catalogoCursos(): CursoInteres[] {
+    return Object.values(CATALOGO_CURSOS_INTERES).flat();
+  }
+
+  /** Cursos extracurriculares en los que está inscrito (aunque haya cambiado sus intereses). */
+  get cursosInscritos(): CursoInteres[] {
+    return this.inscripcionesCursos
+      .map(ins => this.catalogoCursos.find(c => c.id === ins.curso_id))
+      .filter((c): c is CursoInteres => !!c);
+  }
+
+  get statsListos(): number {
+    return this.materiasParaTi.length + this.cursosRecomendados.length;
+  }
+
+  get statsEnCurso(): number {
+    return this.materiasInscritas.length + this.inscripcionesCursos.length;
+  }
+
+  estaInscritoCurso(cursoId: string): boolean {
+    return this.inscripcionesCursos.some(i => i.curso_id === cursoId);
+  }
+
+  modulosVistos(cursoId: string): number[] {
+    return this.inscripcionesCursos.find(i => i.curso_id === cursoId)?.modulos_vistos ?? [];
+  }
+
+  estaVisto(cursoId: string, idx: number): boolean {
+    return this.modulosVistos(cursoId).indexOf(idx) >= 0;
+  }
+
+  avanceCurso(curso: CursoInteres): number {
+    if (curso.modulos.length === 0) return 0;
+    const vistos = this.modulosVistos(curso.id).filter(idx => idx < curso.modulos.length).length;
+    return Math.round((vistos * 100) / curso.modulos.length);
+  }
+
+  /** Se inscribe en una materia del pensum y navega directo a su aula. */
+  inscribirMateria(m: AsignaturaNodo): void {
+    this.errorInscripcion = '';
+    this.avisoInscripcion = '';
+    this.api.inscribirse(m.id).subscribe({
+      next: () => {
+        m.inscrito = true;
+        this.irAlAula(m.id);
+      },
+      error: err => {
+        this.errorInscripcion = err?.error?.error || 'No se pudo completar la inscripción.';
+      }
+    });
+  }
+
+  /** Cancela la inscripción de una materia del pensum. */
+  salirMateria(m: AsignaturaNodo): void {
+    this.errorInscripcion = '';
+    this.api.desinscribirse(m.id).subscribe({
+      next: () => {
+        m.inscrito = false;
+        this.avisoInscripcion = `Inscripción cancelada en ${m.nombre}.`;
+      },
+      error: err => {
+        this.errorInscripcion = err?.error?.error || 'No se pudo cancelar la inscripción.';
+      }
+    });
+  }
+
+  /** Se inscribe en un curso extracurricular del catálogo. */
+  inscribirExtracurricular(curso: CursoInteres): void {
+    if (this.inscribiendoCursoId) return;
+    this.errorInscripcion = '';
+    this.inscribiendoCursoId = curso.id;
+    this.api.inscribirseCurso(curso.id, curso.interes).subscribe({
+      next: res => {
+        const i = this.inscripcionesCursos.findIndex(x => x.curso_id === curso.id);
+        if (i >= 0) this.inscripcionesCursos[i] = res.inscripcion;
+        else this.inscripcionesCursos = [...this.inscripcionesCursos, res.inscripcion];
+        this.inscribiendoCursoId = null;
+        this.avisoInscripcion = `Inscripción confirmada en ${curso.titulo}. Marca cada módulo al terminarlo.`;
+      },
+      error: err => {
+        this.inscribiendoCursoId = null;
+        this.errorInscripcion = err?.error?.error || 'No se pudo completar la inscripción.';
+      }
+    });
+  }
+
+  /** Se da de baja de un curso extracurricular. */
+  salirExtracurricular(curso: CursoInteres): void {
+    this.errorInscripcion = '';
+    this.api.desinscribirseCurso(curso.id).subscribe({
+      next: () => {
+        this.inscripcionesCursos = this.inscripcionesCursos.filter(x => x.curso_id !== curso.id);
+        this.avisoInscripcion = `Diste de baja en ${curso.titulo}.`;
+      },
+      error: err => {
+        this.errorInscripcion = err?.error?.error || 'No se pudo cancelar la inscripción.';
+      }
+    });
+  }
+
+  /** Marca/desmarca un módulo del temario (guarda el progreso en el servidor). */
+  toggleModulo(curso: CursoInteres, idx: number): void {
+    const ins = this.inscripcionesCursos.find(x => x.curso_id === curso.id);
+    if (!ins) return;
+
+    const previo = ins.modulos_vistos ?? [];
+    const set = new Set(previo);
+    if (set.has(idx)) set.delete(idx); else set.add(idx);
+    const lista = [...set].sort((a, b) => a - b);
+
+    ins.modulos_vistos = lista; // actualización optimista
+    this.api.guardarProgresoCurso(curso.id, lista).subscribe({
+      error: () => {
+        ins.modulos_vistos = previo;
+        this.errorInscripcion = 'No se pudo guardar el progreso del módulo.';
+      }
+    });
+  }
+
+  /** Limpia avisos y errores de inscripción. */
+  limpiarAvisos(): void {
+    this.errorInscripcion = '';
+    this.avisoInscripcion = '';
+  }
+
+  /** Carga las inscripciones propias a cursos extracurriculares. */
+  private cargarInscripcionesCursos(): void {
+    this.api.getMisInscripcionesCursos().subscribe({
+      next: filas => {
+        this.inscripcionesCursos = filas;
+      },
+      error: () => {
+        this.inscripcionesCursos = [];
+      }
+    });
+  }
+
+  // ── Soporte: reportar un problema y "Mis reportes" (Fase 3) ─────────────────
+
+  mostrarSoporte = false;
+  soporteTab: 'nuevo' | 'mis-tickets' = 'nuevo';
+
+  ticketAsunto = '';
+  ticketDescripcion = '';
+  mensajeTicket = '';
+  errorTicket = '';
+
+  misTickets: TicketItem[] = [];
+  cargandoTickets = false;
+  ticketsCargados = false;
+
+  /** Abre el panel de soporte. `nuevo` muestra el formulario; `mis-tickets` el historial. */
+  abrirSoporte(tab: 'nuevo' | 'mis-tickets' = 'nuevo'): void {
+    this.mostrarSoporte = true;
+    this.soporteTab = tab;
+    if (tab === 'mis-tickets' && !this.ticketsCargados) {
+      this.cargarMisTickets();
+    }
+  }
+
+  cerrarSoporte(): void {
+    this.mostrarSoporte = false;
+  }
+
+  /** Escape cierra el panel de soporte. */
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.mostrarSoporte) this.cerrarSoporte();
+  }
+
+  cambiarSoporteTab(tab: 'nuevo' | 'mis-tickets'): void {
+    this.soporteTab = tab;
+    if (tab === 'mis-tickets' && !this.ticketsCargados) {
+      this.cargarMisTickets();
+    }
+  }
+
+  cargarMisTickets(): void {
+    this.cargandoTickets = true;
+    this.api.getMisTickets().subscribe({
+      next: tickets => {
+        this.misTickets = tickets;
+        this.cargandoTickets = false;
+        this.ticketsCargados = true;
+      },
+      error: () => {
+        this.cargandoTickets = false;
+        this.ticketsCargados = true;
+      }
+    });
+  }
+
+  enviarTicket(): void {
+    this.mensajeTicket = '';
+    this.errorTicket = '';
+
+    const asunto = this.ticketAsunto.trim();
+    const descripcion = this.ticketDescripcion.trim();
+
+    if (!asunto) {
+      this.errorTicket = 'Escribe un asunto para el reporte.';
+      return;
+    }
+    if (descripcion.length < 10) {
+      this.errorTicket = 'Describe el problema con al menos 10 caracteres.';
+      return;
+    }
+
+    this.api.createTicket({ asunto, descripcion, recurso_id: null }).subscribe({
+      next: res => {
+        this.mensajeTicket = res.message;
+        this.ticketAsunto = '';
+        this.ticketDescripcion = '';
+        this.ticketsCargados = false;
+        this.cargarMisTickets();
+      },
+      error: err => {
+        this.errorTicket = err?.error?.error || 'No se pudo enviar el reporte.';
+      }
+    });
+  }
+
+  trackTicket(_: number, t: TicketItem): number {
+    return t.id;
   }
 
   setStatusFilter(filter: 'all' | 'Disponible' | 'Completado' | 'Bloqueado'): void {
@@ -139,11 +499,14 @@ export class DashboardEstudianteController implements OnInit, OnDestroy {
 
   loadData(): void {
     if (this.api.getToken()) {
+      this.cargarInscripcionesCursos();
       this.api.getPensum().subscribe({
         next: (res: PensumResponse) => {
           this.pensumData = res;
         },
-        error: () => {}
+        error: (err) => {
+          console.error('[DashboardEstudiante] Error cargando pensum:', err);
+        }
       });
     }
   }

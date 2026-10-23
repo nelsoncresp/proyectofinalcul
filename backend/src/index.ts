@@ -7,6 +7,10 @@ import progressRoutes from './routes/progress.routes';
 import resourceRoutes from './routes/resource.routes';
 import ticketRoutes from './routes/ticket.routes';
 import asignaturaRoutes from './routes/asignatura.routes';
+import auditoriaRoutes from './routes/auditoria.routes';
+import userRoutes from './routes/user.routes';
+import statsRoutes from './routes/stats.routes';
+import cursoExtracurricularRoutes from './routes/curso-extracurricular.routes';
 
 dotenv.config();
 
@@ -31,6 +35,10 @@ app.use('/api/progress', progressRoutes);
 app.use('/api/resources', resourceRoutes);
 app.use('/api/tickets', ticketRoutes);
 app.use('/api/asignaturas', asignaturaRoutes);
+app.use('/api/auditoria', auditoriaRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/stats', statsRoutes);
+app.use('/api/cursos', cursoExtracurricularRoutes);
 app.use('/prueba', (req, res) => {
     console.log('HOLA'); res.send('HOLA, culo con cara <br> uaa');
 }

@@ -37,6 +37,15 @@
   --surface-2: rgba(17, 24, 39, 0.04);
   --surface-raised: #ffffff;
 
+  /* ── Estados semánticos (badges, alertas) ──────────────────────── */
+  --warning: #b45309;
+  --warning-soft: rgba(245, 158, 11, 0.14);
+  --violet: #6d28d9;
+  --violet-soft: rgba(139, 92, 246, 0.14);
+
+  /* Texto sobre fondos con marca (botones, pestañas activas) */
+  --on-brand: #ffffff;
+
   /* ── Sombras por capas (elevación, no bordes) ──────────────────── */
   --shadow-1: 0 1px 2px rgba(11, 18, 32, 0.05), 0 4px 12px -6px rgba(11, 18, 32, 0.1);
   --shadow-2: 0 2px 4px rgba(11, 18, 32, 0.05), 0 14px 30px -12px rgba(11, 18, 32, 0.16);
@@ -83,6 +92,13 @@
 
   --surface-2: rgba(255, 255, 255, 0.05);
   --surface-raised: #151d2e;
+
+  --warning: #fbbf24;
+  --warning-soft: rgba(245, 158, 11, 0.16);
+  --violet: #c4b5fd;
+  --violet-soft: rgba(139, 92, 246, 0.2);
+
+  --on-brand: #06122b;
 
   --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 12px -6px rgba(0, 0, 0, 0.5);
   --shadow-2: 0 2px 4px rgba(0, 0, 0, 0.4), 0 14px 30px -12px rgba(0, 0, 0, 0.6);
