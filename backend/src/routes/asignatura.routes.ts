@@ -14,6 +14,12 @@ router.get('/mis-rutas', authenticateJWT, requireRole([1, 2]), AsignaturaControl
 // Creación de nueva asignatura o ruta (Docente y Admin) (R-12)
 router.post('/', authenticateJWT, requireRole([1, 2]), AsignaturaController.createAsignatura);
 
+// Edición de una asignatura existente: nombre y prerrequisitos (editor de nodos)
+router.put('/:id', authenticateJWT, requireRole([1, 2]), AsignaturaController.updateAsignatura);
+
+// Eliminación de una asignatura sin dependencias (editor de nodos)
+router.delete('/:id', authenticateJWT, requireRole([1, 2]), AsignaturaController.deleteAsignatura);
+
 // Creación o edición de lección de asignatura (Docente y Admin) (R-12)
 router.post('/:id/leccion', authenticateJWT, requireRole([1, 2]), AsignaturaController.saveLeccion);
 

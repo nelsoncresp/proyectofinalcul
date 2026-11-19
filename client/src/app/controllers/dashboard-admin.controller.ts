@@ -4,27 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { MockDataService } from '../services/mock-data.service';
-import { ApiService, AdminStats, BackendUser, RecursoItem } from '../services/api.service';
-import { Ruta, Usuario } from '../models';
+import { ApiService } from '../services/api.service';
+import { Ruta, Usuario, AdminStats, BackendUser, RecursoItem, RutaRow, TicketRow } from '../models';
 import { Subscription } from 'rxjs';
-
-interface RutaRow {
-  ruta: Ruta;
-  totalNodos: number;
-  nodosCompletados: number;
-}
-
-export interface TicketRow {
-  id: number;
-  descripcion: string;
-  asunto?: string;
-  usuario_id: number;
-  recurso_id: number | null;
-  estado?: string;
-  fecha_creacion?: string;
-  recurso?: { id: number; titulo: string; enlace: string } | null;
-  usuario?: { id: number; nombre: string; email: string };
-}
 
 type AdminTab = 'lineas' | 'usuarios' | 'metricas' | 'recursos' | 'tickets' | 'auditoria';
 
@@ -50,6 +32,7 @@ export class DashboardAdminController implements OnInit, OnDestroy {
   tickets: TicketRow[] = [];
   auditoria: any[] = [];
   stats: AdminStats | null = null;
+  statsError = false;
   mensaje: string | null = null;
 
   activeTab: AdminTab = 'lineas';
@@ -126,7 +109,7 @@ export class DashboardAdminController implements OnInit, OnDestroy {
         error: () => this.loadMockRows()
       });
 
-      // 2. Recursos para curaduría
+      // 2. Recursos para revisión
       this.api.getAllResources().subscribe({
         next: (recs) => { this.recursos = recs; },
         error: () => {}
@@ -147,8 +130,8 @@ export class DashboardAdminController implements OnInit, OnDestroy {
         error: () => {}
       });
       this.api.getAdminStats().subscribe({
-        next: (s) => { this.stats = s; },
-        error: () => {}
+        next: (s) => { this.stats = s; this.statsError = false; },
+        error: () => { this.statsError = true; }
       });
     } else {
       this.loadMockRows();
@@ -206,6 +189,31 @@ export class DashboardAdminController implements OnInit, OnDestroy {
     return Math.max(...this.stats.loginsPorDia.map(d => Number(d.total)), 1);
   }
 
+  get maxInteresEstudiantes(): number {
+    if (!this.stats?.cursos.porInteres.length) return 1;
+    return Math.max(...this.stats.cursos.porInteres.map(i => i.estudiantes), 1);
+  }
+
+  get maxSemestreEstudiantes(): number {
+    if (!this.stats?.distribucionSemestres?.length) return 1;
+    return Math.max(...this.stats.distribucionSemestres.map(s => s.total), 1);
+  }
+
+  get maxJornadaEstudiantes(): number {
+    if (!this.stats?.distribucionJornada?.length) return 1;
+    return Math.max(...this.stats.distribucionJornada.map(j => j.total), 1);
+  }
+
+  get coberturaLeccionPct(): number {
+    if (!this.stats) return 0;
+    const { con_leccion, total_materias } = this.stats.cobertura;
+    return total_materias > 0 ? Math.round((con_leccion / total_materias) * 100) : 0;
+  }
+
+  get totalInscripcionesCursos(): number {
+    return this.stats?.cursos.porEstado.reduce((s, e) => s + Number(e.total), 0) ?? 0;
+  }
+
   // ── Gestión de usuarios (R-17) ─────────────────────────────────────────────
 
   get usuariosFiltrados(): BackendUser[] {
@@ -226,6 +234,17 @@ export class DashboardAdminController implements OnInit, OnDestroy {
   alternarFormUsuario(): void {
     this.mostrarFormUsuario = !this.mostrarFormUsuario;
     this.mensaje = null;
+    // Al abrir, reinicia el formulario a sus valores por defecto
+    // (evita que queden datos de un intento anterior).
+    if (this.mostrarFormUsuario) {
+      this.formNombre = '';
+      this.formEmail = '';
+      this.formPassword = '';
+      this.formRol = 3;
+      this.formSemestre = 1;
+      this.formJornada = '';
+      this.formGenero = 'No especificado';
+    }
   }
 
   crearUsuario(): void {
@@ -241,6 +260,18 @@ export class DashboardAdminController implements OnInit, OnDestroy {
     if (this.formPassword.length < 6) {
       this.mensaje = 'La contraseña debe tener al menos 6 caracteres.';
       return;
+    }
+    // Campos requeridos para estudiantes (semestre y jornada obligatorios).
+    if (this.formRol === 3) {
+      const semestre = Number(this.formSemestre);
+      if (!Number.isInteger(semestre) || semestre < 1 || semestre > 10) {
+        this.mensaje = 'El semestre es obligatorio (número entero entre 1 y 10).';
+        return;
+      }
+      if (!this.formJornada) {
+        this.mensaje = 'La jornada es obligatoria (Diurno o Nocturno).';
+        return;
+      }
     }
 
     this.api.createUser({
@@ -300,7 +331,7 @@ export class DashboardAdminController implements OnInit, OnDestroy {
     });
   }
 
-  // ── Curaduría de recursos ───────────────────────────────────────────────────
+  // ── Gestión de recursos ───────────────────────────────────────────────────
 
   aprobarRecurso(id: number): void {
     this.api.updateResourceStatus(id, 'aprobado').subscribe({

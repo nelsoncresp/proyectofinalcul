@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Unique } from 'typeorm';
 import { Asignatura } from './asignatura.model';
 
 /**
@@ -6,6 +6,7 @@ import { Asignatura } from './asignatura.model';
  * navegador (Web Worker) contra los casos de prueba almacenados.
  */
 @Entity('retos')
+@Unique(['asignatura_id', 'corte'])
 export class Reto {
     @PrimaryGeneratedColumn()
     id!: number;

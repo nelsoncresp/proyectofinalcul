@@ -3,20 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { ApiService, RecursoItem } from '../services/api.service';
-import { Usuario } from '../models';
+import { ApiService } from '../services/api.service';
+import { Usuario, RecursoItem, TicketDocenteRow } from '../models';
 import { Subscription } from 'rxjs';
-
-export interface TicketDocenteRow {
-  id: number;
-  descripcion: string;
-  asunto?: string;
-  usuario_id: number;
-  recurso_id: number | null;
-  estado?: string;
-  recurso?: { id: number; titulo: string; enlace: string } | null;
-  usuario?: { id: number; nombre: string; email: string };
-}
 
 @Component({
   standalone: true,

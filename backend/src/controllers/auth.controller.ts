@@ -4,19 +4,7 @@ import jwt from 'jsonwebtoken';
 import { AppDataSource } from '../config/database';
 import { User } from '../models/user.model';
 import { AuditoriaPensum } from '../models/auditoria.model';
-
-export const INTERESES_PERMITIDOS: readonly string[] = [
-    'Desarrollo Web',
-    'Desarrollo Móvil',
-    'Inteligencia Artificial y ML',
-    'Ciberseguridad',
-    'Bases de Datos y Big Data',
-    'Redes e Infraestructura',
-    'DevOps y Cloud',
-    'Ingeniería de Software',
-    'Videojuegos',
-    'Gestión de TI'
-];
+import { validarIntereses } from '../config/intereses';
 
 export const AuthController = {
     async register(req: Request, res: Response): Promise<void> {
@@ -41,16 +29,12 @@ export const AuthController = {
 
             let validatedIntereses: string[] | null = null;
             if (intereses !== undefined && intereses !== null) {
-                if (!Array.isArray(intereses)) {
-                    res.status(400).json({ error: 'Intereses debe ser un arreglo' });
-                    return;
-                }
-                const invalid = intereses.some(i => typeof i !== 'string' || !INTERESES_PERMITIDOS.includes(i));
-                if (invalid) {
+                const interesesValidados = validarIntereses(intereses);
+                if (interesesValidados === null) {
                     res.status(400).json({ error: 'Uno o más intereses no son válidos' });
                     return;
                 }
-                validatedIntereses = intereses;
+                validatedIntereses = interesesValidados;
             }
             
             const salt = await bcrypt.genSalt(10);

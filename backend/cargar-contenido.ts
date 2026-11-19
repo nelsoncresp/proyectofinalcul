@@ -22,10 +22,12 @@
  *   5. Reporte final: cobertura N/59, lecciones y recursos escritos,
  *      materias sin video y ruta del respaldo.
  */
+/// <reference types="node" />
+
 import 'dotenv/config';
-import { createConnection } from 'mysql2/promise';
-import { mkdir, writeFile } from 'fs/promises';
-import path from 'path';
+import { createConnection, type Connection, type RowDataPacket } from 'mysql2/promise';
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
 import { contenidoPorSemestre } from './content';
 import type { ContenidoAsignatura } from './content/tipos';
 
@@ -36,14 +38,14 @@ const TOTAL_PENSUM = 59;
 const normalizar = (texto: string): string =>
     texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
 
-interface AsignaturaRow {
+interface AsignaturaRow extends RowDataPacket {
     id: number;
     nombre: string;
     semestre: number;
 }
 
 async function main(): Promise<void> {
-    const conn = await createConnection({
+    const conn: Connection = await createConnection({
         host: process.env.DB_HOST || 'localhost',
         port: Number(process.env.DB_PORT) || 3306,
         user: process.env.DB_USER || 'root',
@@ -55,8 +57,8 @@ async function main(): Promise<void> {
         console.log(`\n== CARGAR-CONTENIDO ${DRY_RUN ? '(dry-run: nada se escribe)' : ''}==\n`);
 
         // ── 1. Respaldo de las tablas que se van a modificar ────────────────
-        const [filasLecciones] = await conn.query('SELECT * FROM lecciones_evaluaciones');
-        const [filasRecursos] = await conn.query('SELECT * FROM recursos_contenido');
+        const [filasLecciones] = await conn.query<RowDataPacket[]>('SELECT * FROM lecciones_evaluaciones');
+        const [filasRecursos] = await conn.query<RowDataPacket[]>('SELECT * FROM recursos_contenido');
 
         const carpetaBackups = path.join(__dirname, 'backups');
         const sello = new Date().toISOString().replace(/[:T]/g, '-').slice(0, 19);

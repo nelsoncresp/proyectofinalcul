@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { ApiService, AdminStats } from '../services/api.service';
-import { Usuario } from '../models';
-import { INTERESES_DISPONIBLES } from '../utils/intereses';
+import { ApiService } from '../services/api.service';
+import { Usuario, AdminStats } from '../models';
+import { INTERESES_DISPONIBLES } from '../utils/scripts/intereses';
 
 type Genero = 'Masculino' | 'Femenino' | 'Otro' | 'No especificado';
 

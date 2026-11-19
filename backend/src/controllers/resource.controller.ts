@@ -81,7 +81,7 @@ export const ResourceController = {
     },
 
     /**
-     * Permite a un Administrador aprobar o rechazar un recurso en curaduría.
+     * Permite a un Administrador aprobar o rechazar un recurso en revisión.
      */
     async updateResourceStatus(req: AuthRequest, res: Response): Promise<void> {
         try {

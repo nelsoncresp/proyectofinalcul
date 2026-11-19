@@ -60,3 +60,39 @@ Desktop.ini
 # Respaldos locales pre-migración (se conservan fuera del repo: Documents\backups-sequora)
 backend/backups/
 *.sql
+
+# ========== Seguridad: credenciales, llaves y tokens ==========
+# Cualquier variante de .env (además de las listadas arriba)
+.env.*
+!.env.example
+# Archivos que pueden contener tokens de npm/registros
+.npmrc
+.netrc
+# Llaves y certificados privados
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+id_rsa*
+# Bases de datos locales
+*.sqlite
+*.sqlite3
+*.db
+
+# ========== Semillas con contraseñas en texto plano ==========
+# Solo uso local: contiene credenciales de prueba. Ejecutar en local, no publicar.
+backend/seed-usuarios-prueba.js
+
+# ========== Artefactos de herramientas y archivos locales ==========
+# Archivo vacío generado por accidente al configurar dotenv
+backend/dotenv.config
+# Skills instaladas por agentes (estado local de herramientas)
+.agents/
+skills-lock.json
+# Lock de la raíz: no existe package.json en la raíz, es un archivo sobrante
+/package-lock.json
+# Configuración local de agentes
+.opencode/
+# Archivos *.local de cualquier herramienta
+*.local

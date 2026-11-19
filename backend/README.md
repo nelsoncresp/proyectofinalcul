@@ -27,6 +27,17 @@ Este es el servidor backend para la estructuración de rutas de aprendizaje del 
    ```
    *El servidor quedará escuchando peticiones en `http://localhost:3000`.*
 
+### Crear la base de datos completa en MySQL
+
+En MySQL Workbench:
+
+1. Abre una conexión MySQL.
+2. Selecciona **File → Open SQL Script**.
+3. Abre `backend/database.sql`.
+4. Ejecuta todo el contenido con el botón **Execute** (⚡) o `Ctrl+Shift+Enter`.
+
+El script crea `plataforma_academica`, todas las tablas de la aplicación y los datos iniciales de roles, áreas, asignaturas, prerrequisitos, lecciones y recursos.
+
 ## 4. Base de Datos, Roles e Inserts Iniciales
 La base de datos relacional está definida por un esquema que mapea las entidades académicas a través de TypeORM (usuarios, asignaturas, recursos, prerrequisitos, etc.).
 
@@ -41,7 +52,7 @@ La base de datos se debe alimentar inicialmente con 5 áreas de formación (Cien
 
 ## 5. Reglas de Negocio Implementadas
 - **Motor de Prerrequisitos**: Al intentar actualizar el estado de una asignatura a `completado`, el servidor intercepta la acción, cruza la tabla de relaciones muchos-a-muchos y valida en el historial que el alumno haya aprobado previamente todos los prerrequisitos estrictos de la materia.
-- **Filtrado de Curaduría**: Los recursos académicos de estudio son consultados bajo la condición estricta de que su columna `estado_revision` sea equivalente a `aprobado`.
+- **Filtrado de revisión**: Los recursos académicos de estudio son consultados bajo la condición estricta de que su columna `estado_revision` sea equivalente a `aprobado`.
 
 ## 6. Manejo de Errores (Error Handling)
 El API implementa un control de errores robusto utilizando códigos de estado HTTP semánticos y middlewares globales que previenen caídas del sistema:

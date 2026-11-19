@@ -1,5 +1,5 @@
 /**
- * Catálogo único de intereses académicos (registro + perfil + recomendador).
+ * Catálogo central de intereses académicos (registro, perfil y recomendador).
  * Mantener sincronizado con INTERESES_PERMITIDOS en backend/src/controllers/auth.controller.ts.
  */
 export const INTERESES_DISPONIBLES: string[] = [

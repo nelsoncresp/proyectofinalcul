@@ -12,7 +12,7 @@
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
-          Editor de Nodos
+          Editor de nodos
         </a>
         <button class="docente-logout-btn" (click)="logout()" type="button">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -79,7 +79,7 @@
         Mis Rutas de Aprendizaje
       </button>
       <button class="docente-tab" [class.is-active]="activeTab === 'recursos'" (click)="setTab('recursos')">
-        Curaduría de Recursos
+        Gestión de Recursos
       </button>
       <button class="docente-tab" [class.is-active]="activeTab === 'tickets'" (click)="setTab('tickets')">
         Bandeja de Tickets
@@ -95,7 +95,7 @@
           <p class="section-desc">Visualiza las asignaturas registradas y sus lecciones activas.</p>
         </div>
         <a routerLink="/node-editor" class="btn-create-route">
-          + Crear Nodo en Editor
+          Ir al Editor de nodos
         </a>
       </div>
 
@@ -103,9 +103,9 @@
       <div class="panel-loading">Cargando rutas...</div>
       } @else if (rutas.length === 0) {
       <div class="empty-panel">
-        <p>No tienes rutas propias creadas aún. Puedes usar el Editor de Nodos para crear nuevas materias personalizadas.</p>
+        <p>No tienes rutas propias creadas aún. Puedes usar el Editor de nodos para crear nuevas materias personalizadas.</p>
         <a routerLink="/node-editor" class="docente-btn-primary" style="margin-top: 12px; display: inline-flex;">
-          Ir al Editor de Nodos
+          Ir al Editor de nodos
         </a>
       </div>
       } @else {
@@ -141,7 +141,7 @@
               Ver Aula →
             </a>
             <a routerLink="/node-editor" class="card-btn-edit">
-              Editar en Nodos
+              Editor de nodos
             </a>
           </div>
         </div>

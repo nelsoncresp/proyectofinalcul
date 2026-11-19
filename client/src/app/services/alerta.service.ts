@@ -1,14 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-
-export type AlertaTipo = 'exito' | 'error' | 'info';
-
-export interface Alerta {
-  id: number;
-  tipo: AlertaTipo;
-  titulo: string;
-  detalle?: string;
-}
+import { Alerta, AlertaTipo } from '../models';
 
 /**
  * Sistema único de alertas de la app (toasts). Los modales quedan

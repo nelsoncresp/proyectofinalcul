@@ -1,5 +1,5 @@
 /**
- * Resaltador de sintaxis JS mínimo para el editor del aula.
+ * Resaltador central de sintaxis JavaScript para el editor del aula.
  * Sin dependencias: un tokenizador de una pasada que emite <span> escapados.
  * Incluye "rainbow brackets": cada nivel de profundidad de (), [] y {}
  * se colorea con un tono distinto para que se vea qué pareja cierra qué.

@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Unique } from 'typeorm';
 import { Asignatura } from './asignatura.model';
 import { User } from './user.model';
 
 @Entity('lecciones_evaluaciones')
+@Unique(['asignatura_id', 'corte'])
 export class LeccionEvaluacion {
     @PrimaryGeneratedColumn()
     id!: number;

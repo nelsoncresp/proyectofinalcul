@@ -4,6 +4,7 @@ import { AppDataSource } from '../config/database';
 import { User } from '../models/user.model';
 import { AuditoriaPensum } from '../models/auditoria.model';
 import { AuthRequest } from '../middlewares/auth.middleware';
+import { validarIntereses } from '../config/intereses';
 
 const ROLES_VALIDOS = [1, 2, 3];
 const JORNADAS_VALIDAS = ['Diurno', 'Nocturno'];
@@ -113,6 +114,15 @@ export const UserController = {
                 return;
             }
 
+            let interesesValidados: string[] | null = null;
+            if (intereses !== undefined && intereses !== null) {
+                interesesValidados = validarIntereses(intereses);
+                if (interesesValidados === null) {
+                    res.status(400).json({ error: 'Uno o más intereses no son válidos' });
+                    return;
+                }
+            }
+
             const userRepository = AppDataSource.getRepository(User);
             const emailNormalizado = email.trim().toLowerCase();
 
@@ -133,7 +143,7 @@ export const UserController = {
                 semestre: rolNum === 3 && semestre !== undefined && semestre !== null ? Number(semestre) : null,
                 jornada: jornada ?? null,
                 genero: genero ?? null,
-                intereses: Array.isArray(intereses) ? intereses : null
+                intereses: interesesValidados
             });
             const saved = await userRepository.save(newUser);
 
@@ -252,11 +262,16 @@ export const UserController = {
                 user.semestre = semestre === null ? null : sem;
             }
             if (intereses !== undefined) {
-                if (intereses !== null && !Array.isArray(intereses)) {
-                    res.status(400).json({ error: 'intereses debe ser una lista' });
-                    return;
+                if (intereses === null) {
+                    user.intereses = null;
+                } else {
+                    const interesesValidados = validarIntereses(intereses);
+                    if (interesesValidados === null) {
+                        res.status(400).json({ error: 'Uno o más intereses no son válidos' });
+                        return;
+                    }
+                    user.intereses = interesesValidados;
                 }
-                user.intereses = Array.isArray(intereses) && intereses.length > 0 ? intereses : null;
             }
 
             const saved = await userRepository.save(user);

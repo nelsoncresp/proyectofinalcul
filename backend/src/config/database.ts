@@ -13,6 +13,9 @@ import { LeccionEvaluacion } from '../models/leccion.model';
 import { Reto } from '../models/reto.model';
 import { CorteAprobado } from '../models/corte-aprobado.model';
 import { InscripcionCurso } from '../models/inscripcion-curso.model';
+import { CursoExtracurricular } from '../models/curso-extracurricular.model';
+import { ModuloCurso } from '../models/modulo-curso.model';
+import { ProgresoModuloCurso } from '../models/progreso-modulo-curso.model';
 
 dotenv.config();
 
@@ -37,6 +40,9 @@ export const AppDataSource = new DataSource({
         SoporteTicket,
         AuditoriaPensum,
         CorteAprobado,
-        InscripcionCurso
+        InscripcionCurso,
+        CursoExtracurricular,
+        ModuloCurso,
+        ProgresoModuloCurso
     ]
 });

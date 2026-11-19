@@ -1,17 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Nodo, NodoContenido, Progreso, Ruta } from '../models';
+import { EstadoAprendizaje, Nodo, NodoContenido, Progreso, Ruta } from '../models';
 
 const RUTAS_KEY = 'mock-rutas';
 const PROGRESO_KEY = 'mock-progreso';
 const APRENDIZAJE_KEY = 'mock-aprendizaje';
 
-export interface EstadoAprendizaje {
-  rutaId: string;
-  nodoId: string;
-  lecturaConfirmada: boolean;
-  respuesta: number | null;
-  ejercicioAprobado: boolean;
-}
 
 @Injectable({ providedIn: 'root' })
 export class MockDataService {

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AlertaService, Alerta } from '../services/alerta.service';
+import { AlertaService } from '../services/alerta.service';
+import { Alerta } from '../models/alerta.model';
 
 @Component({
   selector: 'app-alertas',

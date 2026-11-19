@@ -1,21 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { Usuario, UserRole } from '../models';
-import { ApiService, BackendUser } from './api.service';
-
-// ─── Tipos públicos ────────────────────────────────────────────────────────────
-
-export type LoginResult =
-  | { ok: true; user: Usuario }
-  | { ok: false; error: 'invalid-credentials' | 'server-error' };
-
-/** Cuenta de demostración mostrada en la pantalla de login. */
-export interface DemoAccount {
-  email: string;
-  password: string;
-  rol: UserRole;
-}
+import { DemoAccount, LoginResult, Usuario, UserRole, BackendUser } from '../models';
+import { ApiService } from './api.service';
 
 // ─── Mapa rol_id → UserRole ────────────────────────────────────────────────────
 // Backend: 1=Administrador, 2=Docente, 3=Estudiante

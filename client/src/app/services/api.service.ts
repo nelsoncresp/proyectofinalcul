@@ -1,199 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-// ─── Tipos de respuesta del backend ────────────────────────────────────────────
-
-export interface BackendUser {
-  id: number;
-  nombre: string;
-  email: string;
-  rol_id: number; // 1=Admin, 2=Docente, 3=Estudiante
-  semestre?: number | null;
-  jornada?: 'Diurno' | 'Nocturno' | null;
-  genero?: 'Masculino' | 'Femenino' | 'Otro' | 'No especificado' | null;
-  intereses?: string[] | null;
-}
-
-export interface LoginResponse {
-  token: string;
-  user: BackendUser;
-}
-
-export interface RegisterResponse {
-  id: number;
-  nombre: string;
-  email: string;
-  rol_id: number;
-  semestre: number | null;
-  jornada: 'Diurno' | 'Nocturno' | null;
-  intereses?: string[] | null;
-}
-
-export interface AsignaturaNodo {
-  id: number;
-  nombre: string;
-  semestre: number;
-  area_id: number;
-  areaNombre: string;
-  areaColor: string;
-  areaIcono: string;
-  estado: 'Completado' | 'Disponible' | 'Bloqueado';
-  /** El estudiante se inscribió (progreso 'inscrito') y aún no aprueba la materia. */
-  inscrito?: boolean;
-  prerrequisitos: { id: number; nombre: string; completado: boolean }[];
-}
-
-export interface AreaGroup {
-  id: number;
-  nombre: string;
-  descripcion: string;
-  color: string;
-  icono: string;
-  porcentajeAvance: number;
-  nodos: AsignaturaNodo[];
-}
-
-export interface SemestreGroup {
-  semestre: number;
-  total: number;
-  completadas: number;
-  porcentaje: number;
-  materias: AsignaturaNodo[];
-}
-
-export interface PensumResponse {
-  avanceGlobal: number;
-  totalMaterias: number;
-  totalCompletadas: number;
-  areas: AreaGroup[];
-  semestres: SemestreGroup[];
-  practica_libre?: AsignaturaNodo[];
-}
-
-export interface LeccionData {
-  id: number;
-  corte: number;
-  contenido_lectura: string;
-  video_url: string | null;
-  tiempo_minimo_segundos: number;
-  pregunta: string;
-  opciones: string[];
-}
-
-export interface CorteInfo {
-  corte: number;
-  estado: 'aprobada' | 'publicada' | 'borrador' | 'pendiente';
-  aprobado: boolean;
-}
-
-export interface RetoData {
-  id: number;
-  enunciado: string;
-  plantilla: string;
-  nombre_funcion: string;
-  casos: { entrada: unknown[]; esperado: unknown }[];
-}
-
-export interface RecursoItem {
-  id: number;
-  asignatura_id: number;
-  titulo: string;
-  tipo_recurso: string;
-  enlace: string;
-  estado_revision: string;
-  asignatura?: { id: number; nombre: string };
-}
-
-export interface LeccionResponse {
-  asignatura: {
-    id: number;
-    nombre: string;
-    semestre: number;
-    area: { id: number; nombre: string; color: string; icono: string };
-  };
-  corte: number;
-  cortes: CorteInfo[];
-  leccion: LeccionData | null;
-  reto: RetoData | null;
-  recursos: RecursoItem[];
-}
-
-export interface EvaluarResponse {
-  esCorrecto: boolean;
-  explicacion: string;
-  corteAprobado: boolean;
-  materiaCompletada: boolean;
-}
-
-export interface ProgressUpdateBody {
-  asignatura_id: number;
-  estado: 'en_progreso' | 'completado';
-}
-
-export interface ProgressResponse {
-  message: string;
-  asignatura_id: number;
-  estado: string;
-  recienDesbloqueadas: { id: number; nombre: string; semestre: number }[];
-}
-
-export interface TicketCreateBody {
-  asunto: string;
-  recurso_id?: number | null;
-  descripcion: string;
-}
-
-export interface TicketItem {
-  id: number;
-  asunto: string;
-  descripcion: string;
-  usuario_id: number;
-  recurso_id: number | null;
-  estado?: string;
-  fecha_creacion?: string;
-  recurso?: { id: number; titulo: string; enlace: string } | null;
-  usuario?: { id: number; nombre: string; email: string };
-}
-
-/** Inscripción del estudiante en un curso extracurricular del catálogo por interés. */
-export interface InscripcionCurso {
-  id: number;
-  usuario_id: number;
-  curso_id: string;
-  interes: string;
-  /** Índices de módulos del temario marcados como vistos. */
-  modulos_vistos: number[] | null;
-  fecha?: string;
-}
-
-export interface NuevoUsuarioBody {
-  nombre: string;
-  email: string;
-  password: string;
-  rol_id: 1 | 2 | 3;
-  semestre?: number | null;
-  jornada?: 'Diurno' | 'Nocturno' | null;
-  genero?: 'Masculino' | 'Femenino' | 'Otro' | 'No especificado' | null;
-}
-
-export interface AdminStats {
-  usuarios: { total: number; por_rol: { rol_id: number; total: number }[] };
-  avancePorArea: {
-    area_id: number;
-    nombre: string;
-    color: string;
-    icono: string;
-    total_materias: number;
-    avance_promedio: number;
-  }[];
-  recursos: { aprobado: number; pendiente: number; rechazado: number };
-  tickets: { total: number; abiertos: number; resueltos: number };
-  cobertura: { total_materias: number; con_leccion: number; con_reto: number };
-  loginsPorDia: { fecha: string; total: number }[];
-}
-
-// ─── Servicio API ──────────────────────────────────────────────────────────────
+import type {
+  AdminStats,
+  BackendUser,
+  EvaluarResponse,
+  InscripcionCurso,
+  CursoCatalogoBackend,
+  LeccionResponse,
+  LoginResponse,
+  NuevoUsuarioBody,
+  PensumResponse,
+  ProgressResponse,
+  ProgressUpdateBody,
+  RegisterResponse,
+  RecursoItem,
+  TicketCreateBody,
+  TicketItem
+} from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -340,7 +164,7 @@ export class ApiService {
     );
   }
 
-  // ── Recursos y Curaduría ────────────────────────────────────────────────────
+  // ── Recursos y gestión ──────────────────────────────────────────────────────
 
   getResources(asignaturaId: number): Observable<RecursoItem[]> {
     return this.http.get<RecursoItem[]>(
@@ -399,6 +223,27 @@ export class ApiService {
 
   // ── Inscripciones a cursos extracurriculares (pestaña "Para ti") ────────────
 
+  getCatalogoCursos(): Observable<CursoCatalogoBackend[]> {
+    return this.http.get<CursoCatalogoBackend[]>(
+      `${this.BASE_URL}/api/cursos/catalogo`,
+      { headers: this.authHeaders() }
+    );
+  }
+
+  /** Detalle de un curso extracurricular con sus módulos y estado de inscripción. */
+  getCursoDetalle(cursoId: string): Observable<{
+    curso: CursoCatalogoBackend;
+    inscripcion: { id: number; estado: 'inscrito' | 'en_progreso' | 'completado'; modulos_vistos: number[] } | null;
+  }> {
+    return this.http.get<{
+      curso: CursoCatalogoBackend;
+      inscripcion: { id: number; estado: 'inscrito' | 'en_progreso' | 'completado'; modulos_vistos: number[] } | null;
+    }>(
+      `${this.BASE_URL}/api/cursos/${cursoId}`,
+      { headers: this.authHeaders() }
+    );
+  }
+
   /** Inscripciones propias del estudiante en cursos extracurriculares. */
   getMisInscripcionesCursos(): Observable<InscripcionCurso[]> {
     return this.http.get<InscripcionCurso[]>(
@@ -428,8 +273,8 @@ export class ApiService {
   guardarProgresoCurso(
     cursoId: string,
     modulos_vistos: number[]
-  ): Observable<{ message: string; modulos_vistos: number[] }> {
-    return this.http.patch<{ message: string; modulos_vistos: number[] }>(
+  ): Observable<{ message: string; modulos_vistos: number[]; estado: 'inscrito' | 'en_progreso' | 'completado' }> {
+    return this.http.patch<{ message: string; modulos_vistos: number[]; estado: 'inscrito' | 'en_progreso' | 'completado' }>(
       `${this.BASE_URL}/api/cursos/${cursoId}/progreso`,
       { modulos_vistos },
       { headers: this.authHeaders() }
@@ -454,6 +299,26 @@ export class ApiService {
     return this.http.post<{ message: string; asignatura: any }>(
       `${this.BASE_URL}/api/asignaturas`,
       body,
+      { headers: this.authHeaders() }
+    );
+  }
+
+  /** Actualiza nombre y/o prerrequisitos de una asignatura (editar nodo). */
+  updateAsignatura(
+    id: number,
+    body: { nombre?: string; prerrequisitos_ids?: number[] }
+  ): Observable<{ message: string; asignatura: any }> {
+    return this.http.put<{ message: string; asignatura: any }>(
+      `${this.BASE_URL}/api/asignaturas/${id}`,
+      body,
+      { headers: this.authHeaders() }
+    );
+  }
+
+  /** Elimina una asignatura sin dependencias (eliminar nodo). */
+  deleteAsignatura(id: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(
+      `${this.BASE_URL}/api/asignaturas/${id}`,
       { headers: this.authHeaders() }
     );
   }

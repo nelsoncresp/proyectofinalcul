@@ -4,3 +4,7 @@ export * from './ruta.model';
 export * from './nodo.model';
 export * from './recurso.model';
 export * from './progreso.model';
+export * from './api.model';
+export * from './auth.model';
+export * from './alerta.model';
+export * from './ui.model';

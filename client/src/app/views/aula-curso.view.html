@@ -1,0 +1,201 @@
+<div class="aula-curso">
+  <!-- ════════ Barra Superior ════════ -->
+  <header class="aula-top">
+    <button type="button" class="btn-back" (click)="volver()">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="19" y1="12" x2="5" y2="12"/>
+        <polyline points="12 19 5 12 12 5"/>
+      </svg>
+      <span>Volver a Cursos</span>
+    </button>
+
+    <div class="aula-titulo">
+      @if (curso; as c) {
+        <p class="aula-kicker">{{ c.interes }} · {{ c.nivel }} · {{ c.duracion }}</p>
+        <h1 class="aula-nombre">{{ c.titulo }}</h1>
+      } @else {
+        <h1 class="aula-nombre">Cargando curso…</h1>
+      }
+    </div>
+
+    @if (curso) {
+      <div class="aula-meta-right">
+        <span class="aula-estado" [attr.data-state]="estadoInscripcion">
+          {{ estadoInscripcion === 'completado' ? 'Completado' : (estadoInscripcion === 'en_progreso' ? 'En progreso' : (estadoInscripcion === 'inscrito' ? 'Inscrito' : 'No inscrito')) }}
+        </span>
+      </div>
+    }
+
+    @if (!isLoading && !isError && curso) {
+      <div class="aula-progreso" aria-hidden="true">
+        <span [style.width.%]="progresoPct"></span>
+      </div>
+    }
+  </header>
+
+  <!-- ════════ Contenedor Principal ════════ -->
+  <main class="aula-cuerpo">
+    @if (isLoading) {
+      <div class="aula-estado-vista" role="status">
+        <div class="skeleton" aria-hidden="true">
+          <span class="skeleton-line"></span>
+          <span class="skeleton-line"></span>
+          <span class="skeleton-line"></span>
+        </div>
+        <p class="aula-estado-titulo">Cargando contenido del curso…</p>
+      </div>
+    } @else if (isError || !curso) {
+      <div class="aula-estado-vista is-error" role="alert">
+        <p class="aula-estado-titulo">No se pudo cargar el curso</p>
+        <p class="aula-estado-texto">El curso solicitado no está disponible o hubo un problema de conexión.</p>
+        <button type="button" class="btn btn-secondary" (click)="cargarCurso()">Reintentar</button>
+      </div>
+    } @else {
+      <!-- Layout a 2 columnas -->
+      <div class="curso-layout">
+        <!-- Barra Lateral: Temario y Módulos -->
+        <aside class="curso-sidebar" aria-label="Temario del curso">
+          <div class="sidebar-header">
+            <h2>Temario del Curso</h2>
+            <span class="sidebar-progreso-txt">{{ modulosVistos.length }} de {{ curso.modulos.length }} vistos ({{ progresoPct }}%)</span>
+          </div>
+
+          <ol class="modulo-nav-list">
+            @for (mod of curso.modulos; track mod.id; let idx = $index) {
+              <li class="modulo-nav-item">
+                <button
+                  type="button"
+                  class="modulo-nav-btn"
+                  [class.is-active]="moduloSeleccionadoIndex === idx"
+                  [class.is-completed]="esModuloVisto(idx)"
+                  (click)="seleccionarModulo(idx)"
+                >
+                  <span class="modulo-check" aria-hidden="true">
+                    @if (esModuloVisto(idx)) {
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                    } @else {
+                      {{ idx + 1 }}
+                    }
+                  </span>
+                  <div class="modulo-nav-info">
+                    <span class="modulo-nav-titulo">{{ mod.titulo }}</span>
+                    <span class="modulo-nav-duracion">{{ mod.duracion_minutos }} min</span>
+                  </div>
+                </button>
+              </li>
+            }
+          </ol>
+
+          <!-- Banner de Inscripción en Sidebar -->
+          @if (!estaInscrito) {
+            <div class="sidebar-banner-inscripcion">
+              <p>Inscríbete para registrar tu progreso y completar el curso.</p>
+              <button
+                type="button"
+                class="btn btn-primary btn-block"
+                [disabled]="isSaving"
+                (click)="inscribirme()"
+              >
+                Inscribirme gratis
+              </button>
+            </div>
+          }
+        </aside>
+
+        <!-- Columna Central: Contenido del Módulo Seleccionado -->
+        <section class="curso-content-area" aria-live="polite">
+          @if (moduloActual; as m) {
+            <article class="modulo-detalle">
+              <!-- Encabezado del Módulo -->
+              <div class="modulo-header">
+                <div class="modulo-header-tags">
+                  <span class="badge-modulo">Módulo {{ moduloSeleccionadoIndex + 1 }} de {{ curso.modulos.length }}</span>
+                  <span class="badge-tiempo">{{ m.duracion_minutos }} minutos</span>
+                  @if (esModuloVisto(moduloSeleccionadoIndex)) {
+                    <span class="badge-completado">Completado ✓</span>
+                  }
+                </div>
+                <h2 class="modulo-titulo-principal">{{ m.titulo }}</h2>
+              </div>
+
+              <!-- Video Embebido bajo demanda -->
+              @if (m.video_url) {
+                <div class="modulo-video-wrapper">
+                  @if (videoIniciado && videoEmbedUrl) {
+                    <iframe
+                      [src]="videoEmbedUrl"
+                      title="Video del módulo"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen
+                      class="modulo-iframe"
+                    ></iframe>
+                  } @else {
+                    <div class="video-placeholder" (click)="iniciarVideo()">
+                      <div class="video-play-btn" aria-hidden="true">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                          <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                      </div>
+                      <p class="video-play-txt">Reproducir clase en video ({{ m.duracion_minutos }} min)</p>
+                    </div>
+                  }
+                </div>
+              }
+
+              <!-- Contenido de Lectura Académica -->
+              <div class="modulo-lectura-cuerpo">
+                <h3>Contenido y Guía de Aprendizaje</h3>
+                <div class="texto-lectura">{{ m.contenido || 'Contenido disponible para este módulo.' }}</div>
+              </div>
+
+              <!-- Barra de Acción Inferior -->
+              <div class="modulo-accion-footer">
+                @if (!estaInscrito) {
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-lg"
+                    [disabled]="isSaving"
+                    (click)="inscribirme()"
+                  >
+                    Inscribirme en este curso
+                  </button>
+                } @else {
+                  <button
+                    type="button"
+                    class="btn btn-lg"
+                    [class.btn-primary]="!esModuloVisto(moduloSeleccionadoIndex)"
+                    [class.btn-success]="esModuloVisto(moduloSeleccionadoIndex)"
+                    [disabled]="isSaving"
+                    (click)="toggleModuloActual()"
+                  >
+                    @if (isSaving) {
+                      Guardando avance…
+                    } @else if (esModuloVisto(moduloSeleccionadoIndex)) {
+                      ✓ Módulo completado (clic para desmarcar)
+                    } @else {
+                      Marcar módulo como completado y continuar →
+                    }
+                  </button>
+                }
+              </div>
+
+              <!-- Banner de Felicitación si todo el curso está completo -->
+              @if (progresoPct === 100) {
+                <div class="curso-completo-card" role="alert">
+                  <div class="curso-completo-icono" aria-hidden="true">🎉</div>
+                  <div class="curso-completo-info">
+                    <h4>¡Felicitaciones! Has completado {{ curso.titulo }}</h4>
+                    <p>Has superado todos los módulos formativos de este curso extracurricular alineado a tu perfil.</p>
+                  </div>
+                </div>
+              }
+            </article>
+          }
+        </section>
+      </div>
+    }
+  </main>
+</div>

@@ -2,19 +2,15 @@ import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { UserRole } from '../models';
-import { suppressTransitionsOnce } from '../utils/suppress-transitions';
+import { NavLink, UserRole } from '../models';
+import { suppressTransitionsOnce } from '../utils/scripts/suppress-transitions';
 import { Subscription } from 'rxjs';
 
-interface NavLink {
-  path: string;
-  label: string;
-}
 
 const NAV_BY_ROLE: Record<UserRole, NavLink[]> = {
   Estudiante: [{ path: '/dashboard-estudiante', label: 'Mis rutas' }],
   Administrador: [
-    { path: '/dashboard-admin', label: 'Panel de curaduría' },
+    { path: '/dashboard-admin', label: 'Panel de gestión' },
     { path: '/node-editor', label: 'Editor de nodos' }
   ],
   Docente: [
@@ -72,7 +68,7 @@ export class NavbarController implements OnInit, OnDestroy {
     this.routerSub = this.router.events.subscribe(evento => {
       if (evento instanceof NavigationEnd) {
         this.menuAbierto = false;
-        if (!evento.urlAfterRedirects.startsWith('/aula/')) {
+        if (!evento.urlAfterRedirects.startsWith('/aula/') && !evento.urlAfterRedirects.startsWith('/curso/')) {
           this.setOculto(false);
         }
       }
@@ -99,7 +95,7 @@ export class NavbarController implements OnInit, OnDestroy {
    */
   private readonly onScroll = (): void => {
     const y = window.scrollY;
-    const enAula = this.router.url.startsWith('/aula/');
+    const enAula = this.router.url.startsWith('/aula/') || this.router.url.startsWith('/curso/');
     if (!enAula || y <= 8) {
       this.setOculto(false);
     } else if (this.isHidden) {

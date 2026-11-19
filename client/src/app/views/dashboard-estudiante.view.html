@@ -1,115 +1,68 @@
 <section class="campus-experience" aria-labelledby="campus-title">
 
-  <!-- ============ ARTE DE LA MASCOTA (reutilizable) ============ -->
-  <ng-template #robotArt>
-    <svg class="robot-art" viewBox="0 0 120 128" aria-hidden="true" focusable="false">
-      <!-- Antena -->
-      <line class="ant-stem" x1="60" y1="27" x2="60" y2="15"/>
-      <circle class="ant-ball" cx="60" cy="11" r="5"/>
-
-      <!-- Orejas -->
-      <rect class="bot-ear" x="15" y="45" width="9" height="20" rx="4.5"/>
-      <rect class="bot-ear" x="96" y="45" width="9" height="20" rx="4.5"/>
-
-      <!-- Cabeza -->
-      <rect class="bot-head" x="24" y="27" width="72" height="54" rx="20"/>
-
-      <!-- Pantalla facial -->
-      <rect class="bot-face" x="33" y="36" width="54" height="36" rx="14"/>
-
-      <!-- Ojos (parpadean) -->
-      <g class="bot-eyes">
-        <circle class="bot-eye" cx="49" cy="52" r="8"/>
-        <circle class="bot-eye" cx="71" cy="52" r="8"/>
-        <circle class="bot-glint" cx="46.5" cy="49" r="2.4"/>
-        <circle class="bot-glint" cx="68.5" cy="49" r="2.4"/>
-      </g>
-
-      <!-- Mejillas (solo mood feliz) -->
-      <ellipse class="bot-blush" cx="39" cy="63" rx="5" ry="3"/>
-      <ellipse class="bot-blush" cx="81" cy="63" rx="5" ry="3"/>
-
-      <!-- Boca según el estado de ánimo -->
-      @if (mascot.mood === 'happy') {
-        <path class="bot-mouth" d="M 51 62 Q 60 73 69 62"/>
-      } @else if (mascot.mood === 'ready') {
-        <path class="bot-mouth is-open" d="M 53 62 Q 60 71 67 62 Z"/>
-      } @else if (mascot.mood === 'think') {
-        <path class="bot-mouth is-wavy" d="M 52 65 q 4 -4 8 0 t 8 0"/>
-      } @else {
-        <path class="bot-mouth" d="M 54 64 Q 60 68 66 64"/>
-      }
-
-      <!-- Cuello y cuerpo -->
-      <rect class="bot-neck" x="54" y="80" width="12" height="8" rx="3"/>
-      <rect class="bot-body" x="34" y="87" width="52" height="33" rx="14"/>
-      <rect class="bot-panel" x="50" y="95" width="20" height="12" rx="4"/>
-
-      <!-- Brazos y pies -->
-      <rect class="bot-arm bot-arm-l" x="22" y="91" width="10" height="22" rx="5"/>
-      <rect class="bot-arm bot-arm-r" x="88" y="91" width="10" height="22" rx="5"/>
-      <rect class="bot-foot" x="41" y="118" width="15" height="7" rx="3.5"/>
-      <rect class="bot-foot" x="64" y="118" width="15" height="7" rx="3.5"/>
-    </svg>
-  </ng-template>
-
-  <!-- ============ 1. HERO DE CAMPUS ============ -->
-  <header class="campus-hero">
-    <div class="hero-identity">
-      <div class="hero-avatar">
-        <span>{{ userInitials }}</span>
-        <span class="hero-avatar-dot" aria-hidden="true"></span>
-      </div>
-      <div class="hero-text">
-        <p class="hero-kicker">
-          Corporación Universitaria Latinoamericana
-          <span class="kicker-sep" aria-hidden="true">·</span>
-          Ingeniería de Sistemas
+  <!-- ============ 1. CABECERA ACADÉMICA & DATA STRIP TÉCNICO ============ -->
+  <header class="academic-strip">
+    <div class="strip-header">
+      <div class="strip-identity">
+        <p class="strip-breadcrumb">
+          CORPORACIÓN UNIVERSITARIA LATINOAMERICANA
+          <span class="sep">/</span>
+          FACULTAD DE INGENIERÍA
         </p>
-        <h1 id="campus-title" class="hero-name">{{ user?.nombre || 'Estudiante CUL' }}</h1>
-        <div class="hero-chips">
-          <span class="chip chip-brand">Semestre {{ user?.semestre || selectedSemestre }}</span>
-          <span class="chip">{{ totalCompletadas }} de {{ totalMaterias }} asignaturas aprobadas</span>
+        <div class="strip-title-row">
+          <h1 id="campus-title" class="strip-title">Ingeniería de Sistemas</h1>
+          <span class="strip-badge-pensum">Pensum 2024 · Vigente</span>
         </div>
+        <p class="strip-sub">Ruta de formación académica para {{ user?.nombre || 'Estudiante CUL' }}</p>
+      </div>
+
+      <div class="strip-status">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          Estado: Regular · Activo
+        </span>
+        <button
+          type="button"
+          class="btn-incidencia"
+          (click)="abrirSoporte('nuevo')"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          Reportar incidencia
+        </button>
       </div>
     </div>
 
-    <div
-      class="hero-progress"
-      role="img"
-      [attr.aria-label]="'Avance global de la carrera: ' + avanceGlobal + ' por ciento'"
-    >
-      <div class="ring-wrap">
-        <svg class="progress-ring" viewBox="0 0 120 120" aria-hidden="true">
-          <defs>
-            <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%"/>
-              <stop offset="100%"/>
-            </linearGradient>
-          </defs>
-          <circle class="ring-track" cx="60" cy="60" r="52"/>
-          <circle
-            class="ring-fill"
-            cx="60"
-            cy="60"
-            r="52"
-            [style.stroke-dasharray]="ringCircumference"
-            [style.stroke-dashoffset]="ringOffset"
-          />
-        </svg>
-        <div class="ring-center">
-          <strong class="ring-value">{{ avanceGlobal }}%</strong>
-          <span class="ring-label">Avance global</span>
+    <!-- Data Strip de Métricas (Fila de 4 métricas con separadores) -->
+    <div class="metrics-strip">
+      <div class="metric-cell">
+        <span class="metric-label">SEMESTRE EN CURSO</span>
+        <span class="metric-value">Semestre {{ selectedSemestre < 10 ? '0' + selectedSemestre : selectedSemestre }} <span class="metric-total">/ 10</span></span>
+      </div>
+      <div class="metric-cell">
+        <span class="metric-label">EN ESTE SEMESTRE</span>
+        <span class="metric-value">{{ semestreActualData?.completadas || 0 }} <span class="metric-total">/ {{ semestreActualData?.total || 0 }} asignaturas</span></span>
+      </div>
+      <div class="metric-cell">
+        <span class="metric-label">MATERIAS APROBADAS</span>
+        <span class="metric-value">{{ totalCompletadas }} <span class="metric-total">/ {{ totalMaterias }} pensum base</span></span>
+      </div>
+      <div class="metric-cell metric-cell-progress">
+        <div class="metric-progress-top">
+          <span class="metric-label">AVANCE GLOBAL</span>
+          <span class="metric-value metric-value-pct">{{ avanceGlobal }}%</span>
+        </div>
+        <div class="micro-progress-bar">
+          <span class="micro-progress-fill" [style.width.%]="avanceGlobal"></span>
         </div>
       </div>
-      <p class="ring-aside">
-        <strong>Semestre {{ selectedSemestre }}</strong>
-        <span>{{ semestreActualData?.completadas || 0 }}/{{ semestreActualData?.total || 0 }} completadas aquí</span>
-      </p>
     </div>
   </header>
 
-  <!-- ============ 2. BARRA DE HERRAMIENTAS (vistas + resumen) ============ -->
+  <!-- ============ 2. BARRA DE HERRAMIENTAS (Pestañas Globales) ============ -->
   <div class="route-toolbar">
     <div class="route-tabs" role="tablist" aria-label="Vistas del mapa de carrera">
       <button
@@ -120,7 +73,7 @@
         [attr.aria-selected]="activeTab === 'roadmap'"
         (click)="setTab('roadmap')"
       >
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="6" cy="6" r="3"/>
           <circle cx="18" cy="18" r="3"/>
           <path d="M6 9v12M18 3v12M6 15h12"/>
@@ -135,7 +88,7 @@
         [attr.aria-selected]="activeTab === 'areas'"
         (click)="setTab('areas')"
       >
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <polygon points="12 2 2 7 12 12 22 7 12 2"/>
           <polyline points="2 17 12 22 22 17"/>
           <polyline points="2 12 12 17 22 12"/>
@@ -150,9 +103,8 @@
         [attr.aria-selected]="activeTab === 'para-ti'"
         (click)="setTab('para-ti')"
       >
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 3l1.9 4.6L18.5 9.5 13.9 11.4 12 16l-1.9-4.6L5.5 9.5l4.6-1.9L12 3z"/>
-          <path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15z"/>
         </svg>
         <span>Para ti</span>
         @if (hayRecomendacion) {
@@ -160,684 +112,376 @@
         }
       </button>
     </div>
-
-    <p class="route-summary">
-      <strong>Semestre {{ selectedSemestre }}</strong>
-      <span aria-hidden="true">·</span>
-      {{ semestreActualData?.completadas || 0 }}/{{ semestreActualData?.total || 0 }} aprobadas
-      <span aria-hidden="true">·</span>
-      <strong class="route-summary-pct">{{ semestreActualData?.porcentaje || 0 }}%</strong>
-    </p>
   </div>
 
   <!-- ==================== PESTAÑA 1: RUTA DE APRENDIZAJE ==================== -->
   @if (activeTab === 'roadmap') {
 
-    <!-- Stepper de semestres + filtros -->
-    <div class="stepper-bar">
-      <div
-        class="stepper-nav"
-        (keydown.arrowLeft)="$event.preventDefault(); prevSemestre()"
-        (keydown.arrowRight)="$event.preventDefault(); nextSemestre()"
-      >
-        <button
-          type="button"
-          class="stepper-arrow"
-          [disabled]="!canPrevSemestre"
-          (click)="prevSemestre()"
-          aria-label="Semestre anterior"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="15 18 9 12 15 6"/>
-          </svg>
-        </button>
-
-        <div class="sem-pills" role="group" aria-label="Seleccionar semestre">
-          @for (sem of semestresList; track sem.semestre) {
-            <button
-              type="button"
-              class="sem-pill"
-              [class.is-selected]="selectedSemestre === sem.semestre"
-              [class.is-current]="user?.semestre === sem.semestre"
-              [attr.aria-pressed]="selectedSemestre === sem.semestre"
-              (click)="selectSemestre(sem.semestre)"
-            >
-              <span class="sem-pill-num">S{{ sem.semestre }}</span>
-              <span class="sem-pill-meter" aria-hidden="true">
-                <span class="sem-pill-meter-fill" [style.width.%]="sem.porcentaje"></span>
-              </span>
-              @if (user?.semestre === sem.semestre) {
-                <span class="sem-pill-you">Tu nivel</span>
-              }
-            </button>
-          }
-        </div>
-
-        <button
-          type="button"
-          class="stepper-arrow"
-          [disabled]="!canNextSemestre"
-          (click)="nextSemestre()"
-          aria-label="Siguiente semestre"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <polyline points="9 18 15 12 9 6"/>
-          </svg>
-        </button>
-      </div>
-
-      <div class="filter-group" role="group" aria-label="Filtrar materias por estado">
-        <button type="button" class="filter-chip" [class.is-active]="statusFilter === 'all'" [attr.aria-pressed]="statusFilter === 'all'" (click)="setStatusFilter('all')">
-          Todas <span class="filter-count">{{ semestreActualData?.total || 0 }}</span>
-        </button>
-        <button type="button" class="filter-chip is-open" [class.is-active]="statusFilter === 'Disponible'" [attr.aria-pressed]="statusFilter === 'Disponible'" (click)="setStatusFilter('Disponible')">
-          Disponibles
-        </button>
-        <button type="button" class="filter-chip is-done" [class.is-active]="statusFilter === 'Completado'" [attr.aria-pressed]="statusFilter === 'Completado'" (click)="setStatusFilter('Completado')">
-          Aprobadas
-        </button>
-        <button type="button" class="filter-chip is-lock" [class.is-active]="statusFilter === 'Bloqueado'" [attr.aria-pressed]="statusFilter === 'Bloqueado'" (click)="setStatusFilter('Bloqueado')">
-          Bloqueadas
-        </button>
+    <!-- Segmented bar de semestres (01 a 10) -->
+    <div class="semester-navigator" role="group" aria-label="Navegador de semestres">
+      <div class="semester-segmented-bar">
+        @for (sem of semestresList; track sem.semestre) {
+          <button
+            type="button"
+            class="seg-btn"
+            [class.is-active]="selectedSemestre === sem.semestre"
+            [attr.aria-pressed]="selectedSemestre === sem.semestre"
+            (click)="selectSemestre(sem.semestre)"
+          >
+            <span class="seg-num">{{ sem.semestre < 10 ? '0' + sem.semestre : sem.semestre }}</span>
+            <span class="seg-label">Semestre {{ sem.semestre }}</span>
+            @if (user?.semestre === sem.semestre) {
+              <span class="seg-current-dot" title="Nivel matriculado"></span>
+            }
+          </button>
+        }
       </div>
     </div>
 
-    <!-- Estado vacío / Ruta viva -->
-    @if (materiasDelSemestre.length === 0) {
-      <div class="path-empty">
-        <div class="path-empty-bot" aria-hidden="true">
-          <ng-container *ngTemplateOutlet="robotArt"></ng-container>
+    <!-- Contenedor Unificado de Asignaturas (Estilo Linear / Filas Técnicas) -->
+    <div class="technical-table-card">
+      <header class="table-header">
+        <div class="table-title-wrap">
+          <h2 class="table-title">Asignaturas de la ruta</h2>
+          <span class="table-count">{{ materiasDelSemestre.length }}</span>
         </div>
-        <h3 class="path-empty-title">Nada por aquí</h3>
-        <p class="path-empty-text">Ninguna materia del Semestre {{ selectedSemestre }} coincide con este filtro.</p>
-        <button type="button" class="btn btn-ghost" (click)="setStatusFilter('all')">
-          Ver todas las materias
-        </button>
-      </div>
-    } @else {
-      <!-- Ruta viva: nodos conectados por una línea de progreso -->
-      <ol class="learning-path">
-        @for (materia of materiasDelSemestre; track materia.id; let idx = $index) {
-          <li
-            class="path-step"
-            [attr.data-state]="materia.estado"
-            [style.--step-i]="idx"
+
+        <div class="table-filters" role="group" aria-label="Filtrar materias">
+          <button
+            type="button"
+            class="filter-pill"
+            [class.is-active]="statusFilter === 'all'"
+            (click)="setStatusFilter('all')"
           >
-            <div class="path-rail" aria-hidden="true">
-              <span class="path-node">
-                @if (materia.estado === 'Completado') {
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="20 6 9 17 4 12"/>
-                  </svg>
-                } @else if (materia.estado === 'Disponible') {
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                    <polygon points="6 4 20 12 6 20 6 4"/>
-                  </svg>
-                } @else {
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="4" y="11" width="16" height="10" rx="2"/>
-                    <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
-                  </svg>
-                }
-              </span>
-              <span class="path-line"></span>
-            </div>
+            Todas <span class="pill-badge">{{ semestreActualData?.total || 0 }}</span>
+          </button>
+          <button
+            type="button"
+            class="filter-pill"
+            [class.is-active]="statusFilter === 'Disponible'"
+            (click)="setStatusFilter('Disponible')"
+          >
+            Disponibles
+          </button>
+          <button
+            type="button"
+            class="filter-pill"
+            [class.is-active]="statusFilter === 'Completado'"
+            (click)="setStatusFilter('Completado')"
+          >
+            Aprobadas
+          </button>
+          <button
+            type="button"
+            class="filter-pill"
+            [class.is-active]="statusFilter === 'Bloqueado'"
+            (click)="setStatusFilter('Bloqueado')"
+          >
+            Bloqueadas
+          </button>
+        </div>
+      </header>
 
-            <article
-              class="path-card"
-              [style.--area]="materia.areaColor"
-            >
-              <div class="path-card-top">
-                <span class="area-chip">
-                  <span class="area-dot" aria-hidden="true"></span>
-                  {{ materia.areaNombre }}
-                </span>
-                <span class="state-badge" [attr.data-state]="materia.estado">
-                  @if (materia.estado === 'Completado') {
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                    Aprobada
-                  } @else if (materia.estado === 'Disponible') {
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                      <polygon points="6 4 20 12 6 20 6 4"/>
-                    </svg>
-                    Disponible
-                  } @else {
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <rect x="4" y="11" width="16" height="10" rx="2"/>
-                      <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
-                    </svg>
-                    Bloqueada
-                  }
-                </span>
-              </div>
+      <!-- Estado vacío -->
+      @if (materiasDelSemestre.length === 0) {
+        <div class="table-empty">
+          <p>No se encontraron asignaturas con el estado <strong>{{ statusFilter }}</strong> en este semestre.</p>
+          <button type="button" class="btn btn-ghost btn-sm" (click)="setStatusFilter('all')">
+            Restablecer filtro
+          </button>
+        </div>
+      } @else {
+        <!-- Lista continua de filas con separador de 1px -->
+        <div class="table-rows">
+          @for (materia of materiasDelSemestre; track materia.id) {
+            <article class="table-row" [attr.data-state]="materia.estado">
+              <div class="row-main">
+                <div class="row-meta">
+                  <span class="area-indicator" [style.background]="materia.areaColor" [title]="materia.areaNombre"></span>
+                  <span class="meta-text">{{ materia.areaNombre }}</span>
+                  <span class="meta-sep">·</span>
+                  <span class="meta-text">Semestre {{ materia.semestre }}</span>
+                </div>
 
-              <div class="path-card-grid">
-                <div class="path-card-info">
-                  <h3 class="path-title">{{ materia.nombre }}</h3>
+                <h3 class="row-title">{{ materia.nombre }}</h3>
 
+                <div class="row-requirements">
                   @if (materia.prerrequisitos.length > 0) {
-                    <div class="prereq">
-                      <span class="prereq-label">Prerrequisitos</span>
-                      <ul class="prereq-list">
-                        @for (pre of materia.prerrequisitos; track pre.id) {
-                          <li class="prereq-chip" [class.is-cleared]="pre.completado">
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                              @if (pre.completado) {
-                                <polyline points="20 6 9 17 4 12"/>
-                              } @else {
-                                <rect x="4" y="11" width="16" height="10" rx="2"/>
-                                <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
-                              }
-                            </svg>
-                            {{ pre.nombre }}
-                          </li>
-                        }
-                      </ul>
+                    <span class="req-label">Requisitos:</span>
+                    <div class="req-chips">
+                      @for (pre of materia.prerrequisitos; track pre.id) {
+                        <span class="req-chip" [class.is-cleared]="pre.completado">
+                          {{ pre.nombre }}
+                          @if (pre.completado) {
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                          }
+                        </span>
+                      }
                     </div>
                   } @else {
-                    <p class="prereq-free">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <polyline points="20 6 9 17 4 12"/>
-                      </svg>
+                    <span class="req-direct">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
                       Sin prerrequisitos · entrada directa
-                    </p>
-                  }
-                </div>
-
-                <div class="path-action">
-                  @if (materia.estado === 'Disponible') {
-                    <button type="button" class="btn btn-primary" (click)="irAlAula(materia.id)">
-                      <span>Entrar a la clase</span>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <line x1="5" y1="12" x2="19" y2="12"/>
-                        <polyline points="12 5 19 12 12 19"/>
-                      </svg>
-                    </button>
-                  } @else if (materia.estado === 'Completado') {
-                    <button type="button" class="btn btn-energy" (click)="irAlAula(materia.id)">
-                      <span>Repasar contenido</span>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                        <circle cx="12" cy="12" r="3"/>
-                      </svg>
-                    </button>
-                  } @else {
-                    <p class="locked-note">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <rect x="4" y="11" width="16" height="10" rx="2"/>
-                        <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
-                      </svg>
-                      Supera los prerrequisitos
-                    </p>
+                    </span>
                   }
                 </div>
               </div>
+
+              <div class="row-action">
+                <span class="state-pill" [attr.data-state]="materia.estado">
+                  {{ materia.estado === 'Completado' ? 'Aprobada' : materia.estado }}
+                </span>
+
+                @if (materia.estado === 'Disponible') {
+                  <button type="button" class="btn-action-dark" (click)="irAlAula(materia.id)">
+                    <span>Acceder al aula</span>
+                    <span class="arrow-up-right">↗</span>
+                  </button>
+                } @else if (materia.estado === 'Completado') {
+                  <button type="button" class="btn-action-outline" (click)="irAlAula(materia.id)">
+                    <span>Repasar</span>
+                    <span class="arrow-up-right">↗</span>
+                  </button>
+                } @else {
+                  <button type="button" class="btn-action-disabled" disabled>
+                    <span>Bloqueada</span>
+                  </button>
+                }
+              </div>
             </article>
-          </li>
-        }
-      </ol>
-    }
-  }
-
-  <!-- ==================== PESTAÑA 2: LÍNEAS DE FORMACIÓN ==================== -->
-  @if (activeTab === 'areas') {
-    <div class="areas-grid">
-      @for (area of areasOrdenadas; track area.id) {
-        <article class="track-card" [style.--area]="area.color">
-          <header class="track-head">
-            <div class="track-head-top">
-              <span class="track-tag">
-                <span class="area-dot" aria-hidden="true"></span>
-                Línea de formación
-              </span>
-              @if (esRecomendada(area.id)) {
-                <span class="track-rec">
-                  <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path d="M12 2l2.4 6.2L21 9.3l-4.8 4.3L17.6 21 12 17.4 6.4 21l1.4-7.4L3 9.3l6.6-1.1L12 2z"/>
-                  </svg>
-                  Para ti
-                </span>
-              }
-              <span class="track-pct" [style.color]="area.color">{{ area.porcentajeAvance }}%</span>
-            </div>
-            <h3 class="track-title">{{ area.nombre }}</h3>
-            <p class="track-desc">{{ area.descripcion }}</p>
-            <div class="track-meter" role="img" [attr.aria-label]="area.porcentajeAvance + '% completado'">
-              <span class="track-meter-fill" [style.width.%]="area.porcentajeAvance" [style.background]="area.color"></span>
-            </div>
-          </header>
-
-          <div class="track-flow">
-            @for (nodo of area.nodos; track nodo.id) {
-              <button
-                type="button"
-                class="flow-chip"
-                [attr.data-state]="nodo.estado"
-                (click)="irAlAula(nodo.id)"
-              >
-                <span class="flow-chip-dot" aria-hidden="true">
-                  @if (nodo.estado === 'Completado') {
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                  } @else if (nodo.estado === 'Disponible') {
-                    <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
-                  } @else {
-                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-                  }
-                </span>
-                <span class="flow-chip-text">
-                  <span class="flow-chip-sem">Semestre {{ nodo.semestre }}</span>
-                  <span class="flow-chip-name">{{ nodo.nombre }}</span>
-                </span>
-              </button>
-            }
-          </div>
-        </article>
+          }
+        </div>
       }
     </div>
   }
 
-  <!-- ==================== PESTAÑA 3: PARA TI ==================== -->
-  @if (activeTab === 'para-ti') {
-    <div class="para-ti">
+  <!-- ==================== PESTAÑA 2: LÍNEAS DE FORMACIÓN (ESTILO TÉCNICO) ==================== -->
+  @if (activeTab === 'areas') {
+    <div class="technical-table-card">
+      <header class="table-header">
+        <div class="table-title-wrap">
+          <h2 class="table-title">Líneas de formación curricular</h2>
+          <span class="table-count">{{ areasOrdenadas.length }}</span>
+        </div>
+        <p class="table-sub-header">Progreso y materias estructuradas por área de conocimiento en Ingeniería de Sistemas.</p>
+      </header>
 
-      <!-- Hero: recomendaciones con base en el registro -->
-      <header class="pt-hero">
-        <div class="pt-hero-copy">
-          <p class="pt-kicker">Recomendaciones con base en tu registro</p>
-          <h2 class="pt-title">Para ti</h2>
-          <p class="pt-sub">
-            Cursos elegidos por tus intereses académicos: inscríbete y empieza en un solo clic.
-          </p>
+      <div class="area-tracks-list">
+        @for (area of areasOrdenadas; track area.id) {
+          <article class="area-track-item">
+            <div class="track-header">
+              <div class="track-info">
+                <div class="track-meta">
+                  <span class="area-indicator" [style.background]="area.color"></span>
+                  <span class="meta-text">Línea de formación</span>
+                  @if (esRecomendada(area.id)) {
+                    <span class="badge-rec">Recomendada · Para ti</span>
+                  }
+                </div>
+                <h3 class="track-name">{{ area.nombre }}</h3>
+                <p class="track-description">{{ area.descripcion }}</p>
+              </div>
+
+              <div class="track-progress-box">
+                <div class="track-progress-label">
+                  <span>Avance</span>
+                  <strong class="track-pct-val">{{ area.porcentajeAvance }}%</strong>
+                </div>
+                <div class="micro-progress-bar">
+                  <span class="micro-progress-fill" [style.width.%]="area.porcentajeAvance" [style.background]="area.color"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Nodos secuenciales de la línea en pills técnicos -->
+            <div class="track-sequence">
+              @for (nodo of area.nodos; track nodo.id) {
+                <button
+                  type="button"
+                  class="tech-node-pill"
+                  [attr.data-state]="nodo.estado"
+                  (click)="irAlAula(nodo.id)"
+                  [title]="'Semestre ' + nodo.semestre + ': ' + nodo.nombre + ' (' + nodo.estado + ')'"
+                >
+                  <span class="node-sem-tag">Semestre {{ nodo.semestre }}</span>
+                  <span class="node-state-dot" aria-hidden="true"></span>
+                  <span class="node-name-text">{{ nodo.nombre }}</span>
+                </button>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- ==================== PESTAÑA 3: PARA TI (ESTILO TÉCNICO LINEAR) ==================== -->
+  @if (activeTab === 'para-ti') {
+    <div class="para-ti-technical">
+
+      <!-- Header sutil de recomendaciones -->
+      <header class="pt-tech-header">
+        <div class="pt-tech-info">
+          <span class="code-mono">RECOMENDACIONES BASADAS EN TU PERFIL</span>
+          <h2 class="pt-tech-title">Ruta personalizada</h2>
+          <p class="pt-tech-sub">Materias y cursos extracurriculares seleccionados según tus intereses académicos.</p>
           @if (interesesUsuario.length > 0) {
-            <div class="pt-chips" aria-label="Tus intereses">
+            <div class="pt-interests-tags">
               @for (it of interesesUsuario; track it) {
-                <span class="pt-chip">{{ it }}</span>
+                <span class="interest-tag">{{ it }}</span>
               }
             </div>
           }
         </div>
-        <div class="pt-hero-side">
-          <dl class="pt-stats">
-            <div class="pt-stat">
-              <dt>Listos para empezar</dt>
-              <dd>{{ statsListos }}</dd>
+
+        <div class="pt-tech-actions">
+          <div class="pt-stats-strip">
+            <div class="pt-stat-cell">
+              <span class="stat-lbl">Listos</span>
+              <strong class="stat-num">{{ statsListos }}</strong>
             </div>
-            <div class="pt-stat">
-              <dt>En curso</dt>
-              <dd>{{ statsEnCurso }}</dd>
+            <div class="pt-stat-cell">
+              <span class="stat-lbl">En curso</span>
+              <strong class="stat-num">{{ statsEnCurso }}</strong>
             </div>
-            <div class="pt-stat">
-              <dt>Líneas recomendadas</dt>
-              <dd>{{ areasParaTi.length }}</dd>
-            </div>
-          </dl>
-          <a class="btn btn-outline pt-edit" routerLink="/perfil">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-            </svg>
-            {{ interesesUsuario.length > 0 ? 'Editar intereses' : 'Configurar intereses' }}
+          </div>
+          <a class="btn-action-outline btn-sm" routerLink="/perfil">
+            <span>Editar intereses</span>
+            <span class="arrow-up-right">↗</span>
           </a>
         </div>
       </header>
 
-      <!-- Avisos y errores de inscripción -->
+      <!-- Avisos -->
       @if (avisoInscripcion || errorInscripcion) {
-        <div class="pt-aviso" [class.is-error]="!!errorInscripcion" role="status">
-          @if (errorInscripcion) {
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="8" x2="12" y2="12"/>
-              <line x1="12" y1="16" x2="12.01" y2="16"/>
-            </svg>
-          } @else {
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-              <polyline points="22 4 12 14.01 9 11.01"/>
-            </svg>
-          }
+        <div class="pt-tech-alert" [class.is-error]="!!errorInscripcion" role="status">
           <span>{{ errorInscripcion || avisoInscripcion }}</span>
-          <button type="button" class="pt-aviso-close" (click)="limpiarAvisos()" aria-label="Cerrar aviso">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </button>
+          <button type="button" class="btn-alert-close" (click)="limpiarAvisos()" aria-label="Cerrar">×</button>
         </div>
       }
 
       @if (!hayRecomendacion) {
-        <!-- Sin intereses: invitación a configurarlos -->
-        <div class="path-empty">
-          <div class="path-empty-bot" aria-hidden="true">
-            <ng-container *ngTemplateOutlet="robotArt"></ng-container>
-          </div>
-          <h3 class="path-empty-title">Aún no conocemos tus gustos</h3>
-          <p class="path-empty-text">
-            Elige tus intereses académicos y aquí verás tus líneas de formación
-            recomendadas y las materias listas para cursar en ellas.
-          </p>
-          <a class="btn btn-primary" routerLink="/perfil">
-            <span>Configurar mis intereses</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <line x1="5" y1="12" x2="19" y2="12"/>
-              <polyline points="12 5 19 12 12 19"/>
-            </svg>
+        <div class="table-empty">
+          <p>Configura tus intereses en tu perfil para generar tus recomendaciones personalizadas.</p>
+          <a class="btn-action-dark" routerLink="/perfil">
+            <span>Configurar intereses</span>
+            <span class="arrow-up-right">↗</span>
           </a>
         </div>
       } @else {
-        <!-- En curso: continúa donde ibas -->
-        @if (materiasInscritas.length > 0 || cursosInscritos.length > 0) {
-          <section class="pt-curso" aria-label="Cursos en curso">
-            <div class="pt-curso-head">
-              <h3 class="pt-curso-title">Continúa donde ibas</h3>
-              <span class="pt-curso-count">{{ statsEnCurso }} en curso</span>
+
+        <!-- 1. Materias del pensum listas para cursar (Tabla Técnica) -->
+        <div class="technical-table-card">
+          <header class="table-header">
+            <div class="table-title-wrap">
+              <h3 class="table-title">Materias del pensum listas para cursar</h3>
+              <span class="table-count">{{ materiasParaTi.length }}</span>
             </div>
-            <div class="pt-curso-lista">
-              @for (m of materiasInscritas; track m.id) {
-                <button type="button" class="pt-curso-chip" [style.--area]="m.areaColor" (click)="irAlAula(m.id)">
-                  <span class="area-dot" aria-hidden="true"></span>
-                  <span class="pt-curso-chip-copy">
-                    <span class="pt-curso-chip-name">{{ m.nombre }}</span>
-                    <span class="pt-curso-chip-meta">Pensum · {{ m.areaNombre }}</span>
-                  </span>
-                  <span class="pt-curso-chip-cta">
-                    Continuar
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <line x1="5" y1="12" x2="19" y2="12"/>
-                      <polyline points="12 5 19 12 12 19"/>
-                    </svg>
-                  </span>
-                </button>
-              }
-              @for (c of cursosInscritos; track c.id) {
-                <button type="button" class="pt-curso-chip" [style.--area]="c.color" (click)="abrirDetalleCurso(c)">
-                  <span class="area-dot" aria-hidden="true"></span>
-                  <span class="pt-curso-chip-copy">
-                    <span class="pt-curso-chip-name">{{ c.titulo }}</span>
-                    <span class="pt-curso-chip-meta">Especialización · {{ avanceCurso(c) }}% avanzado</span>
-                  </span>
-                  <span class="pt-curso-chip-cta">
-                    Continuar
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <line x1="5" y1="12" x2="19" y2="12"/>
-                      <polyline points="12 5 19 12 12 19"/>
-                    </svg>
-                  </span>
-                </button>
-              }
-            </div>
-          </section>
-        }
-
-        <!-- ① Especializaciones extracurriculares por interés -->
-        <section class="pt-seccion">
-          <div class="pt-seccion-head">
-            <div>
-              <span class="pt-badge-cat">Especializaciones extracurriculares</span>
-              <h3 class="pt-seccion-title">Cursos recomendados para tu perfil</h3>
-            </div>
-            <p class="pt-seccion-sub">Rutas independientes del pensum elegidas por tus intereses: inscríbete, marca tus módulos y avanza.</p>
-          </div>
-
-          <div class="cursos-interes-grid">
-            @for (curso of cursosRecomendados; track curso.id) {
-              <article class="curso-card" [class.is-inscrito]="estaInscritoCurso(curso.id)">
-                <div class="curso-visual">
-                  @if (estaInscritoCurso(curso.id)) {
-                    <span class="curso-inscrito-badge">Inscrito</span>
-                  }
-                  <span class="curso-nivel-badge">{{ curso.nivel }}</span>
-                  <div class="curso-iconos" aria-hidden="true">
-                    @for (icono of iconosCurso(curso); track icono) {
-                      <img [src]="icono" alt="" [class.icono-invertido]="iconoInvertido(icono)" (error)="ocultarIcono($event)">
-                    }
-                  </div>
-                </div>
-
-                <div class="curso-content">
-                  <p class="curso-category">{{ curso.interes }}</p>
-                  <h4 class="curso-title">{{ curso.titulo }}</h4>
-
-                  <div class="curso-tags">
-                    @for (tag of curso.tags; track tag) {
-                      <span class="curso-tag">{{ tag }}</span>
-                    }
-                  </div>
-
-                  <footer class="curso-foot">
-                    <div class="curso-meta">
-                      <span class="curso-meta-duracion">{{ curso.duracion.split('·')[0].trim() }}</span>
-                      <span class="curso-meta-sub">
-                        @if (estaInscritoCurso(curso.id)) {
-                          {{ avanceCurso(curso) }}% completado
-                        } @else {
-                          {{ curso.clasesCount }} clases
-                        }
-                      </span>
-                    </div>
-                    <button type="button" class="curso-btn" (click)="abrirDetalleCurso(curso)">
-                      {{ estaInscritoCurso(curso.id) ? 'Continuar curso' : 'Ver temario' }}
-                    </button>
-                  </footer>
-                </div>
-              </article>
-            }
-          </div>
-        </section>
-
-        <!-- ② Materias del pensum listas para cursar -->
-        <section class="pt-seccion">
-          <div class="pt-seccion-head">
-            <div>
-              <span class="pt-badge-cat">Plan curricular activo</span>
-              <h3 class="pt-seccion-title">Materias listas para cursar</h3>
-            </div>
-            <p class="pt-seccion-sub">
-              Inscríbete y entra directo al aula de la materia. Las de tus áreas recomendadas van primero.
-            </p>
-          </div>
+            <span class="table-note">Priorizadas según tus intereses académicos</span>
+          </header>
 
           @if (materiasParaTi.length === 0) {
-            <div class="pt-nota">
-              <p>No tienes materias disponibles ahora mismo. Cuando avances en tus prerrequisitos aparecerán aquí.</p>
-              <button type="button" class="btn btn-ghost" (click)="setTab('roadmap')">Ver mi ruta completa</button>
+            <div class="table-empty">
+              <p>No tienes asignaturas disponibles de momento.</p>
             </div>
           } @else {
-            <div class="materias-grid">
+            <div class="table-rows">
               @for (m of materiasParaTi; track m.id) {
-                <article class="materia-card" [style.--area]="m.areaColor">
-                  <div class="materia-meta">
-                    <span class="state-badge" data-state="Disponible">Disponible</span>
-                    <span class="area-chip">
-                      <span class="area-dot" aria-hidden="true"></span>
-                      {{ m.areaNombre }}
-                    </span>
-                    <span class="materia-sem">Semestre {{ m.semestre }}</span>
+                <article class="table-row" data-state="Disponible">
+                  <div class="row-main">
+                    <div class="row-meta">
+                      <span class="area-indicator" [style.background]="m.areaColor"></span>
+                      <span class="meta-text">{{ m.areaNombre }}</span>
+                      <span class="meta-sep">·</span>
+                      <span class="meta-text">Semestre {{ m.semestre }}</span>
+                    </div>
+
+                    <h4 class="row-title">{{ m.nombre }}</h4>
+                    <p class="row-reason">{{ razonRecomendacion(m) }}</p>
                   </div>
-                  <h4 class="materia-title">{{ m.nombre }}</h4>
-                  <p class="materia-razon">{{ razonRecomendacion(m) }}</p>
-                  <div class="materia-acciones">
+
+                  <div class="row-action">
                     @if (!m.inscrito) {
-                      <button type="button" class="btn btn-primary" (click)="inscribirMateria(m)">
+                      <button type="button" class="btn-action-dark" (click)="inscribirMateria(m)">
                         <span>Inscribirme y empezar</span>
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                          <line x1="5" y1="12" x2="19" y2="12"/>
-                          <polyline points="12 5 19 12 12 19"/>
-                        </svg>
+                        <span class="arrow-up-right">↗</span>
                       </button>
                     } @else {
-                      <button type="button" class="btn btn-primary" (click)="irAlAula(m.id)">
-                        <span>Continuar curso</span>
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                          <line x1="5" y1="12" x2="19" y2="12"/>
-                          <polyline points="12 5 19 12 12 19"/>
-                        </svg>
+                      <button type="button" class="btn-action-dark" (click)="irAlAula(m.id)">
+                        <span>Continuar aula</span>
+                        <span class="arrow-up-right">↗</span>
                       </button>
-                      <button type="button" class="btn btn-ghost btn-sm" (click)="salirMateria(m)">Salir del curso</button>
+                      <button type="button" class="btn-action-outline btn-sm" (click)="salirMateria(m)">
+                        Dar de baja
+                      </button>
                     }
                   </div>
                 </article>
               }
             </div>
           }
-        </section>
-
-        <!-- Pie: mapa completo -->
-        <div class="pt-pie">
-          <p>¿Quieres ver el mapa completo de tu carrera?</p>
-          <button type="button" class="btn btn-outline" (click)="setTab('areas')">
-            <span>Ver mis líneas de formación</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <line x1="5" y1="12" x2="19" y2="12"/>
-              <polyline points="12 5 19 12 12 19"/>
-            </svg>
-          </button>
         </div>
-      }
 
-    <!-- Modal de Temario / Detalle del Curso Extracurricular -->
-    @if (cursoSeleccionado; as cSel) {
-      <div class="modal-overlay" (click)="cerrarDetalleCurso()" role="dialog" aria-modal="true" aria-labelledby="modal-curso-title">
-        <div class="modal-card card" (click)="$event.stopPropagation()">
-          <header class="modal-head">
-            <div>
-              <span class="curso-interest-badge">
-                <span class="curso-dot" [style.background]="cSel.color" aria-hidden="true"></span>
-                {{ cSel.interes }} · {{ cSel.nivel }}
-              </span>
-              <h3 id="modal-curso-title" class="modal-title">{{ cSel.titulo }}</h3>
-              <p class="modal-sub">{{ cSel.subtitulo }}</p>
+        <!-- 2. Cursos extracurriculares con sus iconos de tecnología -->
+        <div class="technical-table-card">
+          <header class="table-header">
+            <div class="table-title-wrap">
+              <h3 class="table-title">Especializaciones extracurriculares</h3>
+              <span class="table-count">{{ cursosRecomendados.length }}</span>
             </div>
-            <button type="button" class="modal-close" (click)="cerrarDetalleCurso()" aria-label="Cerrar modal">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"/>
-                <line x1="6" y1="6" x2="18" y2="18"/>
-              </svg>
-            </button>
+            <span class="table-note">Rutas independientes para potenciar tu perfil técnico</span>
           </header>
 
-          <div class="modal-body">
-            <p class="modal-desc">{{ cSel.descripcion }}</p>
-
-            <div class="modal-meta-grid">
-              <div class="meta-box">
-                <span class="meta-label">Duración</span>
-                <span class="meta-value">{{ cSel.duracion }}</span>
-              </div>
-              <div class="meta-box">
-                <span class="meta-label">Modalidad</span>
-                <span class="meta-value">100% Online · Asíncrono</span>
-              </div>
-              <div class="meta-box">
-                <span class="meta-label">Certificación</span>
-                <span class="meta-value">Insignia Digital Sequora</span>
-              </div>
-            </div>
-
-            <div class="modal-temario-head">
-              <h4 class="modal-section-title">Temario y módulos de aprendizaje</h4>
-              @if (estaInscritoCurso(cSel.id)) {
-                <span class="modal-progreso-text">
-                  {{ modulosVistos(cSel.id).length }} de {{ cSel.modulos.length }} vistos
-                </span>
-              }
-            </div>
-            @if (estaInscritoCurso(cSel.id)) {
-              <div class="modal-progreso-barra" aria-hidden="true">
-                <span [style.width.%]="avanceCurso(cSel)" [style.background]="cSel.color"></span>
-              </div>
-            }
-
-            <ol class="temario-list">
-              @for (mod of cSel.modulos; track mod; let idx = $index) {
-                <li class="temario-item" [class.is-visto]="estaInscritoCurso(cSel.id) && estaVisto(cSel.id, idx)">
-                  <div class="temario-copy">
-                    <span class="temario-num">Módulo {{ idx + 1 }}</span>
-                    <span class="temario-name">{{ mod }}</span>
+          <div class="table-rows">
+            @for (curso of cursosRecomendados; track curso.id) {
+              <article class="table-row">
+                <div class="row-main">
+                  <div class="row-meta">
+                    <span class="meta-text">{{ curso.interes }}</span>
+                    <span class="meta-sep">·</span>
+                    <span class="meta-text">{{ curso.nivel }}</span>
+                    <span class="meta-sep">·</span>
+                    <span class="meta-text">{{ curso.duracion.split('·')[0].trim() }}</span>
                   </div>
-                  @if (estaInscritoCurso(cSel.id)) {
-                    <button
-                      type="button"
-                      class="temario-check"
-                      [class.is-checked]="estaVisto(cSel.id, idx)"
-                      role="checkbox"
-                      [attr.aria-checked]="estaVisto(cSel.id, idx)"
-                      [attr.aria-label]="'Marcar módulo ' + (idx + 1) + ' como visto'"
-                      (click)="toggleModulo(cSel, idx)"
-                    >
-                      @if (estaVisto(cSel.id, idx)) {
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                          <polyline points="20 6 9 17 4 12"/>
-                        </svg>
-                      }
-                    </button>
-                  }
-                </li>
-              }
-            </ol>
 
-            @if (errorInscripcion) {
-              <p class="modal-error" role="alert">{{ errorInscripcion }}</p>
+                  <div class="course-header-row">
+                    <!-- Iconos compactos de tecnologías (HTML, CSS, JS, React, etc.) -->
+                    <div class="course-tech-icons" aria-hidden="true">
+                      @for (icono of iconosCurso(curso); track icono) {
+                        <img [src]="icono" alt="" class="tech-icon-mini" [class.icono-invertido]="iconoInvertido(icono)" (error)="ocultarIcono($event)">
+                      }
+                    </div>
+                    <h4 class="row-title">{{ curso.titulo }}</h4>
+                  </div>
+
+                  <div class="row-requirements">
+                    <span class="req-chips">
+                      @for (tag of curso.tags; track tag) {
+                        <span class="req-chip">{{ tag }}</span>
+                      }
+                    </span>
+                    @if (estaInscritoCurso(curso.id)) {
+                      <span class="badge-rec">En curso: {{ avanceCurso(curso) }}%</span>
+                    }
+                  </div>
+                </div>
+
+                <div class="row-action">
+                  <button type="button" class="btn-action-dark" (click)="abrirDetalleCurso(curso)">
+                    <span>{{ estaInscritoCurso(curso.id) ? 'Continuar curso' : 'Ver temario y cursar' }}</span>
+                    <span class="arrow-up-right">↗</span>
+                  </button>
+                </div>
+              </article>
             }
           </div>
-
-          <footer class="modal-foot">
-            @if (!estaInscritoCurso(cSel.id)) {
-              <button type="button" class="btn btn-outline" (click)="cerrarDetalleCurso()">
-                Cerrar
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                [disabled]="inscribiendoCursoId !== null"
-                (click)="inscribirExtracurricular(cSel)"
-              >
-                <span>{{ inscribiendoCursoId === cSel.id ? 'Inscribiéndome…' : 'Inscribirme en esta especialización' }}</span>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <polyline points="9 18 15 12 9 6"/>
-                </svg>
-              </button>
-            } @else {
-              <button type="button" class="btn btn-ghost" (click)="salirExtracurricular(cSel)">
-                Darme de baja
-              </button>
-              <button type="button" class="btn btn-primary" (click)="cerrarDetalleCurso()">
-                <span>Continuar curso</span>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <line x1="5" y1="12" x2="19" y2="12"/>
-                  <polyline points="12 5 19 12 12 19"/>
-                </svg>
-              </button>
-            }
-          </footer>
         </div>
-      </div>
-    }
+
+      }
     </div>
   }
 
-  <!-- ============ FAB DE SOPORTE (Fase 3) ============ -->
-  <button
-    type="button"
-    class="soporte-fab"
-    (click)="abrirSoporte('nuevo')"
-    aria-label="Reportar un problema"
-  >
-    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <circle cx="12" cy="12" r="9"/>
-      <circle cx="12" cy="12" r="4"/>
-      <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/>
-      <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/>
-      <line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/>
-      <line x1="9.17" y1="14.83" x2="4.93" y2="19.07"/>
-    </svg>
-    <span class="soporte-fab-text">Reportar un problema</span>
-  </button>
-
-  <!-- ============ PANEL DE SOPORTE ============ -->
+  <!-- ============ PANEL DE SOPORTE (Modal limpio y accesible) ============ -->
   @if (mostrarSoporte) {
     <div class="soporte-backdrop" (click)="cerrarSoporte()" aria-hidden="true"></div>
     <div class="soporte-modal" role="dialog" aria-modal="true" aria-labelledby="soporte-title">
@@ -951,34 +595,4 @@
       }
     </div>
   }
-
-  <!-- ============ MASCOTA GUÍA (Byte) ============ -->
-  <aside class="mascot" [attr.data-mood]="mascot.mood" [class.is-open]="isMascotOpen">
-      @if (isMascotOpen) {
-        <div class="mascot-bubble" role="status">
-          <button type="button" class="mascot-close" (click)="toggleMascot()" aria-label="Cerrar mensaje de Byte">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </button>
-          <span class="mascot-name">Byte · tu guía</span>
-          <p class="mascot-msg">{{ mascot.message }}</p>
-        </div>
-      }
-      <button
-        type="button"
-        class="mascot-bot"
-        (click)="toggleMascot()"
-        [attr.aria-expanded]="isMascotOpen"
-        aria-label="Byte, asistente de tu ruta"
-      >
-        <span class="mascot-bot-inner">
-          <ng-container *ngTemplateOutlet="robotArt"></ng-container>
-        </span>
-        @if (!isMascotOpen) {
-          <span class="mascot-alert" aria-hidden="true"></span>
-        }
-      </button>
-    </aside>
 </section>

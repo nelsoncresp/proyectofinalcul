@@ -4,27 +4,21 @@ import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { ApiService, PensumResponse, LeccionResponse, AsignaturaNodo, RetoData, CorteInfo } from '../services/api.service';
+import { ApiService } from '../services/api.service';
 import { AlertaService } from '../services/alerta.service';
-import { resaltarJs } from '../utils/resaltar-js';
-import { Usuario } from '../models';
+import { resaltarJs } from '../utils/scripts/resaltar-js';
+import {
+  Usuario,
+  PensumResponse,
+  LeccionResponse,
+  AsignaturaNodo,
+  RetoData,
+  CorteInfo,
+  ResultadoCaso,
+  EstadoCaso,
+  FilaCaso
+} from '../models';
 import { Subscription } from 'rxjs';
-
-interface ResultadoCaso {
-  ok: boolean;
-  obtenido?: unknown;
-  esperado: unknown;
-  error?: string;
-}
-
-/** Estado de una fila de la lista de casos de prueba (tanda progresiva). */
-type EstadoCaso = 'ok' | 'error' | 'corriendo' | 'pendiente' | 'omitido';
-
-interface FilaCaso {
-  numero: number;
-  estado: EstadoCaso;
-  resultado: ResultadoCaso | null;
-}
 
 type ClavePaso = 'lectura' | 'video' | 'recursos' | 'reto' | 'evaluacion';
 
@@ -180,6 +174,13 @@ export class AulaEstudianteController implements OnInit, OnDestroy {
           return;
         }
         this.selectedLeccionBackend = res;
+        const corteActualInfo = res.cortes?.find(c => c.corte === this.corteActual);
+        if (corteActualInfo?.aprobado) {
+          this.exercisePassed = true;
+          this.exerciseFeedback = 'Este corte ya ha sido aprobado por ti.';
+          this.readingConfirmed = true;
+          this.readingComplete = true;
+        }
         this.reto = res.reto ?? null;
         if (this.reto) {
           this.codigo = this.cargarCodigoGuardado() ?? this.reto.plantilla;
@@ -608,15 +609,24 @@ self.onmessage = function (e) {
         this.exercisePassed = res.esCorrecto;
         this.exerciseFeedback = res.explicacion;
         if (res.esCorrecto) {
-          this.alertas.exito('Evaluacion superada', 'Tu respuesta es correcta.');
+          this.alertas.exito('Evaluación superada', 'Tu respuesta es correcta.');
           if (res.materiaCompletada) {
-            this.alertas.exito('Materia completada', 'Aprobaste los 3 cortes.');
+            this.alertas.exito('Materia completada', '¡Aprobaste los 3 cortes de la asignatura!');
+            this.cargarLeccion();
+          } else {
+            this.cargarLeccion();
+            if (this.corteActual < 3) {
+              window.setTimeout(() => {
+                this.cambiarCorte(this.corteActual + 1);
+              }, 1200);
+            }
           }
         }
         this.guardarEstado();
       },
-      error: () => {
-        this.alertas.error('No se pudo evaluar', 'Revisa tu conexión e inténtalo de nuevo.');
+      error: (err) => {
+        const mensaje = err?.error?.error || 'Revisa tu conexión e inténtalo de nuevo.';
+        this.alertas.error('No se pudo evaluar', mensaje);
       }
     });
   }

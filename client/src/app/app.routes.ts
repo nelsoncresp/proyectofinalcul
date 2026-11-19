@@ -4,6 +4,7 @@ import { LoginController } from './controllers/login.controller';
 import { RegisterController } from './controllers/register.controller';
 import { DashboardEstudianteController } from './controllers/dashboard-estudiante.controller';
 import { AulaEstudianteController } from './controllers/aula-estudiante.controller';
+import { AulaCursoController } from './controllers/aula-curso.controller';
 import { DashboardAdminController } from './controllers/dashboard-admin.controller';
 import { DashboardDocenteController } from './controllers/dashboard-docente.controller';
 import { NodeEditorController } from './controllers/node-editor.controller';
@@ -24,6 +25,12 @@ export const routes: Routes = [
 	{
 		path: 'aula/:id',
 		component: AulaEstudianteController,
+		canActivate: [AuthGuard],
+		data: { roles: ['Estudiante'] }
+	},
+	{
+		path: 'curso/:id',
+		component: AulaCursoController,
 		canActivate: [AuthGuard],
 		data: { roles: ['Estudiante'] }
 	},

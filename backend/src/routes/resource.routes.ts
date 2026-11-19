@@ -8,7 +8,7 @@ const router = Router();
 // Consulta de recursos aprobados por asignatura (para estudiantes y docentes)
 router.get('/:asignatura_id', authenticateJWT, ResourceController.getResources);
 
-// Listado de todos los recursos para curaduría (Admin y Docentes)
+// Listado de todos los recursos para revisión (Admin y Docentes)
 router.get('/', authenticateJWT, requireRole([1, 2]), ResourceController.getAllResources);
 
 // Propuesta de nuevo recurso (Docente y Admin)

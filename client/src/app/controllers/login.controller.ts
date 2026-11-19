@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService, DemoAccount } from '../services/auth.service';
+import { AuthService } from '../services/auth.service';
+import { DemoAccount } from '../models/auth.model';
 import { IllustrationController } from './illustration.controller';
 
 type LoginStatus = 'idle' | 'submitting' | 'error' | 'server-error';

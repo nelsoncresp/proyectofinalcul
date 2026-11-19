@@ -4,7 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../services/api.service';
 import { IllustrationController } from './illustration.controller';
-import { INTERESES_DISPONIBLES } from '../utils/intereses';
+import { INTERESES_DISPONIBLES } from '../utils/scripts/intereses';
 
 type RegisterStatus = 'idle' | 'submitting' | 'success' | 'error' | 'server-error';
 

@@ -10,6 +10,85 @@ import { Reto } from '../models/reto.model';
 import { User } from '../models/user.model';
 import { CorteAprobado } from '../models/corte-aprobado.model';
 
+async function validarAccesoMateriaEstudiante(
+    usuarioId: number,
+    asignatura: Asignatura,
+    semestreToken: number | null | undefined
+): Promise<string | null> {
+    const userRepo = AppDataSource.getRepository(User);
+    const progRepo = AppDataSource.getRepository(ProgresoEstudiante);
+
+    let semestre = semestreToken ? Number(semestreToken) : null;
+    if (!semestre) {
+        const usuario = await userRepo.findOneBy({ id: usuarioId });
+        semestre = usuario?.semestre ? Number(usuario.semestre) : null;
+    }
+    semestre = semestre ?? 1;
+
+    if (asignatura.semestre > semestre) {
+        return 'Esta materia pertenece a un semestre posterior al tuyo';
+    }
+
+    const progresos = await progRepo.findBy({ usuario_id: usuarioId });
+    const completadas = new Set(
+        progresos
+            .filter(progreso => progreso.estado === 'completado')
+            .map(progreso => progreso.asignatura_id)
+    );
+
+    if (completadas.has(asignatura.id) || asignatura.semestre < semestre) {
+        return null;
+    }
+
+    const prerrequisitos = asignatura.prerrequisitos ?? [];
+    if (prerrequisitos.length === 0) {
+        return null;
+    }
+
+    const faltantes = prerrequisitos.filter(prerrequisito =>
+        !completadas.has(prerrequisito.id)
+        && !(semestre > 1 && prerrequisito.semestre < semestre)
+    );
+
+    if (faltantes.length > 0) {
+        return `Aún no cumples los prerrequisitos: ${faltantes.map(materia => materia.nombre).join(', ')}`;
+    }
+
+    return null;
+}
+
+async function validarInscripcionParaEvaluar(
+    usuarioId: number,
+    asignatura: Asignatura,
+    semestreToken: number | null | undefined
+): Promise<string | null> {
+    const progRepo = AppDataSource.getRepository(ProgresoEstudiante);
+    const progreso = await progRepo.findOneBy({
+        usuario_id: usuarioId,
+        asignatura_id: asignatura.id
+    });
+
+    if (progreso?.estado === 'completado') {
+        return null;
+    }
+
+    let semestre = semestreToken ? Number(semestreToken) : null;
+    if (!semestre) {
+        const usuario = await AppDataSource.getRepository(User).findOneBy({ id: usuarioId });
+        semestre = usuario?.semestre ? Number(usuario.semestre) : null;
+    }
+
+    if (semestre && asignatura.semestre < semestre) {
+        return null;
+    }
+
+    if (progreso?.estado !== 'inscrito') {
+        return 'Debes inscribirte en esta materia antes de evaluar el corte';
+    }
+
+    return null;
+}
+
 export const AsignaturaController = {
     /**
      * Retorna el pensum completo organizado por Áreas de Conocimiento y Semestres,
@@ -184,6 +263,18 @@ export const AsignaturaController = {
                 return;
             }
 
+            if (rolId === 3 && usuarioId) {
+                const errorAcceso = await validarAccesoMateriaEstudiante(
+                    usuarioId,
+                    asignatura,
+                    req.user?.semestre
+                );
+                if (errorAcceso) {
+                    res.status(403).json({ error: errorAcceso });
+                    return;
+                }
+            }
+
             // Lecciones de los 3 cortes para calcular el panel de estado
             const todasLecciones = await leccRepo.find({ where: { asignatura_id: id } });
 
@@ -214,6 +305,8 @@ export const AsignaturaController = {
                     estado = 'pendiente';
                 } else if (lec.estado === 'borrador') {
                     estado = esEstudiante ? 'pendiente' : 'borrador';
+                } else if (esEstudiante && c > 1 && !cortesAprobados.includes(c - 1)) {
+                    estado = 'pendiente';
                 } else {
                     estado = 'publicada';
                 }
@@ -275,6 +368,52 @@ export const AsignaturaController = {
             if (typeof respuesta !== 'number') {
                 res.status(400).json({ error: 'Respuesta inválida. Debe ser un índice numérico.' });
                 return;
+            }
+
+            if (req.user?.rol_id === 3 && req.user.id) {
+                const asignatura = await AppDataSource.getRepository(Asignatura).findOne({
+                    where: { id },
+                    relations: ['prerrequisitos']
+                });
+                if (!asignatura) {
+                    res.status(404).json({ error: 'Asignatura no encontrada' });
+                    return;
+                }
+
+                const errorAcceso = await validarAccesoMateriaEstudiante(
+                    req.user.id,
+                    asignatura,
+                    req.user.semestre
+                );
+                if (errorAcceso) {
+                    res.status(403).json({ error: errorAcceso });
+                    return;
+                }
+
+                const errorInscripcion = await validarInscripcionParaEvaluar(
+                    req.user.id,
+                    asignatura,
+                    req.user.semestre
+                );
+                if (errorInscripcion) {
+                    res.status(403).json({ error: errorInscripcion });
+                    return;
+                }
+
+                if (corte > 1) {
+                    const corteRepo = AppDataSource.getRepository(CorteAprobado);
+                    const prevAprobado = await corteRepo.findOneBy({
+                        usuario_id: req.user.id,
+                        asignatura_id: id,
+                        corte: corte - 1
+                    });
+                    if (!prevAprobado) {
+                        res.status(400).json({
+                            error: `Debes aprobar el Corte ${corte - 1} antes de presentar la evaluación del Corte ${corte}`
+                        });
+                        return;
+                    }
+                }
             }
 
             const leccRepo = AppDataSource.getRepository(LeccionEvaluacion);
@@ -494,6 +633,160 @@ export const AsignaturaController = {
             });
         } catch (error) {
             console.error('[CreateAsignatura Error]:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+
+    /**
+     * Actualiza el nombre y/o los prerrequisitos de una asignatura existente
+     * (editar nodo en el editor). Valida auto-referencia y ciclos de dependencia.
+     */
+    async updateAsignatura(req: AuthRequest, res: Response): Promise<void> {
+        try {
+            const id = parseInt(req.params.id as string, 10);
+            if (isNaN(id)) {
+                res.status(400).json({ error: 'ID de asignatura inválido' });
+                return;
+            }
+
+            const asigRepo = AppDataSource.getRepository(Asignatura);
+            const existente = await asigRepo.findOne({ where: { id } });
+            if (!existente) {
+                res.status(404).json({ error: 'Asignatura no encontrada' });
+                return;
+            }
+
+            const { nombre, prerrequisitos_ids } = req.body;
+
+            if (nombre !== undefined) {
+                const limpio = String(nombre).trim();
+                if (!limpio) {
+                    res.status(400).json({ error: 'El nombre no puede quedar vacío' });
+                    return;
+                }
+                existente.nombre = limpio;
+            }
+
+            if (prerrequisitos_ids !== undefined) {
+                if (!Array.isArray(prerrequisitos_ids)) {
+                    res.status(400).json({ error: 'prerrequisitos_ids debe ser una lista de IDs' });
+                    return;
+                }
+                const ids = [...new Set(prerrequisitos_ids.map(Number))].filter(n => !isNaN(n) && n > 0);
+                if (ids.includes(id)) {
+                    res.status(400).json({ error: 'Una asignatura no puede ser prerrequisito de sí misma' });
+                    return;
+                }
+
+                let candidatos: Asignatura[] = [];
+                if (ids.length > 0) {
+                    candidatos = await asigRepo.find({ where: ids.map(x => ({ id: x })) });
+                    if (candidatos.length !== ids.length) {
+                        res.status(404).json({ error: 'Alguno de los prerrequisitos seleccionados no existe' });
+                        return;
+                    }
+                }
+
+                // Detección de ciclos: si siguiendo los prerrequisitos de cada
+                // candidato se llega hasta esta asignatura, se crearía un ciclo.
+                const filas: { asignatura_id: number; prerrequisito_id: number }[] =
+                    await AppDataSource.query('SELECT asignatura_id, prerrequisito_id FROM prerrequisitos');
+                const adyacencia = new Map<number, number[]>();
+                filas.forEach(f => {
+                    const lista = adyacencia.get(Number(f.asignatura_id)) ?? [];
+                    lista.push(Number(f.prerrequisito_id));
+                    adyacencia.set(Number(f.asignatura_id), lista);
+                });
+                const visitado = new Set<number>();
+                const pila = [...ids];
+                let ciclo = false;
+                while (pila.length > 0) {
+                    const actual = pila.pop()!;
+                    if (actual === id) { ciclo = true; break; }
+                    if (visitado.has(actual)) continue;
+                    visitado.add(actual);
+                    (adyacencia.get(actual) ?? []).forEach(h => pila.push(h));
+                }
+                if (ciclo) {
+                    res.status(400).json({ error: 'Ese prerrequisito crearía un ciclo de dependencias' });
+                    return;
+                }
+
+                existente.prerrequisitos = candidatos;
+            }
+
+            const saved = await asigRepo.save(existente);
+            res.status(200).json({ message: 'Nodo actualizado exitosamente', asignatura: saved });
+        } catch (error) {
+            console.error('[UpdateAsignatura Error]:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+
+    /**
+     * Elimina una asignatura/ruta SOLO si no tiene dependencias académicas
+     * (progresos, lecciones, recursos, retos, cortes) ni otras materias que la
+     * usen como prerrequisito. Previene errores de integridad referencial.
+     */
+    async deleteAsignatura(req: AuthRequest, res: Response): Promise<void> {
+        try {
+            const id = parseInt(req.params.id as string, 10);
+            if (isNaN(id)) {
+                res.status(400).json({ error: 'ID de asignatura inválido' });
+                return;
+            }
+
+            const asigRepo = AppDataSource.getRepository(Asignatura);
+            const existente = await asigRepo.findOne({ where: { id } });
+            if (!existente) {
+                res.status(404).json({ error: 'Asignatura no encontrada' });
+                return;
+            }
+
+            const contar = async (tabla: string): Promise<number> => {
+                const filas = await AppDataSource.query(
+                    `SELECT COUNT(*) AS total FROM ${tabla} WHERE asignatura_id = ?`,
+                    [id]
+                );
+                return Number(filas[0]?.total ?? 0);
+            };
+            const filasPrereq = await AppDataSource.query(
+                'SELECT COUNT(*) AS total FROM prerrequisitos WHERE prerrequisito_id = ?',
+                [id]
+            );
+            const referencias = Number(filasPrereq[0]?.total ?? 0);
+
+            const [progresos, lecciones, recursos, retos, cortes] = await Promise.all([
+                contar('progreso_estudiante'),
+                contar('lecciones_evaluaciones'),
+                contar('recursos_contenido'),
+                contar('retos'),
+                contar('cortes_aprobados')
+            ]);
+
+            const motivos: string[] = [];
+            if (progresos > 0) motivos.push(`${progresos} registro(s) de progreso`);
+            if (lecciones > 0) motivos.push(`${lecciones} lección(es)`);
+            if (recursos > 0) motivos.push(`${recursos} recurso(s)`);
+            if (retos > 0) motivos.push(`${retos} reto(s)`);
+            if (cortes > 0) motivos.push(`${cortes} corte(s) aprobados`);
+            if (referencias > 0) motivos.push(`es prerrequisito de ${referencias} materia(s)`);
+
+            if (motivos.length > 0) {
+                res.status(409).json({
+                    error: `No se puede eliminar: la materia tiene ${motivos.join(', ')}.`
+                });
+                return;
+            }
+
+            await AppDataSource.transaction(async manager => {
+                await manager.query('DELETE FROM prerrequisitos WHERE asignatura_id = ?', [id]);
+                await manager.query('DELETE FROM asignaturas WHERE id = ?', [id]);
+            });
+
+            res.status(200).json({ message: `Nodo "${existente.nombre}" eliminado exitosamente` });
+        } catch (error) {
+            console.error('[DeleteAsignatura Error]:', error);
             res.status(500).json({ error: 'Internal server error' });
         }
     },

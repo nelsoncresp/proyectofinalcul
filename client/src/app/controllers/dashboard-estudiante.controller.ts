@@ -5,15 +5,14 @@ import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { MockDataService } from '../services/mock-data.service';
-import { ApiService, PensumResponse, AsignaturaNodo, SemestreGroup, AreaGroup, TicketItem, InscripcionCurso } from '../services/api.service';
-import { Usuario } from '../models';
+import { ApiService } from '../services/api.service';
+import { Usuario, PensumResponse, AsignaturaNodo, SemestreGroup, AreaGroup, TicketItem, InscripcionCurso, CursoCatalogoBackend, ModuloCursoBackend } from '../models';
 import {
   areasRecomendadas,
   CursoInteres,
-  obtenerCursosPorIntereses,
   INTERES_AREAS,
   CATALOGO_CURSOS_INTERES
-} from '../utils/intereses';
+} from '../utils/scripts/intereses';
 import { Subscription } from 'rxjs';
 
 /**
@@ -42,9 +41,6 @@ export class DashboardEstudianteController implements OnInit, OnDestroy {
 
   // Semestre seleccionado para la ruta guiada
   selectedSemestre: number = 1;
-
-  // Mascota guía (robot "Byte")
-  isMascotOpen: boolean = true;
 
   // Activa el trazado animado del anillo de progreso tras el primer render
   ringReady: boolean = false;
@@ -115,19 +111,12 @@ export class DashboardEstudianteController implements OnInit, OnDestroy {
 
   /** Cursos extracurriculares independientes recomendados según los intereses del estudiante. */
   get cursosRecomendados(): CursoInteres[] {
-    return obtenerCursosPorIntereses(this.user?.intereses);
+    const intereses = new Set(this.user?.intereses ?? []);
+    return this.catalogoCursos.filter(curso => intereses.has(curso.interes));
   }
-
-  cursoSeleccionado: CursoInteres | null = null;
 
   abrirDetalleCurso(curso: CursoInteres): void {
-    this.errorInscripcion = '';
-    this.cursoSeleccionado = curso;
-  }
-
-  cerrarDetalleCurso(): void {
-    this.cursoSeleccionado = null;
-    this.errorInscripcion = '';
+    this.router.navigate(['/curso', curso.id]);
   }
 
   /** Solo las líneas recomendadas (pestaña "Para ti"). */
@@ -310,25 +299,6 @@ export class DashboardEstudianteController implements OnInit, OnDestroy {
     });
   }
 
-  /** Marca/desmarca un módulo del temario (guarda el progreso en el servidor). */
-  toggleModulo(curso: CursoInteres, idx: number): void {
-    const ins = this.inscripcionesCursos.find(x => x.curso_id === curso.id);
-    if (!ins) return;
-
-    const previo = ins.modulos_vistos ?? [];
-    const set = new Set(previo);
-    if (set.has(idx)) set.delete(idx); else set.add(idx);
-    const lista = [...set].sort((a, b) => a - b);
-
-    ins.modulos_vistos = lista; // actualización optimista
-    this.api.guardarProgresoCurso(curso.id, lista).subscribe({
-      error: () => {
-        ins.modulos_vistos = previo;
-        this.errorInscripcion = 'No se pudo guardar el progreso del módulo.';
-      }
-    });
-  }
-
   /** Limpia avisos y errores de inscripción. */
   limpiarAvisos(): void {
     this.errorInscripcion = '';
@@ -469,32 +439,6 @@ export class DashboardEstudianteController implements OnInit, OnDestroy {
       const pill = document.querySelector('.sem-pill.is-selected') as HTMLElement | null;
       pill?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }, 0);
-  }
-
-  toggleMascot(): void {
-    this.isMascotOpen = !this.isMascotOpen;
-  }
-
-  /** Estado animado de la mascota: mood + mensaje contextual. */
-  get mascot(): { mood: 'happy' | 'ready' | 'think' | 'idle'; message: string } {
-    const sem = this.semestreActualData;
-    const disponibles = this.materiasDelSemestre.filter(m => m.estado === 'Disponible').length;
-
-    if (this.statusFilter !== 'all' && this.materiasDelSemestre.length === 0) {
-      return { mood: 'think', message: 'Ninguna materia coincide con ese filtro. Prueba con "Todas".' };
-    }
-    if (sem && sem.total > 0 && sem.completadas === sem.total) {
-      return { mood: 'happy', message: `¡Semestre ${sem.semestre} completado al 100% Eres imparable.` };
-    }
-    if (disponibles > 0) {
-      const noun = disponibles === 1 ? 'materia lista' : 'materias listas';
-      return { mood: 'ready', message: `Tienes ${disponibles} ${noun} para cursar en el Semestre ${this.selectedSemestre}.` };
-    }
-    if (this.avanceGlobal === 0) {
-      const nombre = this.user?.nombre?.split(' ')[0] || 'estudiante';
-      return { mood: 'idle', message: `¡Hola, ${nombre}! Elige una materia con el estado "Disponible" para empezar tu ruta.` };
-    }
-    return { mood: 'think', message: 'Aprueba los prerrequisitos pendientes para desbloquear más materias.' };
   }
 
   loadData(): void {

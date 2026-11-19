@@ -1,4 +1,4 @@
-// Helper to suppress transitions during a theme switch or other global style swap.
+// Helper central para suprimir transiciones durante cambios globales de tema.
 // Usage: call `suppressTransitionsOnce()` immediately before toggling theme classes on <html>.
 // It will add the `suppress-transitions` class (styles already added in `styles.css`),
 // force a reflow, then remove the class on the next animation frame so transitions resume.

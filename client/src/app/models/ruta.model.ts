@@ -6,5 +6,5 @@ export interface Ruta {
   descripcion?: string;
   nodos: Nodo[];
   porcentajeAvance: number; // 0..100
-  actualizadoEn?: string; // ISO date string — última modificación (curaduría)
+  actualizadoEn?: string; // ISO date string — última modificación (gestión de recursos)
 }
