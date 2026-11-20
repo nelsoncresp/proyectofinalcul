@@ -17,19 +17,10 @@ dotenv.config();
 const app: Application = express();
 const port: number = parseInt(process.env.PORT as string, 10) || 3000;
 
-const origenesPermitidos = (process.env.CORS_ORIGIN || 'http://localhost:4200')
-    .split(',')
-    .map((origen) => origen.trim())
-    .filter(Boolean);
-
+// CORS abierto para la demo: refleja cualquier origen (Netlify produce URLs
+// distintas para producción y para cada deploy preview).
 app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin || origenesPermitidos.includes('*') || origenesPermitidos.includes(origin)) {
-            callback(null, true);
-            return;
-        }
-        callback(new Error(`Origen no permitido por CORS: ${origin}`));
-    },
+    origin: true,
     credentials: true
 }));
 app.use(express.json());
