@@ -17,7 +17,21 @@ dotenv.config();
 const app: Application = express();
 const port: number = parseInt(process.env.PORT as string, 10) || 3000;
 
-app.use(cors());
+const origenesPermitidos = (process.env.CORS_ORIGIN || 'http://localhost:4200')
+    .split(',')
+    .map((origen) => origen.trim())
+    .filter(Boolean);
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || origenesPermitidos.includes('*') || origenesPermitidos.includes(origin)) {
+            callback(null, true);
+            return;
+        }
+        callback(new Error(`Origen no permitido por CORS: ${origin}`));
+    },
+    credentials: true
+}));
 app.use(express.json());
 import { Request, Response, NextFunction } from 'express';
 app.use(express.urlencoded({ extended: true }));
@@ -39,10 +53,9 @@ app.use('/api/auditoria', auditoriaRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/stats', statsRoutes);
 app.use('/api/cursos', cursoExtracurricularRoutes);
-app.use('/prueba', (req, res) => {
-    console.log('HOLA'); res.send('HOLA, culo con cara <br> uaa');
-}
-);
+app.get('/api/health', (_req, res) => {
+    res.status(200).json({ ok: true, service: 'sequora-api' });
+});
 
 import { AppDataSource } from './config/database';
 
