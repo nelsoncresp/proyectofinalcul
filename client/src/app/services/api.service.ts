@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 import type {
   AdminStats,
   BackendUser,
@@ -21,7 +22,7 @@ import type {
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  private readonly BASE_URL = 'http://localhost:3000';
+  private readonly BASE_URL = environment.apiUrl;
   private readonly TOKEN_KEY = 'authToken';
 
   constructor(private http: HttpClient) {}
